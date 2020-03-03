@@ -13,4 +13,7 @@ func Run(args []string) {
 		log.Fatal(err)
 	}
 
-	if err = RunWithOptions(options); err !
+	if err = RunWithOptions(options); err != nil {
+		log.Fatal(err)
+	}
+}
