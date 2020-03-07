@@ -13,3 +13,4 @@ func (c *customMakerRegistry) Register(k string, gen func() interface{}) (old fu
 	c.registry[k] = gen
 
 	return old, ok
+}
