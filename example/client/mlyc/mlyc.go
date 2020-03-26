@@ -12,4 +12,8 @@ import (
 func main() {
 	storableSrv := storable.Singleton()
 
-	// in actual client code, any type information should be available within the context of the caller, so 
+	// in actual client code, any type information should be available within the context of the caller, so using a
+	// dynamic type (i.e. using storable) instantiation service is not needed
+
+	storableSrv.Register(slfmodel.Namespace, func() common.Storable {
+		return new(slfmodel.Segme
