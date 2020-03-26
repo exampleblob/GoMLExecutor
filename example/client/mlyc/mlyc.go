@@ -16,4 +16,13 @@ func main() {
 	// dynamic type (i.e. using storable) instantiation service is not needed
 
 	storableSrv.Register(slfmodel.Namespace, func() common.Storable {
-		return new(slfmodel.Segme
+		return new(slfmodel.Segmented)
+	})
+
+	storableSrv.Register("slft_batch", func() common.Storable {
+		sa := make([]*slfmodel.Segmented, 0)
+		segmenteds := slfmodel.Segmenteds(sa)
+		return &segmenteds
+	})
+
+	// this is 
