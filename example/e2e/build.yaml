@@ -1,0 +1,23 @@
+
+pipeline:
+  deploy:
+    unit_test:
+      action: exec:run
+      target: $target
+      checkError: true
+      commands:
+        - go test $(find ${appPath} -name "*.go" -not -path "${appPath}/vendor/*" -exec dirname {} \; | sort -u)
+      env:
+        DYLD_LIBRARY_PATH: /usr/local/lib
+        LD_LIBRARY_PATH: /usr/local/lib
+
+    package:
+      action: exec:run
+      target: $target
+      checkError: true
+      commands:
+        - mkdir -p /tmp/e2e
+        - touch /tmp/e2e/mly-endly /tmp/e2e/mlyc
+        - rm -v /tmp/e2e/mly-endly /tmp/e2e/mlyc
+        - go build -o /tmp/e2e/mly-endly ${appPath}/example/server/mly
+        - go build -o /tmp/e2e/mlyc ${appPath}/example/client/mlyc

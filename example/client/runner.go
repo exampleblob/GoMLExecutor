@@ -121,3 +121,60 @@ func RunWithOptions(options *Options) error {
 			}
 
 			cancel()
+
+			if !options.NoOutput {
+				toolbox.Dump(response)
+			}
+
+			return nil
+		}
+
+		errs := make([]error, concurrency)
+
+		wg := new(sync.WaitGroup)
+		wg.Add(concurrency)
+
+		for wi := 0; wi < concurrency; wi++ {
+			go func(wi int) {
+				defer wg.Done()
+
+				time.Sleep(1)
+
+				err = payloadedRunner()
+
+				if err != nil {
+					errs[wi] = err
+				}
+			}(wi)
+		}
+
+		wg.Wait()
+
+		for wi, err := range errs {
+			if err != nil {
+				return fmt.Errorf("%d:%w", wi, err)
+			}
+		}
+
+		if i < lp-1 && pPause > 0 {
+			time.Sleep(pPause * time.Second)
+		}
+	}
+
+	if options.Metrics {
+		ctrs := gm.OperationCounters()
+		toolbox.Dump(ctrs)
+	}
+
+	cli.Close()
+
+	if options.ErrorHistory {
+		tops := cli.ErrorHistory.TopK()
+		for _, t := range tops {
+			fmt.Printf("%d %s\n", t.Count, string(t.Data))
+		}
+
+	}
+
+	return err
+}
