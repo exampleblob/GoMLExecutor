@@ -6,4 +6,7 @@
   - TODO: major version backwards compatibility matrix.
   - If the current commit is the the latest tagged revision, search for an older tagged revision.
 2. Create build using tagged revision. Run using tagged revision's configuration.
-3. Create build using latest revision. Run using latest revision's configura
+3. Create build using latest revision. Run using latest revision's configuration.
+4. Run e2e tests using a 2x2 (until full matrix) of tagged client, latest client, tagged server, latest server.
+  - Need monitoring of cache thrashing.
+  - Need to ensure no strict
