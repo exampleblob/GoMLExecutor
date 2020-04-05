@@ -1,0 +1,2 @@
+ARG GO_VERSION=1.17
+FROM golang:${GO_VERSION}-bu
