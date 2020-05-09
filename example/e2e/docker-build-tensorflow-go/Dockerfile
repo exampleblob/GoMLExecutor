@@ -8,4 +8,6 @@ RUN /bin/bash /opt/bin/install-tensorflowlib.sh
 COPY build-tf-protoc.sh /opt/bin/build-tf-protoc.sh
 RUN /bin/bash /opt/bin/build-tf-protoc.sh
 
-COPY vendor-tensorflow.sh /opt/bin/vend
+COPY vendor-tensorflow.sh /opt/bin/vendor-tensorflow.sh
+WORKDIR /opt/src
+CMD ["/bin/bash", "/opt/bin/vendor-tensorflow.sh"]
