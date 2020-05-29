@@ -1,2 +1,6 @@
 {
-  "status": "
+  "status": "ok",
+  "data": {
+		"Class": "five"
+  }
+}
