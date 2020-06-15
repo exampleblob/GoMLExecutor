@@ -12,4 +12,14 @@
       },
       {
         "Value": "down"
-      
+      },
+      {
+        "Value": "canceled"
+      },
+      {
+        "Value": "deadlineExceeded",
+        "Count": 1
+      }
+    ]
+  }
+]

@@ -1,0 +1,5 @@
+init:
+  parentPath: $parent.path
+
+pipeline:
+  tes
