@@ -14,3 +14,4 @@ pipeline:
     init:
       actual: $AsJSON($test.Cmd[0].Stdout)
     actual: $actual
+    expect: $LoadJSON('${parentPath}/metrics.json')
