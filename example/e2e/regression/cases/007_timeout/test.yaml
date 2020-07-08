@@ -10,4 +10,9 @@ pipeline:
       - /tmp/e2e/mlyc --noout --skiperrs --metrics -t 10 -m slow -a 'x|float32:0.5;y|float32:0.5'
 
   assertMetrics:
-    act
+    action: validator:assert
+    init:
+      actual: $AsJSON($test.Cmd[0].Stdout)
+    actual: $actual
+    expect: $LoadJSON('${parentPath}/metrics.json')
+
