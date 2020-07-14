@@ -7,4 +7,7 @@ pipeline:
     target: $target
     checkError: true
     commands:
-      - /tmp/e2e/mlyc -m fl
+      - /tmp/e2e/mlyc -m fli -a 'fl|float32:1.00054;sl:a'
+      - /tmp/e2e/mlyc -m fli -a 'fl|float32:1.00053;sl:a'
+      - /tmp/e2e/mlyc -m fli -a 'fl|float32:1.20001;sl:a'
+      - /tmp/e2e/mlyc -m fli -a 'fl|float32:1.2,1.5;
