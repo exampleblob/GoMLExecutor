@@ -1,4 +1,8 @@
 {
   "data": {
     "D": {
-      "@numeri
+      "@numericPrecisionPoint@": 5,
+      "expand": 3.143643
+    }
+  }
+}

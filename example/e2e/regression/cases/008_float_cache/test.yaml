@@ -1,0 +1,10 @@
+init:
+  parentPath: $parent.path
+
+pipeline:
+  test:
+    action: exec:run
+    target: $target
+    checkError: true
+    commands:
+      - /tmp/e2e/mlyc -m fl
