@@ -25,3 +25,12 @@ pipeline:
     init:
       actual: $AsJSON($test.Cmd[1].Stdout)
       expect: $LoadJSON('${parentPath}/expect-cache.json')
+    actual: $actual
+    expect: $expect
+
+  assertNoCache:
+    action: validator:assert
+    init:
+      actual: $AsJSON($test.Cmd[2].Stdout)
+    actual: $actual
+    expect: $LoadJSON('${parentPat
