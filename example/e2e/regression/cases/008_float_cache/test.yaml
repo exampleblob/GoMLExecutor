@@ -40,4 +40,5 @@ pipeline:
     init:
       actual: $AsJSON($test.Cmd[4].Stdout)
     actual: $actual
-    expect: $LoadJSON('${parentPath}/expect-no
+    expect: $LoadJSON('${parentPath}/expect-no-dict.json')
+

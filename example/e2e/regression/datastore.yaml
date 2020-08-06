@@ -1,0 +1,10 @@
+pipeline:
+  reset_aero:
+    init:
+      action: dsunit:init
+      recreate: true
+      datastore: aero
+      config:
+        driverName: aerospike
+        descriptor: tcp([host]:3000)/test
+ 
