@@ -1,0 +1,7 @@
+init:
+
+pipeline:
+
+  datastore:
+    description: start datly app with rule generted from SQLs
+    acti

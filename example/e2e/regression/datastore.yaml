@@ -16,4 +16,6 @@ pipeline:
           excludedColumns: id
 
     populate:
-  
+      action: dsunit:prepare
+      datastore: aero
+      URL: ${appPath}/example/e2e/regression/reset
