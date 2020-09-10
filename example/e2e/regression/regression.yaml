@@ -4,4 +4,14 @@ pipeline:
 
   datastore:
     description: start datly app with rule generted from SQLs
-    acti
+    action: run
+    request: '@datastore'
+
+  app:
+    description: start datly app with rule generted from SQLs
+    action: run
+    request: '@app'
+
+  test:
+    tag: $pathMatch
+    descriptio
