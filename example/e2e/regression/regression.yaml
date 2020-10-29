@@ -14,4 +14,14 @@ pipeline:
 
   test:
     tag: $pathMatch
-    descriptio
+    description: '@info'
+
+    subPath: 'cases/${index}_*'
+
+    range: 1..008
+    template:
+      checkSkip:
+        action: nop
+        comments: use case init
+        skip: $HasResource(${path}/skip.txt)
+    
