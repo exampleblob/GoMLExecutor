@@ -255,3 +255,20 @@ if __name__ == '__main__':
             # sum(rx^2/ry)
             so = s(f's0_{i}')(o)
             # rx^2 * sum(rx^2/ry) / ry
+            o = m(f'm1_{i}')(dict(x=o, y=so))
+            # rx^2 * sum(rx^2/ry) / ry^2
+            o = d(f'd1_{i}')(dict(x=o, y=ry))
+            # sum(rx^2 * sum(rx^2/ry) / ry^2)
+            so = s(f's1_{i}')(o)
+            # [rx^2 * sum(rx^2/ry)] / [ry^2 * sum(rx^2 * sum(rx^2/ry) / ry^2)]
+            o = d(f'd2_{i}')(dict(x=o, y=so))
+
+        o = s(f's2')(o)
+        o = Lambda(lambda t: t, name='output')(o)
+
+        slow_model = Model(inputs=[i_x, i_y], outputs=[o], name='slow')
+
+        test_tf_tensor = dict(x=tf.constant([[4], [8]]), y=tf.constant([[5], [9]]))
+        model_test_save(test_tf_tensor, slow_model)
+
+    print('Done.')
