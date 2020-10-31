@@ -24,4 +24,7 @@ pipeline:
         action: nop
         comments: use case init
         skip: $HasResource(${path}/skip.txt)
-    
+      test:
+        action: run
+        request: '@test'
+
