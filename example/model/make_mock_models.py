@@ -63,3 +63,195 @@ if __name__ == '__main__':
     vocab_size = pa.vocab_size
     vocab_data = [chr(ord('a') + i) for i in range(vocab_size)]
     print(vocab_data)
+
+    oov_element = chr(ord('a') + vocab_size)
+    vocab_with_oov = vocab_data + [oov_element]
+
+    test_sl_data = []
+    test_tv_data = []
+    test_ll_data = []
+    test_fl_data = []
+
+    for ti in range(pa.num_test_samples):
+        test_sl_data.append(random.choice(vocab_data))
+
+        vec_len = random.randint(1, pa.max_test_vector_length)
+        test_tv_row = random.choices(vocab_with_oov, k=vec_len)
+        test_tv_data.append(' '.join(test_tv_row))
+
+        test_ll_data.append(random.randint(0, vocab_size - 1))
+
+        test_fl_data.append(random.random())
+
+    test_sl_data = test_sl_data[:-1]
+    test_sl_data.append(oov_element)
+
+    print(test_sl_data)
+    print(test_tv_data)
+
+    test_sl_tensor = tf.constant(test_sl_data)
+    test_tv_tensor = tf.constant(test_tv_data)
+    test_fl_tensor = tf.constant(test_fl_data)
+
+    def inputs_with_vec():
+        tv_i = Input(shape=(1,), name='tv', dtype='string')
+        tv_layer = TextVectorization(name='tv_text_vectorization')
+        tv_layer.adapt(test_tv_tensor)
+
+        sl_i = Input(shape=(1,), name='sl', dtype='string')
+        sl_layer = StringLookup(name='sl_string_lookup')
+        sl_layer.adapt(vocab_data)
+
+        o = Concatenate()([tv_layer(tv_i), sl_layer(sl_i)])
+
+        return [tv_i, sl_i], o
+
+    def inputs_sl_only():
+        sl_i = Input(shape=(1,), name='sl', dtype='string')
+        sl_layer = StringLookup(name='sl_string_lookup')
+        sl_layer.adapt(vocab_data)
+
+        # string lookup alternate
+        sa_i = Input(shape=(1,), name='sa', dtype='string')
+        sa_layer = StringLookup(name='sa_string_lookup')
+        sa_layer.adapt(vocab_data)
+
+        o = Concatenate()([sa_layer(sa_i), sl_layer(sl_i)])
+        return [sl_i, sa_i], o
+
+    def inputs_float():
+        sl_i = Input(shape=(1,), name='sl', dtype='string')
+        sl_layer = StringLookup(name='sl_string_lookup')
+        sl_layer.adapt(vocab_data)
+
+        fl_i = Input(shape=(1,), name='fl', dtype='float32')
+
+        o = tf.math.divide(sl_layer(sl_i), 7, name='sl_divide')
+        o = Concatenate()([o, fl_i])
+        return [sl_i, fl_i], o
+
+    input_generators = [(
+            pa.no_vectorization, 
+            'vectorization', 
+            inputs_with_vec, 
+            {'tv': test_tv_tensor, 'sl': test_sl_tensor}
+        ), 
+        (
+            pa.no_string_lookup, 
+            'string_lookups', 
+            inputs_sl_only, 
+            {'sa': test_sl_tensor, 'sl': test_sl_tensor}
+        ),
+        (
+            pa.no_float_input, 
+            'float_input', 
+            inputs_float, 
+            {'fl': test_fl_tensor, 'sl': test_sl_tensor}
+        )]
+
+    output_mods = [(pa.no_float_out, True, 'float'), 
+                   (pa.no_int_out, False, 'int')]
+
+    def model_test_save(test_tensor, check_model):
+        check_model.summary()
+
+        print('# Test Input')
+        print(test_tensor)
+
+        print('# Prediction')
+        start = time.perf_counter()
+        print(check_model.predict(test_tensor))
+        print(f'{time.perf_counter() - start} elapsed')
+
+        save_dir = f'{check_model.name}_model'
+        print(f'Saving model to {save_dir}...')
+        check_model.save(save_dir, include_optimizer=False)
+        print(f'Saved model to {save_dir}.')
+
+    for gen_params, mod_params in itertools.product(input_generators, output_mods):
+        is_disabled, gen_name, generator, tester = gen_params
+        if is_disabled:
+            continue
+
+        # note variable name overlap
+        is_disabled, include_divide, mod_name = mod_params
+        if is_disabled:
+            continue
+
+        inputs, o = generator()
+
+        o = tf.math.add(o, 1, name='add_one')
+        o = tf.math.reduce_prod(o, axis=1, name='reduce_prod')
+
+        if include_divide:
+            o = tf.math.divide(o, 7, name='divide',)
+            o = tf.cast(o, 'float32', name='cast_f32')
+
+        o = Lambda(lambda o: tf.expand_dims(o, axis=1), name='expand')(o)
+
+        check_model = Model(inputs=inputs, outputs=o, name=f'{gen_name}_{mod_name}')
+
+        print('# Inputs')
+        print({i.name: i.dtype for i in check_model.inputs})
+
+        print('# Outputs')
+        print({o.name: o.dtype for o in check_model.outputs})
+
+        tester_tensor = {k: tf.expand_dims(v, axis=1) for k, v in tester.items()}
+        model_test_save(tester_tensor, check_model)
+
+    if not pa.no_lookup_layer:
+        print(test_ll_data)
+        str_cols = ['s1', 's2']
+
+        lookup_source = {c: [chr(ord(l) + i) for l in vocab_data] for i, c in enumerate(str_cols)}
+        print(lookup_source)
+
+        # explicitly use layers.Input instead of keras.Input
+        input_layer = tf.keras.layers.Input(name='lookuplayer_input', shape=(1,), dtype=tf.int32)
+
+        keys = list(range(len(vocab_data)))
+        lookup_layers = [LookupLayer(keys, lookup_source[c], default_value='', name=c) for c in str_cols]
+
+        outputs = [lookup_layer(input_layer) for lookup_layer in lookup_layers]
+        wrapped_model = Model(inputs=[input_layer], outputs=outputs, name='broken_case_v0_5_0')
+
+        test_tf_tensor = tf.expand_dims(tf.constant(test_ll_data), axis=1)
+        model_test_save(test_tf_tensor, wrapped_model)
+
+    if not pa.no_keyed_out:
+        class KeyedOut(Model):
+            def __init__(self, **kwargs):
+                super().__init__(**kwargs)
+
+            def call(self, inputs, training=False):
+                copy = inputs.copy()
+                return dict(i0_copy=copy['i'], i1_copy=copy['i'])
+
+        ko_model = KeyedOut(name='keyed_out')
+        test_tf_tensor = dict(i=tf.expand_dims(tf.constant(test_ll_data), axis=1))
+        ko_model.predict(test_tf_tensor)
+        model_test_save(test_tf_tensor, ko_model)
+
+    if not pa.no_slow:
+        repeat_depth = pa.slow_depth ** pa.slow_depth_exp
+
+        r = lambda i: Lambda(lambda t: tf.repeat(t, repeat_depth, axis=-1), name=f'repeater_{i}')
+        d = lambda i: Lambda(lambda d: tf.divide(d['x'], d['y']), name=f'divider_{i}')
+        m = lambda i: Lambda(lambda m: tf.multiply(m['x'], m['y']), name=f'multiplier_{i}')
+        s = lambda i: Lambda(lambda t: tf.expand_dims(tf.math.reduce_sum(t, axis=-1), axis=-1), name=f'summer_{i}')
+
+        i_x = tf.keras.layers.Input(name='x', shape=(1,), dtype=tf.float32)
+        i_y = tf.keras.layers.Input(name='y', shape=(1,), dtype=tf.float32)
+
+        rx = r('x')(i_x)
+        ry = r('y')(i_y)
+        # rx / ry
+        o = d('d0')(dict(x=rx, y=ry))
+
+        for i in range(pa.slow_repeat):
+            # rx^2 / ry
+            o = m(f'm0_{i}')(dict(x=o, y=rx))
+            # sum(rx^2/ry)
+            so = s(f's0_{i}')(o)
+            # rx^2 * sum(rx^2/ry) / ry
