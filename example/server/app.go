@@ -11,4 +11,9 @@ import (
 	"github.com/viant/mly/shared/common/storable"
 )
 
-func RunApp(Version string
+func RunApp(Version string, args []string) {
+	ctx := context.Background()
+
+	storableSrv := storable.Singleton()
+	storableSrv.Register(slfmodel.Namespace, func() common.Storable {
+		return new(slfmodel
