@@ -16,4 +16,9 @@ func RunApp(Version string, args []string) {
 
 	storableSrv := storable.Singleton()
 	storableSrv.Register(slfmodel.Namespace, func() common.Storable {
-		return new(slfmodel
+		return new(slfmodel.Segmented)
+	})
+
+	endpoint.RunAppWithConfig(Version, args, func(options *endpoint.Options) (*endpoint.Config, error) {
+		config, err := NewConfigFromURL(ctx, options.ConfigURL)
+	
