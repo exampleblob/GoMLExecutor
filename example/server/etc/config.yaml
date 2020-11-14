@@ -1,0 +1,6 @@
+Endpoint:
+  Port: 8086
+
+models:
+  - id: sli
+   
