@@ -3,4 +3,14 @@ Endpoint:
 
 models:
   - id: sli
-   
+    url: ${appPath}/example/model/string_lookups_int_model
+    useDict: true
+    debug: false
+    datastore: sli
+    inputs:
+      - name: sa
+      - name: sl
+      - name: aux
+        auxiliary: true
+    test:
+ 
