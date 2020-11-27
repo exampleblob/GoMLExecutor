@@ -13,4 +13,13 @@ models:
       - name: aux
         auxiliary: true
     test:
- 
+      test: true
+
+  - id: slf
+    url: ${appPath}/example/model/string_lookups_float_model
+    useDict: true
+    debug: false
+    datastore: slf
+    transformer: slft
+    inputs:
+      - name:
