@@ -22,4 +22,14 @@ models:
     datastore: slf
     transformer: slft
     inputs:
-      - name:
+      - name: sa
+      - name: sl
+      - name: aux
+        auxiliary: true
+    test:
+      singleBatch: true
+
+  - id: fli
+    url: ${appPath}/example/model/float_input_int_model
+    useDict: true
+    debu
