@@ -54,4 +54,14 @@ models:
         wildcard: true
       - name: sl
       - name: aux
-        auxi
+        auxiliary: true
+    test:
+      test: true
+
+  - id: ll
+    url: ${appPath}/example/model/broken_case_v0_5_0_model
+    useDict: false
+    debug: false
+    inputs:
+      - name: lookuplayer_input
+    tes
