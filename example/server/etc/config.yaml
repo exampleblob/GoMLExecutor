@@ -75,4 +75,14 @@ models:
       singleBatch: true
 
   - id: slow
-    url: ${ap
+    url: ${appPath}/example/model/slow_model
+    useDict: false
+    debug: false
+    test:
+      singleBatch: true
+
+connections:
+  - id: localL1
+    hostnames: localhost
+    port: 3000
+    timeout: 30
