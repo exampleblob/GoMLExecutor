@@ -64,4 +64,15 @@ models:
     debug: false
     inputs:
       - name: lookuplayer_input
-    tes
+    test:
+      test: true
+
+  - id: ko
+    url: ${appPath}/example/model/keyed_out_model
+    useDict: false
+    debug: false
+    test:
+      singleBatch: true
+
+  - id: slow
+    url: ${ap
