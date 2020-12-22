@@ -85,4 +85,15 @@ connections:
   - id: localL1
     hostnames: localhost
     port: 3000
-    timeout: 30
+    timeout: 300
+
+datastores:
+  - id: sli
+    connection: localL1
+    namespace: test
+    dataset: sli
+    timeToLiveMs: 30000
+
+  - id: slf
+    connection: localL1
+    namespace
