@@ -107,4 +107,7 @@ datastores:
     timeToLiveMs: 30000
 
   - id: fli
-    connection: lo
+    connection: localL1
+    namespace: test
+    dataset: fli
+    timeToLiveMs: 30000
