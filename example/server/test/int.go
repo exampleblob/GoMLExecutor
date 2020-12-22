@@ -14,33 +14,33 @@ import (
 	"github.com/viant/toolbox"
 )
 
-type FloatOutput struct {
-	Value float32
+type IntOutput struct {
+	Value int64
 	Sl    string
 }
 
-func (p *FloatOutput) EncodeBinary(enc *bintly.Writer) error {
-	enc.Float32(p.Value)
+func (p *IntOutput) EncodeBinary(enc *bintly.Writer) error {
+	enc.Int64(p.Value)
 	enc.String(p.Sl)
 	return nil
 }
 
-func (p *FloatOutput) DecodeBinary(dec *bintly.Reader) error {
-	dec.Float32(&p.Value)
+func (p *IntOutput) DecodeBinary(dec *bintly.Reader) error {
+	dec.Int64(&p.Value)
 	dec.String(&p.Sl)
 	return nil
 }
 
-func (s *FloatOutput) MarshalJSONObject(enc *gojay.Encoder) {
-	enc.Float32Key("value", s.Value)
+func (s *IntOutput) MarshalJSONObject(enc *gojay.Encoder) {
+	enc.IntKey("value", int(s.Value))
 	enc.StringKey("sl", s.Sl)
 }
 
-func (s *FloatOutput) IsNil() bool {
+func (s *IntOutput) IsNil() bool {
 	return s == nil
 }
 
-func (p *FloatOutput) Iterator() common.Iterator {
+func (p *IntOutput) Iterator() common.Iterator {
 	return func(pair common.Pair) error {
 		if err := pair("value", p.Value); err != nil {
 			return err
@@ -52,11 +52,11 @@ func (p *FloatOutput) Iterator() common.Iterator {
 	}
 }
 
-func (p *FloatOutput) Set(iter common.Iterator) error {
+func (p *IntOutput) Set(iter common.Iterator) error {
 	return iter(func(key string, value interface{}) error {
 		switch key {
 		case "value":
-			p.Value = float32(toolbox.AsFloat(value))
+			p.Value = int64(toolbox.AsInt(value))
 		case "sl":
 			p.Sl = toolbox.AsString(value)
 		}
@@ -64,17 +64,17 @@ func (p *FloatOutput) Set(iter common.Iterator) error {
 	})
 }
 
-func FloatTransformer(ctx context.Context, signature *domain.Signature, input *gtly.Object, output interface{}) (common.Storable, error) {
-	result := &FloatOutput{}
-	result.Sl = toolbox.AsString(input.Value("sl"))
+func IntTransformer(ctx context.Context, signature *domain.Signature, input *gtly.Object, output interface{}) (common.Storable, error) {
+	result := &IntOutput{}
+	result.Sl = toolbox.AsString(input.Value("sa"))
 	switch actual := output.(type) {
 	case []interface{}:
-		return FloatTransformer(ctx, signature, input, actual[0])
-	case [][]float32:
+		return IntTransformer(ctx, signature, input, actual[0])
+	case [][]int64:
 		result.Value = actual[0][0]
 	case *shared.Output:
 		switch val := actual.Values[0].(type) {
-		case [][]float32:
+		case [][]int64:
 			result.Value = val[actual.InputIndex][0]
 		}
 	default:
