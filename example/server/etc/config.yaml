@@ -96,4 +96,15 @@ datastores:
 
   - id: slf
     connection: localL1
-    namespace
+    namespace: test
+    dataset: slf
+    timeToLiveMs: 30000
+
+  - id: vec
+    connection: localL1
+    namespace: test
+    dataset: vec
+    timeToLiveMs: 30000
+
+  - id: fli
+    connection: lo
