@@ -40,4 +40,10 @@ func extract(o interface{}, i int) (float32, error) {
 	case []interface{}:
 		return extract(typed[0], 0)
 	case [][]float32:
-		if len(typed) > i && len(typed[0]) > 0
+		if len(typed) > i && len(typed[0]) > 0 {
+			return typed[i][0], nil
+		} else {
+			return -1, fmt.Errorf("improper result i:%d actual:%v", i, typed)
+		}
+	default:
+		return -1, fmt.Errorf("expected [][]float32,
