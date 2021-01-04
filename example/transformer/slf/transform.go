@@ -24,4 +24,14 @@ func Transform(ctx context.Context, signature *domain.Signature, input *gtly.Obj
 		segment = "one"
 	} else if actual < 2 {
 		segment = "two"
-	} els
+	} else if actual < 5 {
+		segment = "five"
+	}
+
+	s := new(model.Segmented)
+	s.Class = segment
+	return s, nil
+}
+
+func extract(o interface{}, i int) (float32, error) {
+	switch typed := o.(
