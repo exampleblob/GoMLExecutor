@@ -34,4 +34,10 @@ func Transform(ctx context.Context, signature *domain.Signature, input *gtly.Obj
 }
 
 func extract(o interface{}, i int) (float32, error) {
-	switch typed := o.(
+	switch typed := o.(type) {
+	case *shared.Output:
+		return extract(typed.Values[0], typed.InputIndex)
+	case []interface{}:
+		return extract(typed[0], 0)
+	case [][]float32:
+		if len(typed) > i && len(typed[0]) > 0
