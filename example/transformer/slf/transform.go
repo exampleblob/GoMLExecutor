@@ -13,4 +13,15 @@ import (
 
 // conforms to service/domain.Transformer
 // only supports single-item requests
-func Transform(ctx context.Context, signature *domain.Signature, input *gtly.Object, output interface{}) (co
+func Transform(ctx context.Context, signature *domain.Signature, input *gtly.Object, output interface{}) (common.Storable, error) {
+	actual, err := extract(output, 0)
+	if err != nil {
+		return nil, err
+	}
+
+	segment := "other"
+	if actual < 1 {
+		segment = "one"
+	} else if actual < 2 {
+		segment = "two"
+	} els
