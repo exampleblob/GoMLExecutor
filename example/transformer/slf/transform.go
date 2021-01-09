@@ -46,4 +46,6 @@ func extract(o interface{}, i int) (float32, error) {
 			return -1, fmt.Errorf("improper result i:%d actual:%v", i, typed)
 		}
 	default:
-		return -1, fmt.Errorf("expected [][]float32,
+		return -1, fmt.Errorf("expected [][]float32, but had: %T", o)
+	}
+}
