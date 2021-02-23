@@ -27,4 +27,14 @@ func (p *Pool) Put(b []byte) {
 		return
 	}
 	if atomic.AddInt32(&p.count, 1) <= p.poolMaxSize {
-		sel
+		select {
+		case p.channel <- b:
+		default: //If the Pool is full, discard the buffer.
+		}
+	}
+}
+
+//New creates a httputil.BufferPool Pool.
+func New(poolMaxSize, bufferSize int) *Pool {
+	result := &Pool{
+		poolMaxSize:
