@@ -37,4 +37,12 @@ func (p *Pool) Put(b []byte) {
 //New creates a httputil.BufferPool Pool.
 func New(poolMaxSize, bufferSize int) *Pool {
 	result := &Pool{
-		poolMaxSize:
+		poolMaxSize: int32(poolMaxSize),
+		channel:     make(chan []byte, poolMaxSize),
+		bufferSize:  bufferSize,
+	}
+	for i := 0; i < poolMaxSize; i++ {
+		result.Put(make([]byte, bufferSize))
+	}
+	return result
+}
