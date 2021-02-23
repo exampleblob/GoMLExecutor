@@ -36,3 +36,11 @@ func TestRead(t *testing.T) {
 		},
 		{
 			description: "too small buffer",
+			reader:      strings.NewReader(strings.Repeat("Lorem ipsum", 1024*1024)),
+			bufferSize:  1024,
+			hasError:    true,
+			expect:      strings.Repeat("Lorem ipsum", 1024*1024),
+		},
+	}
+
+	for _, useC
