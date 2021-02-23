@@ -9,4 +9,13 @@ import (
 
 func TestRead(t *testing.T) {
 
-	useCases := []struc
+	useCases := []struct {
+		description string
+		bufferSize  int
+		reader      io.Reader
+		hasError    bool
+		expect      string
+	}{
+		{
+			description: "medium buffer, small data",
+			reader:      string
