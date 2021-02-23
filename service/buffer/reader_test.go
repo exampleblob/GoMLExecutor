@@ -24,4 +24,10 @@ func TestRead(t *testing.T) {
 		},
 		{
 			description: "large buffer, medium data",
-			reader:      strings.NewReader(strings.Repeat("Lorem ipsum"
+			reader:      strings.NewReader(strings.Repeat("Lorem ipsum", 1024)),
+			bufferSize:  1024 * 1024,
+			expect:      strings.Repeat("Lorem ipsum", 1024),
+		},
+		{
+			description: "large buffer, large data",
+			reader:      strings.NewReade
