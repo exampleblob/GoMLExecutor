@@ -21,4 +21,10 @@ func (p *Pool) Get() (result []byte) {
 	return result
 }
 
-//P
+//Put put data back to the pool
+func (p *Pool) Put(b []byte) {
+	if len(b) != p.bufferSize {
+		return
+	}
+	if atomic.AddInt32(&p.count, 1) <= p.poolMaxSize {
+		sel
