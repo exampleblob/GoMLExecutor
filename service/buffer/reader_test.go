@@ -43,4 +43,8 @@ func TestRead(t *testing.T) {
 		},
 	}
 
-	for _, useC
+	for _, useCase := range useCases {
+		pool := New(10, useCase.bufferSize)
+		data, size, err := Read(pool, useCase.reader)
+		if useCase.hasError {
+			assert.NotNil(t, err, useCase.descri
