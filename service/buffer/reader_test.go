@@ -47,4 +47,13 @@ func TestRead(t *testing.T) {
 		pool := New(10, useCase.bufferSize)
 		data, size, err := Read(pool, useCase.reader)
 		if useCase.hasError {
-			assert.NotNil(t, err, useCase.descri
+			assert.NotNil(t, err, useCase.description)
+			continue
+		}
+		if !assert.Nil(t, err, useCase.description) {
+			continue
+		}
+		if !assert.Equal(t, size, len(useCase.expect), useCase.description) {
+			continue
+		}
+		assert.Equal(t, s
