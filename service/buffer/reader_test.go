@@ -56,4 +56,9 @@ func TestRead(t *testing.T) {
 		if !assert.Equal(t, size, len(useCase.expect), useCase.description) {
 			continue
 		}
-		assert.Equal(t, s
+		assert.Equal(t, string(data[:size]), useCase.expect, useCase.description)
+		pool.Put(data)
+
+	}
+
+}
