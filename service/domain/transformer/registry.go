@@ -21,4 +21,12 @@ func (r *Registry) Register(key string, transformer domain.Transformer) {
 }
 
 //Lookup returns transformer or error
-func (r *Registry) Lookup(key
+func (r *Registry) Lookup(key string) (domain.Transformer, error) {
+	transformer, ok := r.registry[key]
+	if !ok {
+		return nil, fmt.Errorf("failed to lookup transformer: %v", key)
+	}
+	return transformer, nil
+}
+
+var registry =
