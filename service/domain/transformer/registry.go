@@ -15,4 +15,10 @@ type Registry struct {
 	registry map[string]domain.Transformer
 }
 
-//Regist
+//Register register transformer
+func (r *Registry) Register(key string, transformer domain.Transformer) {
+	r.registry[key] = transformer
+}
+
+//Lookup returns transformer or error
+func (r *Registry) Lookup(key
