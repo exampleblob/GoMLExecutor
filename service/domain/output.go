@@ -10,4 +10,7 @@ import (
 type Output struct {
 	Name         string
 	DataType     string
-	DataTypeKind reflect.Kin
+	DataTypeKind reflect.Kind
+	Index        int
+	*tf.Operation
+}
