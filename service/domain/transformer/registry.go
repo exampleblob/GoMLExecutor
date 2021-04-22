@@ -29,4 +29,11 @@ func (r *Registry) Lookup(key string) (domain.Transformer, error) {
 	return transformer, nil
 }
 
-var registry =
+var registry = &Registry{
+	registry: make(map[string]domain.Transformer),
+}
+
+//Singleton return transformer registry
+func Singleton() *Registry {
+	return registry
+}
