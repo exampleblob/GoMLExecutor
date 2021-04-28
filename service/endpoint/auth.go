@@ -20,3 +20,16 @@ func NewAuthHandler(config *Config, handler http.Handler) *AuthHandler {
 
 func (h *AuthHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	if !common.IsAuthorized(request, h.Config.AllowedSubnet) {
+		writer.WriteHeader(http.StatusForbidden)
+		return
+	}
+
+	h.handler.ServeHTTP(writer, request)
+}
+
+type AuthMux struct {
+	mux    *http.ServeMux
+	config *Config
+}
+
+func NewAuthMux(mux *http.ServeMux,
