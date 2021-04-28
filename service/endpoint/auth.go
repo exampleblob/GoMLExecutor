@@ -14,4 +14,9 @@ type AuthHandler struct {
 func NewAuthHandler(config *Config, handler http.Handler) *AuthHandler {
 	h := new(AuthHandler)
 	h.Config = config
-	h.handler
+	h.handler = handler
+	return h
+}
+
+func (h *AuthHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
+	if !common.IsAuthorized(request, h.Config.AllowedSubnet) {
