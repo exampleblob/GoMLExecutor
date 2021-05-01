@@ -32,4 +32,13 @@ type AuthMux struct {
 	config *Config
 }
 
-func NewAuthMux(mux *http.ServeMux,
+func NewAuthMux(mux *http.ServeMux, config *Config) *AuthMux {
+	am := new(AuthMux)
+	am.mux = mux
+	am.config = config
+	return am
+}
+
+func (m *AuthMux) Handle(path string, handler http.Handler) {
+	a := NewAuthHandler(m.config, handler)
+	m.mux.Hand
