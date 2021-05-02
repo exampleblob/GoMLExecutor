@@ -41,4 +41,15 @@ func NewAuthMux(mux *http.ServeMux, config *Config) *AuthMux {
 
 func (m *AuthMux) Handle(path string, handler http.Handler) {
 	a := NewAuthHandler(m.config, handler)
-	m.mux.Hand
+	m.mux.Handle(path, a)
+}
+
+type w struct {
+	hf func(w http.ResponseWriter, r *http.Request)
+}
+
+func (w *w) ServeHTTP(wr http.ResponseWriter, r *http.Request) {
+	w.hf(wr, r)
+}
+
+func (m *AuthMux) HandleFunc
