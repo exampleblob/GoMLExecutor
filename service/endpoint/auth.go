@@ -52,4 +52,6 @@ func (w *w) ServeHTTP(wr http.ResponseWriter, r *http.Request) {
 	w.hf(wr, r)
 }
 
-func (m *AuthMux) HandleFunc
+func (m *AuthMux) HandleFunc(path string, hf func(w http.ResponseWriter, r *http.Request)) {
+	m.Handle(path, &w{hf})
+}
