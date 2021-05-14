@@ -14,4 +14,5 @@ import (
 	"github.com/viant/toolbox"
 )
 
-func SelfTest(host
+func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTransformer bool, inputs_ []*shared.Field, tp config.TestPayload, outputs []*shared.Field, debug bool) error {
+	cli, err := client.
