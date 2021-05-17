@@ -22,4 +22,14 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 
 	inputs := cli.Config.Datastore.MetaInput.Inputs
 
-	// generate payloa
+	// generate payload
+
+	var testData map[string]interface{}
+	var batchSize int
+	if len(tp.Batch) > 0 {
+		for k, v := range tp.Batch {
+			testData[k] = v
+			batchSize = len(v)
+		}
+	} else {
+		if len(tp.S
