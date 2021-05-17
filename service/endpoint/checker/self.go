@@ -32,4 +32,13 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 			batchSize = len(v)
 		}
 	} else {
-		if len(tp.S
+		if len(tp.Single) > 0 {
+			testData = tp.Single
+
+			for _, field := range inputs {
+				n := field.Name
+				sv, ok := tp.Single[n]
+				switch field.DataType {
+				case "int", "int32", "int64":
+					if !ok {
+						testDat
