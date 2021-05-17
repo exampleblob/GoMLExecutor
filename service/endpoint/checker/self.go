@@ -41,4 +41,11 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 				switch field.DataType {
 				case "int", "int32", "int64":
 					if !ok {
-						testDat
+						testData[n] = rand.Int31()
+					} else {
+						switch tsv := sv.(type) {
+						case string:
+							testData[n], err = strconv.Atoi(tsv)
+							if err != nil {
+								return err
+							}
