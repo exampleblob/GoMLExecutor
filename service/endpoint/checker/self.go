@@ -49,3 +49,10 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 							if err != nil {
 								return err
 							}
+						}
+					}
+				case "float", "float32", "float64":
+					testData[n] = rand.Float32()
+				default:
+					if !ok {
+						testData[n] = fmt.Sprintf("test-%d", ran
