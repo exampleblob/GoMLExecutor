@@ -64,4 +64,9 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 		} else {
 			testData = make(map[string]interface{})
 			for _, field := range inputs {
-	
+				n := field.Name
+				switch field.DataType {
+				case "int", "int32", "int64":
+					testData[n] = rand.Int31()
+				case "float", "float32", "float64":
+					testData[n] =
