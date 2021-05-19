@@ -55,4 +55,13 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 					testData[n] = rand.Float32()
 				default:
 					if !ok {
-						testData[n] = fmt.Sprintf("test-%d", ran
+						testData[n] = fmt.Sprintf("test-%d", rand.Int31())
+					} else {
+						testData[n] = toolbox.AsString(sv)
+					}
+				}
+			}
+		} else {
+			testData = make(map[string]interface{})
+			for _, field := range inputs {
+	
