@@ -69,4 +69,15 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 				case "int", "int32", "int64":
 					testData[n] = rand.Int31()
 				case "float", "float32", "float64":
-					testData[n] =
+					testData[n] = rand.Float32()
+				default:
+					testData[n] = fmt.Sprintf("test-%d", rand.Int31())
+				}
+			}
+		}
+
+		if tp.SingleBatch {
+			for _, field := range inputs {
+				fn := field.Name
+				tv := testData[fn]
+				switch fi
