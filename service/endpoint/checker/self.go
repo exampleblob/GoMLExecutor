@@ -80,4 +80,12 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 			for _, field := range inputs {
 				fn := field.Name
 				tv := testData[fn]
-				switch fi
+				switch field.DataType {
+				case "int", "int32", "int64":
+					var v int
+					switch atv := tv.(type) {
+					case int:
+						v = atv
+					case int32:
+					case int64:
+						v =
