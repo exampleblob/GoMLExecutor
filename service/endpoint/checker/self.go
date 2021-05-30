@@ -88,4 +88,11 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 						v = atv
 					case int32:
 					case int64:
-						v =
+						v = int(atv)
+					default:
+						return fmt.Errorf("test data malformed: %s expected int-like, found %T", fn, tv)
+					}
+
+					b := [1]int{v}
+					testData[fn] = b[:]
+				case "float", 
