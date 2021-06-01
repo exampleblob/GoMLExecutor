@@ -95,4 +95,12 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 
 					b := [1]int{v}
 					testData[fn] = b[:]
-				case "float", 
+				case "float", "float32", "float64":
+					var v float32
+					switch atv := tv.(type) {
+					case float32:
+						v = atv
+					case float64:
+						v = float32(atv)
+					default:
+						retur
