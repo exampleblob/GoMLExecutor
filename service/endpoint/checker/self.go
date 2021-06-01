@@ -111,4 +111,16 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 				default:
 					switch atv := tv.(type) {
 					case string:
-						b
+						b := [1]string{atv}
+						testData[fn] = b[:]
+					default:
+						return fmt.Errorf("test data malformed: %s expected string-like, found %T", fn, tv)
+					}
+				}
+			}
+
+			batchSize = 1
+		}
+	}
+
+	if
