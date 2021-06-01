@@ -103,4 +103,12 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 					case float64:
 						v = float32(atv)
 					default:
-						retur
+						return fmt.Errorf("test data malformed: %s expected float32-like, found %T", fn, tv)
+					}
+
+					b := [1]float32{v}
+					testData[fn] = b[:]
+				default:
+					switch atv := tv.(type) {
+					case string:
+						b
