@@ -123,4 +123,13 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 		}
 	}
 
-	if
+	if debug {
+		log.Printf("[%s test] batchSize:%d %+v", modelID, batchSize, testData)
+	}
+
+	msg := cli.NewMessage()
+	defer msg.Release()
+
+	if batchSize > 0 {
+		msg.SetBatchSize(batchSize)
+	
