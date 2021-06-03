@@ -132,4 +132,12 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 
 	if batchSize > 0 {
 		msg.SetBatchSize(batchSize)
-	
+	}
+
+	for k, vs := range testData {
+		switch at := vs.(type) {
+		case []float32:
+			fmt.Printf("%+v\n", at)
+			msg.FloatsKey(k, at)
+		case []float64:
+			rat := make([]float32, len(
