@@ -140,4 +140,15 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 			fmt.Printf("%+v\n", at)
 			msg.FloatsKey(k, at)
 		case []float64:
-			rat := make([]float32, len(
+			rat := make([]float32, len(at))
+			for i, v := range at {
+				rat[i] = float32(v)
+			}
+			msg.FloatsKey(k, rat)
+		case float32:
+			msg.FloatKey(k, at)
+		case float64:
+			msg.FloatKey(k, float32(at))
+
+		case []int:
+			
