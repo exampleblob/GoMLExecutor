@@ -173,4 +173,14 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 			msg.IntKey(k, int(at))
 
 		case []string:
-			msg
+			msg.StringsKey(k, at)
+		case string:
+			msg.StringKey(k, at)
+
+		default:
+			return fmt.Errorf("%s:could not form payload %T (%+v)", modelID, at, at)
+		}
+	}
+
+	resp := new(client.Response)
+	// see if th
