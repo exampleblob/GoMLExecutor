@@ -160,4 +160,17 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 			msg.IntsKey(k, rat)
 		case []int64:
 			rat := make([]int, len(at))
-			for 
+			for i, v := range at {
+				rat[i] = int(v)
+			}
+			msg.IntsKey(k, rat)
+
+		case int:
+			msg.IntKey(k, at)
+		case int32:
+			msg.IntKey(k, int(at))
+		case int64:
+			msg.IntKey(k, int(at))
+
+		case []string:
+			msg
