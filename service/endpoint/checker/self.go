@@ -187,4 +187,15 @@ func SelfTest(host []*client.Host, timeout time.Duration, modelID string, usesTr
 	// if there is, trigger the transform with mock data?
 	resp.Data = Generated(outputs, batchSize, usesTransformer)()
 
-	ctx, cancel := context.WithTimeout(context.Background()
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	// send response
+	err = cli.Run(ctx, msg, resp)
+
+	if err != nil {
+		return fmt.Errorf("%s:Run():%w", modelID, err)
+	}
+
+	return nil
+}
