@@ -31,4 +31,12 @@ func (e *Endpoint) Init() {
 	if e.ReadTimeoutMs == 0 {
 		e.ReadTimeoutMs = 5000
 	}
-	if e.WriteTimeou
+	if e.WriteTimeoutMs == 0 {
+		e.WriteTimeoutMs = 5000
+	}
+	if e.WriteTimeout == 0 {
+		e.WriteTimeout = time.Duration(e.WriteTimeoutMs) * time.Millisecond
+	}
+
+	if e.MaxHeaderBytes == 0 {
+		e.MaxHeade
