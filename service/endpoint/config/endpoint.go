@@ -18,4 +18,9 @@ type Endpoint struct {
 	PoolMaxSize int `json:",omitempty" yaml:",omitempty"`
 	BufferSize  int `json:",omitempty" yaml:",omitempty"`
 
-	MaxEvaluatorWaitMs      int 
+	MaxEvaluatorWaitMs      int           `json:",omitempty" yaml:",omitempty"`
+	MaxEvaluatorWait        time.Duration `json:",omitempty" yaml:",omitempty"`
+	MaxEvaluatorConcurrency int64         `json:",omitempty" yaml:",omitempty"`
+}
+
+/
