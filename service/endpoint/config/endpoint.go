@@ -23,4 +23,12 @@ type Endpoint struct {
 	MaxEvaluatorConcurrency int64         `json:",omitempty" yaml:",omitempty"`
 }
 
-/
+//Init init applied default settings
+func (e *Endpoint) Init() {
+	if e.Port == 0 {
+		e.Port = 8080
+	}
+	if e.ReadTimeoutMs == 0 {
+		e.ReadTimeoutMs = 5000
+	}
+	if e.WriteTimeou
