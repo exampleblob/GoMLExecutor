@@ -39,4 +39,14 @@ func (e *Endpoint) Init() {
 	}
 
 	if e.MaxHeaderBytes == 0 {
-		e.MaxHeade
+		e.MaxHeaderBytes = 8 * 1024
+	}
+
+	if e.PoolMaxSize == 0 {
+		e.PoolMaxSize = 512
+	}
+	if e.BufferSize == 0 {
+		e.BufferSize = 128 * 1024
+	}
+
+	if e.MaxEvaluatorW
