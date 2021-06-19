@@ -11,4 +11,14 @@ import (
 
 type HealthHandler struct {
 	healths map[string]*int32
-	mu   
+	mu      *sync.Mutex
+}
+
+func NewHealthHandler() *HealthHandler {
+	return &HealthHandler{
+		mu:      new(sync.Mutex),
+		healths: make(map[string]*int32),
+	}
+}
+
+func (h *HealthHandler) RegisterH
