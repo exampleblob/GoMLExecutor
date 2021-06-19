@@ -54,4 +54,10 @@ func (e *Endpoint) Init() {
 	}
 
 	if e.MaxEvaluatorWait == 0 {
-		e.MaxEvaluatorWait = time.Millisecond * time.Duration(defaultMaxEvaluatorW
+		e.MaxEvaluatorWait = time.Millisecond * time.Duration(defaultMaxEvaluatorWait)
+	}
+
+	if e.MaxEvaluatorConcurrency <= 0 {
+		e.MaxEvaluatorConcurrency = 5000
+	}
+}
