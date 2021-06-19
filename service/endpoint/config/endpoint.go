@@ -49,4 +49,9 @@ func (e *Endpoint) Init() {
 		e.BufferSize = 128 * 1024
 	}
 
-	if e.MaxEvaluatorW
+	if e.MaxEvaluatorWaitMs != 0 {
+		e.MaxEvaluatorWait = time.Millisecond * time.Duration(e.MaxEvaluatorWaitMs)
+	}
+
+	if e.MaxEvaluatorWait == 0 {
+		e.MaxEvaluatorWait = time.Millisecond * time.Duration(defaultMaxEvaluatorW
