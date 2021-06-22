@@ -28,4 +28,9 @@ func (h *HealthHandler) RegisterHealthPoint(name string, isOkPtr *int32) {
 }
 
 // implements Hook
-func (h *HealthHandler) Hook(model *config.Model, modelSr
+func (h *HealthHandler) Hook(model *config.Model, modelSrv *service.Service) {
+	h.RegisterHealthPoint(model.ID, &modelSrv.ReloadOK)
+}
+
+// implements http.Handler
+func (h *HealthHandler) ServeHTTP(writer http.ResponseWriter, request *http.R
