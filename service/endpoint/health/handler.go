@@ -21,4 +21,11 @@ func NewHealthHandler() *HealthHandler {
 	}
 }
 
-func (h *HealthHandler) RegisterH
+func (h *HealthHandler) RegisterHealthPoint(name string, isOkPtr *int32) {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	h.healths[name] = isOkPtr
+}
+
+// implements Hook
+func (h *HealthHandler) Hook(model *config.Model, modelSr
