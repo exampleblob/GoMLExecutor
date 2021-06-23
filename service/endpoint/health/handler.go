@@ -33,4 +33,8 @@ func (h *HealthHandler) Hook(model *config.Model, modelSrv *service.Service) {
 }
 
 // implements http.Handler
-func (h *HealthHandler) ServeHTTP(writer http.ResponseWriter, request *http.R
+func (h *HealthHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
+	JSON, _ := json.Marshal(h.healths)
+	writer.Header().Set("Content-Type", "application/json")
+	writer.Write(JSON)
+}
