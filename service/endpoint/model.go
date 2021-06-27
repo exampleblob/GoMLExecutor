@@ -24,4 +24,7 @@ type Hook interface {
 	Hook(*config.Model, *service.Service)
 }
 
-func Build(mux *http.ServeMux, config *Config, datasto
+func Build(mux *http.ServeMux, config *Config, datastores map[string]*datastore.Service, hooks []Hook, metrics *gmetric.Service) error {
+	pool := buffer.New(config.Endpoint.PoolMaxSize, config.Endpoint.BufferSize)
+	fs := afs.New()
+	handlerTimeout :
