@@ -31,3 +31,12 @@ func Build(mux *http.ServeMux, config *Config, datastores map[string]*datastore.
 
 	sema := semaphore.NewWeighted(config.Endpoint.MaxEvaluatorConcurrency)
 	mewOpt := service.WithMaxEvaluatorWait(config.Endpoint.MaxEvaluatorWait)
+
+	waitGroup := sync.WaitGroup{}
+	numModels := len(config.ModelList.Models)
+	waitGroup.Add(numModels)
+
+	log.Printf("init %d models...\n", numModels)
+
+	var err error
+	var lock sy
