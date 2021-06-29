@@ -27,4 +27,7 @@ type Hook interface {
 func Build(mux *http.ServeMux, config *Config, datastores map[string]*datastore.Service, hooks []Hook, metrics *gmetric.Service) error {
 	pool := buffer.New(config.Endpoint.PoolMaxSize, config.Endpoint.BufferSize)
 	fs := afs.New()
-	handlerTimeout :
+	handlerTimeout := config.Endpoint.WriteTimeout - time.Millisecond
+
+	sema := semaphore.NewWeighted(config.Endpoint.MaxEvaluatorConcurrency)
+	mewOpt := service.WithMaxEvaluatorWait(config.Endpoint.MaxEvaluatorWait)
