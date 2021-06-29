@@ -39,4 +39,12 @@ func Build(mux *http.ServeMux, config *Config, datastores map[string]*datastore.
 	log.Printf("init %d models...\n", numModels)
 
 	var err error
-	var lock sy
+	var lock sync.Mutex
+	start := time.Now()
+	for _, m := range config.ModelList.Models {
+		go func(model *serviceConfig.Model) {
+			defer waitGroup.Done()
+
+			mstart := time.Now()
+
+			log.Printf("
