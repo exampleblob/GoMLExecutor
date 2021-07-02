@@ -59,4 +59,10 @@ func Build(mux *http.ServeMux, config *Config, datastores map[string]*datastore.
 				lock.Lock()
 				defer lock.Unlock()
 
-				for _, hook 
+				for _, hook := range hooks {
+					hook.Hook(model, modelSrv)
+				}
+
+				mux.Handle(fmt.Sprintf(common.ModelURI, model.ID), handler)
+
+				metaHandler := meta.NewMetaHandler(modelSrv, &config.DatastoreLi
