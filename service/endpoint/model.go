@@ -47,4 +47,8 @@ func Build(mux *http.ServeMux, config *Config, datastores map[string]*datastore.
 
 			mstart := time.Now()
 
-			log.Printf("
+			log.Printf("[%s] model loading", model.ID)
+			e := func() error {
+				modelSrv, err := service.New(context.Background(), fs, model, metrics, sema, datastores, mewOpt)
+				if err != nil {
+					return fmt.Errorf("fai
