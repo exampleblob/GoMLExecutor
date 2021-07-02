@@ -51,4 +51,12 @@ func Build(mux *http.ServeMux, config *Config, datastores map[string]*datastore.
 			e := func() error {
 				modelSrv, err := service.New(context.Background(), fs, model, metrics, sema, datastores, mewOpt)
 				if err != nil {
-					return fmt.Errorf("fai
+					return fmt.Errorf("failed to create service for model:%v, err:%w", model.ID, err)
+				}
+
+				handler := service.NewHandler(modelSrv, pool, handlerTimeout)
+
+				lock.Lock()
+				defer lock.Unlock()
+
+				for _, hook 
