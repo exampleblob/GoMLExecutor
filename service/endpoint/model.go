@@ -65,4 +65,13 @@ func Build(mux *http.ServeMux, config *Config, datastores map[string]*datastore.
 
 				mux.Handle(fmt.Sprintf(common.ModelURI, model.ID), handler)
 
-				metaHandler := meta.NewMetaHandler(modelSrv, &config.DatastoreLi
+				metaHandler := meta.NewMetaHandler(modelSrv, &config.DatastoreList, metrics)
+				mux.Handle(fmt.Sprintf(common.MetaURI, model.ID), metaHandler)
+
+				return nil
+			}()
+
+			if e != nil {
+				log.Printf("[%s init] error:%s", model.ID, e)
+
+	
