@@ -74,4 +74,15 @@ func Build(mux *http.ServeMux, config *Config, datastores map[string]*datastore.
 			if e != nil {
 				log.Printf("[%s init] error:%s", model.ID, e)
 
-	
+				lock.Lock()
+				err = e
+				lock.Unlock()
+			}
+
+			log.Printf("[%s] model loaded (%s)", model.ID, time.Now().Sub(mstart))
+		}(m)
+	}
+
+	waitGroup.Wait()
+
+	log.Printf("all mod
