@@ -85,4 +85,6 @@ func Build(mux *http.ServeMux, config *Config, datastores map[string]*datastore.
 
 	waitGroup.Wait()
 
-	log.Printf("all mod
+	log.Printf("all model services loaded in %s", time.Since(start))
+	return err
+}
