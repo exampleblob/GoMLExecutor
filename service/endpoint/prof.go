@@ -29,4 +29,6 @@ func (h *memProfHandler) ServeHTTP(writer http.ResponseWriter, request *http.Req
 	h.l.Lock()
 	defer h.l.Unlock()
 
-	writer.Header().Set("Content-Dispos
+	writer.Header().Set("Content-Disposition", "attachment; filename=memprof.prof")
+	pprof.WriteHeapProfile(writer)
+}
