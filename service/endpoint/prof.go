@@ -21,3 +21,12 @@ type memProfHandler struct {
 
 func NewProfHandler() *memProfHandler {
 	return &memProfHandler{
+		l: new(sync.Mutex),
+	}
+}
+
+func (h *memProfHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
+	h.l.Lock()
+	defer h.l.Unlock()
+
+	writer.Header().Set("Content-Dispos
