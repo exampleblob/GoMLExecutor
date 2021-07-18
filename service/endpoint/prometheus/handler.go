@@ -5,4 +5,11 @@ import (
 	"regexp"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"git
+	"github.com/prometheus/client_golang/prometheus/collectors"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+)
+
+func Handler() http.HandlerFunc {
+	pr := prometheus.NewRegistry()
+
+	r := r
