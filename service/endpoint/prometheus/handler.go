@@ -16,4 +16,8 @@ func Handler() http.HandlerFunc {
 	collOpts := collectors.WithGoCollectorRuntimeMetrics(collectors.GoRuntimeMetricsRule{r})
 	pr.MustRegister(collectors.NewGoCollector(collOpts))
 
-	//pr.MustRegister(collectors.NewPr
+	//pr.MustRegister(collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}))
+
+	promHandler := promhttp.HandlerFor(pr, promhttp.HandlerOpts{})
+	return promHandler.ServeHTTP
+}
