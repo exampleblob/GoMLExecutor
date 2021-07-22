@@ -12,4 +12,8 @@ import (
 func Handler() http.HandlerFunc {
 	pr := prometheus.NewRegistry()
 
-	r := r
+	r := regexp.MustCompile("\\/sched.*")
+	collOpts := collectors.WithGoCollectorRuntimeMetrics(collectors.GoRuntimeMetricsRule{r})
+	pr.MustRegister(collectors.NewGoCollector(collOpts))
+
+	//pr.MustRegister(collectors.NewPr
