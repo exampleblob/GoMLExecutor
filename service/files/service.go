@@ -17,4 +17,15 @@ func ModifiedSnapshot(ctx context.Context, fs afs.Service, URL string, resource 
 	}
 
 	if extURL := url.SchemeExtensionURL(URL); extURL != "" {
-		object, err := fs.Object(ctx, ex
+		object, err := fs.Object(ctx, extURL)
+		if err != nil {
+			return nil, err
+		}
+
+		resource.Max = object.ModTime()
+		resource.Min = object.ModTime()
+		return resource, nil
+	}
+
+	for i, item := range objects {
+		if item.IsDir() &
