@@ -38,4 +38,11 @@ func ModifiedSnapshot(ctx context.Context, fs afs.Service, URL string, resource 
 			}
 			continue
 		}
-		
+		if resource.Max.IsZero() {
+			resource.Max = item.ModTime()
+		}
+		if resource.Min.IsZero() {
+			resource.Min = item.ModTime()
+		}
+
+		if item.ModTime().After(resource.Max) {
