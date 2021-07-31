@@ -28,4 +28,14 @@ func ModifiedSnapshot(ctx context.Context, fs afs.Service, URL string, resource 
 	}
 
 	for i, item := range objects {
-		if item.IsDir() &
+		if item.IsDir() && i == 0 {
+			continue
+		}
+		if item.IsDir() {
+			resource, err = ModifiedSnapshot(ctx, fs, item.URL(), resource)
+			if err != nil {
+				return resource, err
+			}
+			continue
+		}
+		
