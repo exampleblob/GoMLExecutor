@@ -15,4 +15,16 @@ type storerOption struct {
 }
 
 func (o *storerOption) Apply(c *Service) {
-	c.datastore = o.
+	c.datastore = o.storer
+	c.useDatastore = true
+}
+
+func WithDataStorer(storer datastore.Storer) Option {
+	return &storerOption{storer: storer}
+}
+
+type maxEvaluatorWait struct {
+	time.Duration
+}
+
+func
