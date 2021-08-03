@@ -27,4 +27,10 @@ type maxEvaluatorWait struct {
 	time.Duration
 }
 
-func
+func (o *maxEvaluatorWait) Apply(s *Service) {
+	s.maxEvaluatorWait = o.Duration
+}
+
+func WithMaxEvaluatorWait(wait time.Duration) *maxEvaluatorWait {
+	return &maxEvaluatorWait{wait}
+}
