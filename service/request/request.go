@@ -232,3 +232,15 @@ func (r *Request) Validate() error {
 	if len(r.inputs) != len(r.supplied) {
 		missing := make([]string, 0)
 		for _, input := range r.inputs {
+			if _, ok := r.supplied[input.Name]; !ok {
+				missing = append(missing, input.Name)
+			}
+		}
+
+		if len(missing) > 0 {
+			return fmt.Errorf("failed to build request due to missing fields: %v", missing)
+		}
+	}
+
+	return nil
+}
