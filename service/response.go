@@ -10,4 +10,12 @@ import (
 	"unsafe"
 )
 
-//Response represents ser
+//Response represents service response
+type Response struct {
+	started        time.Time
+	xSlice         *xunsafe.Slice
+	sliceLen       int
+	Status         string
+	Error          string
+	DictHash       int
+	Data           in
