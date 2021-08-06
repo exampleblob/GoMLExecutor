@@ -18,4 +18,17 @@ type Response struct {
 	Status         string
 	Error          string
 	DictHash       int
-	Data           in
+	Data           interface{}
+	ServiceTimeMcs int
+}
+
+//SetError sets errors
+func (r *Response) SetError(err error) {
+	if err == nil {
+		return
+	}
+	r.Error = err.Error()
+	r.Status = common.StatusError
+}
+
+//MarshalJSONObj
