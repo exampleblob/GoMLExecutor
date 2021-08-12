@@ -31,4 +31,8 @@ func (r *Response) SetError(err error) {
 	r.Status = common.StatusError
 }
 
-//MarshalJSONObj
+//MarshalJSONObject marshal response
+func (r *Response) MarshalJSONObject(enc *gojay.Encoder) {
+	enc.StringKeyOmitEmpty("status", r.Status)
+	enc.StringKeyOmitEmpty("error", r.Error)
+	enc.IntKeyOmitEmpty("dictHash", r.DictHash
