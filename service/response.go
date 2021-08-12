@@ -35,4 +35,8 @@ func (r *Response) SetError(err error) {
 func (r *Response) MarshalJSONObject(enc *gojay.Encoder) {
 	enc.StringKeyOmitEmpty("status", r.Status)
 	enc.StringKeyOmitEmpty("error", r.Error)
-	enc.IntKeyOmitEmpty("dictHash", r.DictHash
+	enc.IntKeyOmitEmpty("dictHash", r.DictHash)
+	enc.IntKey("serviceTimeMcs", r.ServiceTimeMcs)
+	if r.Data != nil {
+		if r.xSlice != nil {
+			aMarshaler := &sliceMarshaler{len: r.sliceLen, xSlice: r.xSlice, ptr: xunsafe.AsPointer(r.Dat
