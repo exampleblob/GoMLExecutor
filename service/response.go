@@ -46,4 +46,10 @@ func (r *Response) MarshalJSONObject(enc *gojay.Encoder) {
 		if marshaler, ok := r.Data.(gojay.MarshalerJSONObject); ok {
 			enc.ObjectKey("data", marshaler)
 		} else {
-			if data, err := json.Marshal(r.Data); err
+			if data, err := json.Marshal(r.Data); err == nil {
+				embeded := gojay.EmbeddedJSON(data)
+				if err = enc.EncodeEmbeddedJSON(&embeded); err != nil {
+					log.Printf("faild to encode: %s %v", data, err)
+				}
+			}
+		}
