@@ -39,4 +39,11 @@ func (r *Response) MarshalJSONObject(enc *gojay.Encoder) {
 	enc.IntKey("serviceTimeMcs", r.ServiceTimeMcs)
 	if r.Data != nil {
 		if r.xSlice != nil {
-			aMarshaler := &sliceMarshaler{len: r.sliceLen, xSlice: r.xSlice, ptr: xunsafe.AsPointer(r.Dat
+			aMarshaler := &sliceMarshaler{len: r.sliceLen, xSlice: r.xSlice, ptr: xunsafe.AsPointer(r.Data)}
+			enc.ArrayKey("data", aMarshaler)
+			return
+		}
+		if marshaler, ok := r.Data.(gojay.MarshalerJSONObject); ok {
+			enc.ObjectKey("data", marshaler)
+		} else {
+			if data, err := json.Marshal(r.Data); err
