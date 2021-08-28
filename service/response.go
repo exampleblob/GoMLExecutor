@@ -53,3 +53,15 @@ func (r *Response) MarshalJSONObject(enc *gojay.Encoder) {
 				}
 			}
 		}
+	}
+}
+
+//IsNil returns true if nil (gojay json API)
+func (r *Response) IsNil() bool {
+	return false
+}
+
+type sliceMarshaler struct {
+	len    int
+	xSlice *xunsafe.Slice
+	ptr    unsafe.Poin
