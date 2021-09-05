@@ -64,4 +64,11 @@ func (r *Response) IsNil() bool {
 type sliceMarshaler struct {
 	len    int
 	xSlice *xunsafe.Slice
-	ptr    unsafe.Poin
+	ptr    unsafe.Pointer
+}
+
+// MarshalerJSONArray is the interface to implement
+// for a slice or an array to be encoded
+func (m *sliceMarshaler) MarshalJSONArray(enc *gojay.Encoder) {
+	for i := 0; i < m.len; i++ {
+		val
