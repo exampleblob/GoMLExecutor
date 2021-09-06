@@ -87,3 +87,5 @@ func (m *sliceMarshaler) MarshalJSONArray(enc *gojay.Encoder) {
 }
 
 func (m *sliceMarshaler) IsNil() bool {
+	return false
+}
