@@ -77,3 +77,13 @@ func (m *sliceMarshaler) MarshalJSONArray(enc *gojay.Encoder) {
 			enc.Object(marshaler)
 		} else {
 			if data, err := json.Marshal(value); err == nil {
+				embeded := gojay.EmbeddedJSON(data)
+				if err = enc.EncodeEmbeddedJSON(&embeded); err != nil {
+					log.Printf("faild to encode: %s %v", data, err)
+				}
+			}
+		}
+	}
+}
+
+func (m *sliceMarshaler) IsNil() bool {
