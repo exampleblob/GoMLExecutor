@@ -71,4 +71,9 @@ type sliceMarshaler struct {
 // for a slice or an array to be encoded
 func (m *sliceMarshaler) MarshalJSONArray(enc *gojay.Encoder) {
 	for i := 0; i < m.len; i++ {
-		val
+		value := m.xSlice.ValuePointerAt(m.ptr, i)
+		marshaler, ok := value.(gojay.MarshalerJSONObject)
+		if ok {
+			enc.Object(marshaler)
+		} else {
+			if data, err := json.Marshal(value); err == nil {
