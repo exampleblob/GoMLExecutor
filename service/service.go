@@ -36,4 +36,16 @@ import (
 	sstat "github.com/viant/mly/shared/stat"
 	"github.com/viant/xunsafe"
 	"golang.org/x/sync/semaphore"
-	"gopkg.in/y
+	"gopkg.in/yaml.v3"
+)
+
+type Service struct {
+	config *config.Model
+	closed int32
+
+	maxEvaluatorWait time.Duration
+
+	// TODO how does this interact with Service.inputs
+	inputProvider *gtly.Provider
+
+	// reload
