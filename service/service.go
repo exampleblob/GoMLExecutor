@@ -49,3 +49,10 @@ type Service struct {
 	inputProvider *gtly.Provider
 
 	// reload
+	ReloadOK int32
+	fs       afs.Service
+	mux      sync.RWMutex
+
+	// model
+	sema      *semaphore.Weighted // prevents potentially explosive thread generation due to concurrent requests
+	evaluator *tfmode
