@@ -55,4 +55,15 @@ type Service struct {
 
 	// model
 	sema      *semaphore.Weighted // prevents potentially explosive thread generation due to concurrent requests
-	evaluator *tfmode
+	evaluator *tfmodel.Evaluator
+
+	// model io
+	signature *domain.Signature
+	inputs    map[string]*domain.Input
+
+	// caching
+	useDatastore bool
+	dictionary   *common.Dictionary
+	datastore    datastore.Storer
+
+	// outp
