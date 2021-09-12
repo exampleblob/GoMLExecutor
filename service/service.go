@@ -78,4 +78,16 @@ type Service struct {
 	stream *stream.Service
 }
 
-func (s *Service) Clos
+func (s *Service) Close() error {
+	if !atomic.CompareAndSwapInt32(&s.closed, 0, 1) {
+		return fmt.Errorf("already closed")
+	}
+
+	if s.evaluator == nil {
+		return nil
+	}
+
+	return s.evaluator.Close()
+}
+
+func (s *Service) Config() *c
