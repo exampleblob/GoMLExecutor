@@ -98,4 +98,15 @@ func (s *Service) Dictionary() *common.Dictionary {
 	return s.dictionary
 }
 
-func (s *Service) Do(ctx context.Context, request *request.Reques
+func (s *Service) Do(ctx context.Context, request *request.Request, response *Response) error {
+	err := s.do(ctx, request, response)
+	if err != nil {
+		response.Error = err.Error()
+		response.Status = common.StatusError
+		return err
+	}
+
+	return nil
+}
+
+func (s *Service) d
