@@ -66,4 +66,16 @@ type Service struct {
 	dictionary   *common.Dictionary
 	datastore    datastore.Storer
 
-	// outp
+	// outputs
+	transformer domain.Transformer
+	newStorable func() common.Storable
+
+	// metrics
+	serviceMetric   *gmetric.Operation
+	evaluatorMetric *gmetric.Operation
+
+	// logging
+	stream *stream.Service
+}
+
+func (s *Service) Clos
