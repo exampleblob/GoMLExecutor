@@ -90,4 +90,12 @@ func (s *Service) Close() error {
 	return s.evaluator.Close()
 }
 
-func (s *Service) Config() *c
+func (s *Service) Config() *config.Model {
+	return s.config
+}
+
+func (s *Service) Dictionary() *common.Dictionary {
+	return s.dictionary
+}
+
+func (s *Service) Do(ctx context.Context, request *request.Reques
