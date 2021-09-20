@@ -112,4 +112,13 @@ func (s *Service) Do(ctx context.Context, request *request.Request, response *Re
 func (s *Service) do(ctx context.Context, request *request.Request, response *Response) error {
 	startTime := time.Now()
 	onDone := s.serviceMetric.Begin(startTime)
-	onPendingDone := incrementPending(s.serviceMetric, star
+	onPendingDone := incrementPending(s.serviceMetric, startTime)
+	stats := sstat.NewValues()
+	defer func() {
+		onDone(time.Now(), stats.Values()...)
+		onPendingDone()
+	}()
+
+	err := request.Validate()
+	if s.config.Debug && err != nil {
+		log.P
