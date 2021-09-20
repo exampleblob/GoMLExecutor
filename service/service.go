@@ -109,4 +109,7 @@ func (s *Service) Do(ctx context.Context, request *request.Request, response *Re
 	return nil
 }
 
-func (s *Service) d
+func (s *Service) do(ctx context.Context, request *request.Request, response *Response) error {
+	startTime := time.Now()
+	onDone := s.serviceMetric.Begin(startTime)
+	onPendingDone := incrementPending(s.serviceMetric, star
