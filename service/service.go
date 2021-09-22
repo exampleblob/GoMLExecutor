@@ -121,4 +121,10 @@ func (s *Service) do(ctx context.Context, request *request.Request, response *Re
 
 	err := request.Validate()
 	if s.config.Debug && err != nil {
-		log.P
+		log.Printf("[%v do] validation error: %v\n", s.config.ID, err)
+	}
+
+	if err != nil {
+		// only captures missing fields
+		stats.Append(stat.Invalid)
+		return clienterr.Wrap(fmt.Errorf("%w,
