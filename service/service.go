@@ -127,4 +127,10 @@ func (s *Service) do(ctx context.Context, request *request.Request, response *Re
 	if err != nil {
 		// only captures missing fields
 		stats.Append(stat.Invalid)
-		return clienterr.Wrap(fmt.Errorf("%w,
+		return clienterr.Wrap(fmt.Errorf("%w, body: %s", err, request.Body))
+	}
+
+	if err != nil {
+		stats.AppendError(err)
+		log.Printf("[%v do] limiter error:(%+v) request:(%+v)", s.config.ID, err, request)
+		return 
