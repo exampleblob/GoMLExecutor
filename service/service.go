@@ -133,4 +133,13 @@ func (s *Service) do(ctx context.Context, request *request.Request, response *Re
 	if err != nil {
 		stats.AppendError(err)
 		log.Printf("[%v do] limiter error:(%+v) request:(%+v)", s.config.ID, err, request)
-		return 
+		return err
+	}
+
+	cancel := func() {}
+	if s.maxEvaluatorWait > 0 {
+		// this is here due to how the semaphore operates
+		ctx, cancel = context.WithTimeout(ctx, s.maxEvaluatorWait)
+	}
+
+	tensorValues, err 
