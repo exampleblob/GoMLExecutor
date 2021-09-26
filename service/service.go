@@ -148,4 +148,10 @@ func (s *Service) do(ctx context.Context, request *request.Request, response *Re
 	if err != nil {
 		// we waited or there was an issue with evaluation; in either case
 		// the prediction never finished so there is nothing left to clean up
-		stats.Appen
+		stats.AppendError(err)
+		log.Printf("[%v do] eval error:(%+v) request:(%+v)", s.config.ID, err, request)
+		return err
+	}
+
+	stats.Append(stat.Evaluate)
+	return s.buildResponse(ctx, request, response, tenso
