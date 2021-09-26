@@ -154,4 +154,9 @@ func (s *Service) do(ctx context.Context, request *request.Request, response *Re
 	}
 
 	stats.Append(stat.Evaluate)
-	return s.buildResponse(ctx, request, response, tenso
+	return s.buildResponse(ctx, request, response, tensorValues)
+}
+
+func (s *Service) transformOutput(ctx context.Context, request *request.Request, output interface{}) (common.Storable, error) {
+	inputIndex := inputIndex(output)
+	inputObject := requ
