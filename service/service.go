@@ -159,4 +159,8 @@ func (s *Service) do(ctx context.Context, request *request.Request, response *Re
 
 func (s *Service) transformOutput(ctx context.Context, request *request.Request, output interface{}) (common.Storable, error) {
 	inputIndex := inputIndex(output)
-	inputObject := requ
+	inputObject := request.Input.ObjectAt(s.inputProvider, inputIndex)
+
+	transformed, err := s.transformer(ctx, s.signature, inputObject, output)
+	if err != nil {
+		return nil, fmt.Errorf("fai
