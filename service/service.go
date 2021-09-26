@@ -142,4 +142,10 @@ func (s *Service) do(ctx context.Context, request *request.Request, response *Re
 		ctx, cancel = context.WithTimeout(ctx, s.maxEvaluatorWait)
 	}
 
-	tensorValues, err 
+	tensorValues, err := s.evaluate(ctx, request)
+	cancel()
+
+	if err != nil {
+		// we waited or there was an issue with evaluation; in either case
+		// the prediction never finished so there is nothing left to clean up
+		stats.Appen
