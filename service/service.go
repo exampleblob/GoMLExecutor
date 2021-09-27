@@ -170,4 +170,13 @@ func (s *Service) transformOutput(ctx context.Context, request *request.Request,
 		dictHash := s.Dictionary().Hash
 		cacheKey := request.Input.KeyAt(inputIndex)
 
-		isDebug := s.config.Deb
+		isDebug := s.config.Debug
+		key := s.datastore.Key(cacheKey)
+
+		go func() {
+			err := s.datastore.Put(ctx, key, transformed, dictHash)
+			if err != nil {
+				log.Printf("[%s trout] put error:%v", s.config.ID, err)
+			}
+
+			if isDeb
