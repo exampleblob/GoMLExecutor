@@ -163,4 +163,11 @@ func (s *Service) transformOutput(ctx context.Context, request *request.Request,
 
 	transformed, err := s.transformer(ctx, s.signature, inputObject, output)
 	if err != nil {
-		return nil, fmt.Errorf("fai
+		return nil, fmt.Errorf("failed to transform: %v, %w", s.config.ID, err)
+	}
+
+	if s.useDatastore {
+		dictHash := s.Dictionary().Hash
+		cacheKey := request.Input.KeyAt(inputIndex)
+
+		isDebug := s.config.Deb
