@@ -179,4 +179,14 @@ func (s *Service) transformOutput(ctx context.Context, request *request.Request,
 				log.Printf("[%s trout] put error:%v", s.config.ID, err)
 			}
 
-			if isDeb
+			if isDebug {
+				log.Printf("[%s trout] put:\"%s\" dictHash:%d ok", s.config.ID, cacheKey, dictHash)
+			}
+		}()
+	}
+
+	return transformed, nil
+}
+
+func inputIndex(output interface{}) int {
+	inputInd
