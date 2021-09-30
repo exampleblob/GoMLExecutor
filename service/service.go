@@ -189,4 +189,11 @@ func (s *Service) transformOutput(ctx context.Context, request *request.Request,
 }
 
 func inputIndex(output interface{}) int {
-	inputInd
+	inputIndex := 0
+	if out, ok := output.(*shared.Output); ok {
+		inputIndex = out.InputIndex
+	}
+	return inputIndex
+}
+
+func (s *Service) buildResponse(ctx context.Context, request *request.Request, re
