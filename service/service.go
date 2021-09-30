@@ -196,4 +196,9 @@ func inputIndex(output interface{}) int {
 	return inputIndex
 }
 
-func (s *Service) buildResponse(ctx context.Context, request *request.Request, re
+func (s *Service) buildResponse(ctx context.Context, request *request.Request, response *Response, tensorValues []interface{}) error {
+	if s.dictionary != nil {
+		response.DictHash = s.dictionary.Hash
+	}
+
+	// TODO change with understanding that batched / multi-request always oper
