@@ -201,4 +201,12 @@ func (s *Service) buildResponse(ctx context.Context, request *request.Request, r
 		response.DictHash = s.dictionary.Hash
 	}
 
-	// TODO change with understanding that batched / multi-request always oper
+	// TODO change with understanding that batched / multi-request always operates on the first dimension
+	if !request.Input.BatchMode() {
+		var err error
+		// single input
+		response.Data, err = s.transformOutput(ctx, request, tensorValues)
+		return err
+	}
+
+	output := &shared.
