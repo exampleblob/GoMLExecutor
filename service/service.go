@@ -209,4 +209,11 @@ func (s *Service) buildResponse(ctx context.Context, request *request.Request, r
 		return err
 	}
 
-	output := &shared.
+	output := &shared.Output{Values: tensorValues}
+	// index 0 call to get data type
+	transformed, err := s.transformOutput(ctx, request, output)
+	if err != nil {
+		return err
+	}
+
+	sliceType := reflect.Sli
