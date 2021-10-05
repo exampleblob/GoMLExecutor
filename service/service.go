@@ -216,4 +216,7 @@ func (s *Service) buildResponse(ctx context.Context, request *request.Request, r
 		return err
 	}
 
-	sliceType := reflect.Sli
+	sliceType := reflect.SliceOf(reflect.TypeOf(transformed))
+	// xSlice = make([]`sliceType`, request.Input.BatchSize)
+	sliceValue := reflect.MakeSlice(sliceType, 0, request.Input.BatchSize)
+	slicePtr := xunsafe.ValuePoi
