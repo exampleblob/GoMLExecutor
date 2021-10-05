@@ -219,4 +219,11 @@ func (s *Service) buildResponse(ctx context.Context, request *request.Request, r
 	sliceType := reflect.SliceOf(reflect.TypeOf(transformed))
 	// xSlice = make([]`sliceType`, request.Input.BatchSize)
 	sliceValue := reflect.MakeSlice(sliceType, 0, request.Input.BatchSize)
-	slicePtr := xunsafe.ValuePoi
+	slicePtr := xunsafe.ValuePointer(&sliceValue)
+	xSlice := xunsafe.NewSlice(sliceType)
+
+	response.xSlice = xSlice
+	response.sliceLen = request.Input.BatchSize
+
+	// xSlice = append(xSlice, transformed)
+	appe
