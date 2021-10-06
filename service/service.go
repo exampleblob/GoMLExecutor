@@ -226,4 +226,10 @@ func (s *Service) buildResponse(ctx context.Context, request *request.Request, r
 	response.sliceLen = request.Input.BatchSize
 
 	// xSlice = append(xSlice, transformed)
-	appe
+	appender := xSlice.Appender(slicePtr)
+	appender.Append(transformed)
+
+	// index 1 - end calls
+	for i := 1; i < request.Input.BatchSize; i++ {
+		output.InputIndex = i
+		if tr
