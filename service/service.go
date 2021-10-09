@@ -232,4 +232,14 @@ func (s *Service) buildResponse(ctx context.Context, request *request.Request, r
 	// index 1 - end calls
 	for i := 1; i < request.Input.BatchSize; i++ {
 		output.InputIndex = i
-		if tr
+		if transformed, err = s.transformOutput(ctx, request, output); err != nil {
+			return err
+		}
+		appender.Append(transformed)
+	}
+
+	response.Data = sliceValue.Interface()
+	return nil
+}
+
+func incrementPen
