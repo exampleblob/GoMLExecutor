@@ -242,4 +242,8 @@ func (s *Service) buildResponse(ctx context.Context, request *request.Request, r
 	return nil
 }
 
-func incrementPen
+func incrementPending(metric *gmetric.Operation, startTime time.Time) func() {
+	return incrementThenDecrement(metric, startTime, stat.Pending)
+}
+
+func incrementThenDecrement(metric *gmetric.Operation, sta
