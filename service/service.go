@@ -268,4 +268,10 @@ func (s *Service) evaluate(ctx context.Context, request *request.Request) ([]int
 	if err != nil {
 		return nil, err
 	}
-	// even if canceled/deadline exceeded, we'r
+	// even if canceled/deadline exceeded, we're going to run the eval
+	defer s.sema.Release(1)
+
+	startTime := time.Now()
+	onDone := s.evaluatorMetric.Begin(startTime)
+	onPendingDone := incrementPending(s.evaluatorMetric, startTime)
+	stats
