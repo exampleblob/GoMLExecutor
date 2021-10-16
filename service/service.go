@@ -254,4 +254,11 @@ func incrementThenDecrement(metric *gmetric.Operation, start time.Time, statName
 	recentCounter.IncrementValue(statName)
 
 	return func() {
-		metric.DecrementValu
+		metric.DecrementValue(statName)
+		recentCounter := metric.Recent[index]
+		recentCounter.DecrementValue(statName)
+	}
+
+}
+
+func (s *Service) evaluate(ctx context.Context, request *request.Request) ([]interface{}, error) {
