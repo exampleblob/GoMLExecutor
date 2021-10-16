@@ -246,4 +246,12 @@ func incrementPending(metric *gmetric.Operation, startTime time.Time) func() {
 	return incrementThenDecrement(metric, startTime, stat.Pending)
 }
 
-func incrementThenDecrement(metric *gmetric.Operation, sta
+func incrementThenDecrement(metric *gmetric.Operation, start time.Time, statName string) func() {
+	metric.IncrementValue(statName)
+
+	index := metric.Index(start)
+	recentCounter := metric.Recent[index]
+	recentCounter.IncrementValue(statName)
+
+	return func() {
+		metric.DecrementValu
