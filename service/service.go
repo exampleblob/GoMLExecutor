@@ -262,3 +262,10 @@ func incrementThenDecrement(metric *gmetric.Operation, start time.Time, statName
 }
 
 func (s *Service) evaluate(ctx context.Context, request *request.Request) ([]interface{}, error) {
+	trr := trace.StartRegion(ctx, "Semaphore.Acquire")
+	err := s.sema.Acquire(ctx, 1)
+	trr.End()
+	if err != nil {
+		return nil, err
+	}
+	// even if canceled/deadline exceeded, we'r
