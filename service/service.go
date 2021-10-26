@@ -281,4 +281,13 @@ func (s *Service) evaluate(ctx context.Context, request *request.Request) ([]int
 	}()
 
 	rleDone := incrementThenDecrement(s.evaluatorMetric, time.Now(), stat.RLockEvaluator)
-	s
+	s.mux.RLock()
+	evaluator := s.evaluator
+	s.mux.RUnlock()
+	rleDone()
+
+	result, err := evaluator.Evaluate(request.Feeds)
+
+	if err != nil {
+		// this branch is logged by the caller
+		stat
