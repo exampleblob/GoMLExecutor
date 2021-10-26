@@ -274,4 +274,11 @@ func (s *Service) evaluate(ctx context.Context, request *request.Request) ([]int
 	startTime := time.Now()
 	onDone := s.evaluatorMetric.Begin(startTime)
 	onPendingDone := incrementPending(s.evaluatorMetric, startTime)
-	stats
+	stats := sstat.NewValues()
+	defer func() {
+		onDone(time.Now(), stats.Values()...)
+		onPendingDone()
+	}()
+
+	rleDone := incrementThenDecrement(s.evaluatorMetric, time.Now(), stat.RLockEvaluator)
+	s
