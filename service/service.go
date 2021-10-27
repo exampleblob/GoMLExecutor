@@ -290,4 +290,14 @@ func (s *Service) evaluate(ctx context.Context, request *request.Request) ([]int
 
 	if err != nil {
 		// this branch is logged by the caller
-		stat
+		stats.Append(err)
+		return nil, err
+	}
+
+	if s.config.Debug {
+		log.Printf("[%s eval] %+v", s.config.ID, result)
+	}
+
+	if s.stream != nil {
+		trace.WithRegion(ctx, "Stream.Log", func() {
+			s.stream
