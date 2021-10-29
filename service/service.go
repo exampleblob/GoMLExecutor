@@ -318,4 +318,14 @@ func (s *Service) reloadIfNeeded(ctx context.Context) error {
 		return nil
 	}
 
-	model,
+	model, err := s.loadModel(ctx, err)
+	if err != nil {
+		return err
+	}
+
+	signature, err := tfmodel.Signature(model)
+	if err != nil {
+		return fmt.Errorf("signature error:%w", err)
+	}
+
+	var dictionary *com
