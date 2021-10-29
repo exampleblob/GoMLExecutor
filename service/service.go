@@ -300,4 +300,12 @@ func (s *Service) evaluate(ctx context.Context, request *request.Request) ([]int
 
 	if s.stream != nil {
 		trace.WithRegion(ctx, "Stream.Log", func() {
-			s.stream
+			s.stream.Log(request.Body, result, time.Now().Sub(startTime))
+		})
+	}
+
+	return result, nil
+}
+
+func (s *Service) reloadIfNeeded(ctx context.Context) error {
+	snapshot, err := files.ModifiedSnapshot(ctx, s.fs
