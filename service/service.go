@@ -308,4 +308,14 @@ func (s *Service) evaluate(ctx context.Context, request *request.Request) ([]int
 }
 
 func (s *Service) reloadIfNeeded(ctx context.Context) error {
-	snapshot, err := files.ModifiedSnapshot(ctx, s.fs
+	snapshot, err := files.ModifiedSnapshot(ctx, s.fs, s.config.URL, &config.Modified{})
+	if err != nil {
+		return fmt.Errorf("failed to check changes:%w", err)
+	}
+
+	if !s.isModified(snapshot) {
+		atomic.StoreInt32(&s.ReloadOK, 1)
+		return nil
+	}
+
+	model,
