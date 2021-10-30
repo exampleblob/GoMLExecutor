@@ -328,4 +328,10 @@ func (s *Service) reloadIfNeeded(ctx context.Context) error {
 		return fmt.Errorf("signature error:%w", err)
 	}
 
-	var dictionary *com
+	var dictionary *common.Dictionary
+	reconcileIOFromSignature(s.config, signature)
+	useDict := s.config.UseDictionary()
+	if useDict {
+		s.config.DictMeta.Error = ""
+		if s.config.DictURL != "" {
+			if dictionary, err = s.
