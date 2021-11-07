@@ -340,4 +340,12 @@ func (s *Service) reloadIfNeeded(ctx context.Context) error {
 			}
 		} else {
 			// extract dictionary from the graph
-			dictionary, err = layers.Diction
+			dictionary, err = layers.Dictionary(model.Session, model.Graph, signature)
+			if err != nil {
+				s.config.DictMeta.Error = err.Error()
+				return fmt.Errorf("dictionary error:%w", err)
+			}
+		}
+	}
+
+	var inputs = make(map[string]*domain.Input)
