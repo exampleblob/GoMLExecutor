@@ -349,3 +349,10 @@ func (s *Service) reloadIfNeeded(ctx context.Context) error {
 	}
 
 	var inputs = make(map[string]*domain.Input)
+	for i, input := range signature.Inputs {
+		inputs[input.Name] = &signature.Inputs[i]
+	}
+
+	// add inputs from the config that aren't in the model
+	for _, input := range s.config.Inputs {
+	
