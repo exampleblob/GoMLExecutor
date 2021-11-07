@@ -334,4 +334,10 @@ func (s *Service) reloadIfNeeded(ctx context.Context) error {
 	if useDict {
 		s.config.DictMeta.Error = ""
 		if s.config.DictURL != "" {
-			if dictionary, err = s.
+			if dictionary, err = s.loadDictionary(ctx, s.config.DictURL); err != nil {
+				s.config.DictMeta.Error = err.Error()
+				return err
+			}
+		} else {
+			// extract dictionary from the graph
+			dictionary, err = layers.Diction
