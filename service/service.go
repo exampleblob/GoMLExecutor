@@ -355,4 +355,15 @@ func (s *Service) reloadIfNeeded(ctx context.Context) error {
 
 	// add inputs from the config that aren't in the model
 	for _, input := range s.config.Inputs {
-	
+		iName := input.Name
+		if _, ok := inputs[iName]; ok {
+			continue
+		}
+
+		fInput := &domain.Input{
+			Name:      iName,
+			Index:     input.Index,
+			Auxiliary: input.Auxiliary,
+		}
+
+		fInput.Type = input.
