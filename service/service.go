@@ -375,4 +375,16 @@ func (s *Service) reloadIfNeeded(ctx context.Context) error {
 	}
 
 	evaluator := tfmodel.NewEvaluator(s.config.ID, signature, model.Session)
-	if s.config.O
+	if s.config.OutputType != "" {
+		signature.Output.DataType = s.config.OutputType
+	}
+
+	// modify all service objects
+	s.mux.Lock()
+	defer s.mux.Unlock()
+
+	if s.evaluator != nil {
+		go s.evaluator.Close()
+	}
+
+	s.evaluator = evaluator
