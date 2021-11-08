@@ -366,4 +366,13 @@ func (s *Service) reloadIfNeeded(ctx context.Context) error {
 			Auxiliary: input.Auxiliary,
 		}
 
-		fInput.Type = input.
+		fInput.Type = input.RawType()
+		if fInput.Type == nil {
+			fInput.Type = reflect.TypeOf("")
+		}
+
+		inputs[iName] = fInput
+	}
+
+	evaluator := tfmodel.NewEvaluator(s.config.ID, signature, model.Session)
+	if s.config.O
