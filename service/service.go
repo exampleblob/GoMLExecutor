@@ -388,3 +388,12 @@ func (s *Service) reloadIfNeeded(ctx context.Context) error {
 	}
 
 	s.evaluator = evaluator
+	s.signature = signature
+
+	if dictionary != nil {
+		var filehash int64
+		if useDict && len(dictionary.Layers) == 0 {
+			filehash = snapshot.Min.Unix() + snapshot.Max.Unix()
+		}
+
+		dictionary.Updat
