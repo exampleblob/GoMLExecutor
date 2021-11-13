@@ -396,4 +396,13 @@ func (s *Service) reloadIfNeeded(ctx context.Context) error {
 			filehash = snapshot.Min.Unix() + snapshot.Max.Unix()
 		}
 
-		dictionary.Updat
+		dictionary.UpdateHash(filehash)
+
+		s.dictionary = dictionary
+
+		s.config.DictMeta.Hash = dictionary.Hash
+		s.config.DictMeta.Reloaded = time.Now()
+	}
+
+	s.inputs = inputs
+	s.config.Modified = s
