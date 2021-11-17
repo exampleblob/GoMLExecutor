@@ -405,4 +405,12 @@ func (s *Service) reloadIfNeeded(ctx context.Context) error {
 	}
 
 	s.inputs = inputs
-	s.config.Modified = s
+	s.config.Modified = snapshot
+
+	atomic.StoreInt32(&s.ReloadOK, 1)
+
+	return nil
+}
+
+func (s *Service) loadModel(ctx context.Context, err error) (*tf.SavedModel, error) {
+	options := option.NewSource(&option.NoCac
