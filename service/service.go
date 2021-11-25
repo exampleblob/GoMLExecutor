@@ -418,4 +418,9 @@ func (s *Service) loadModel(ctx context.Context, err error) (*tf.SavedModel, err
 	localPath := s.config.Location
 
 	if err := s.fs.Copy(ctx, remoteURL, localPath, options); err != nil {
-		return nil, fmt.Errorf("failed 
+		return nil, fmt.Errorf("failed to copy model %v, %s, due to %w", remoteURL, localPath, err)
+	}
+
+	log.Printf("[%s loadModel] copied %s to %s", s.config.ID, remoteURL, localPath)
+
+	model, err := tf.LoadSavedMo
