@@ -423,4 +423,11 @@ func (s *Service) loadModel(ctx context.Context, err error) (*tf.SavedModel, err
 
 	log.Printf("[%s loadModel] copied %s to %s", s.config.ID, remoteURL, localPath)
 
-	model, err := tf.LoadSavedMo
+	model, err := tf.LoadSavedModel(localPath, s.config.Tags, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to load model %v, %s, due to %w", remoteURL, localPath, err)
+	}
+	return model, nil
+}
+
+func (s *Service) isMo
