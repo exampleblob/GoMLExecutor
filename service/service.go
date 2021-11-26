@@ -446,3 +446,11 @@ func (s *Service) isModified(snapshot *config.Modified) bool {
 func (s *Service) NewRequest() *request.Request {
 	return request.NewRequest(s.config.KeysLen(), s.inputs)
 }
+
+func (s *Service) initDatastore(cfg *config.Model, datastores map[string]*datastore.Service) error {
+	if !s.useDatastore {
+		return nil
+	}
+
+	if s.signature == nil {
+		return fmt.Errorf("signatu
