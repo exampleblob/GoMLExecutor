@@ -430,4 +430,13 @@ func (s *Service) loadModel(ctx context.Context, err error) (*tf.SavedModel, err
 	return model, nil
 }
 
-func (s *Service) isMo
+func (s *Service) isModified(snapshot *config.Modified) bool {
+	if snapshot.Span() > time.Hour || snapshot.Max.IsZero() {
+		return false
+	}
+
+	s.mux.RLock()
+	modified := s.config.Modified
+	s.mux.RUnlock()
+
+	return !(modifie
