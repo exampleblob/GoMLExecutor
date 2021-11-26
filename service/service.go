@@ -439,4 +439,10 @@ func (s *Service) isModified(snapshot *config.Modified) bool {
 	modified := s.config.Modified
 	s.mux.RUnlock()
 
-	return !(modifie
+	return !(modified.Max.Equal(snapshot.Max) && modified.Min.Equal(snapshot.Min))
+}
+
+// NewRequest should be used for Do()
+func (s *Service) NewRequest() *request.Request {
+	return request.NewRequest(s.config.KeysLen(), s.inputs)
+}
