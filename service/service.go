@@ -453,4 +453,15 @@ func (s *Service) initDatastore(cfg *config.Model, datastores map[string]*datast
 	}
 
 	if s.signature == nil {
-		return fmt.Errorf("signatu
+		return fmt.Errorf("signature was emtpy")
+	}
+
+	if len(cfg.KeyFields) == 0 {
+		for _, input := range s.signature.Inputs {
+			cfg.KeyFields = append(cfg.KeyFields, input.Name)
+		}
+	}
+
+	if s.datastore == nil {
+		var ok bool
+		if s.datastore, ok = datastores[cf
