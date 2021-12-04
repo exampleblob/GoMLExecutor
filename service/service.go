@@ -464,4 +464,10 @@ func (s *Service) initDatastore(cfg *config.Model, datastores map[string]*datast
 
 	if s.datastore == nil {
 		var ok bool
-		if s.datastore, ok = datastores[cf
+		if s.datastore, ok = datastores[cfg.DataStore]; !ok {
+			return fmt.Errorf("failed to lookup datastore ID: %v", cfg.DataStore)
+		}
+	}
+
+	datastoreConfig := s.datastore.Config()
+	if datastoreConfig.Storable == "" && len(datastoreConfig.F
