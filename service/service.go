@@ -484,4 +484,10 @@ func (s *Service) initDatastore(cfg *config.Model, datastores map[string]*datast
 
 func (s *Service) scheduleModelReload() {
 	for range time.Tick(time.Minute) {
-		ctx, cancel
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+		defer cancel()
+
+		// TODO extend backwards compatibility testing
+		err := s.reloadIfNeeded(ctx)
+		if err != nil {
+			log.Printf("[%s reload] fa
