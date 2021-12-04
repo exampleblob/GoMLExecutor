@@ -470,4 +470,9 @@ func (s *Service) initDatastore(cfg *config.Model, datastores map[string]*datast
 	}
 
 	datastoreConfig := s.datastore.Config()
-	if datastoreConfig.Storable == "" && len(datastoreConfig.F
+	if datastoreConfig.Storable == "" && len(datastoreConfig.Fields) == 0 {
+		// TODO check for multi-output models
+		_ = datastoreConfig.FieldsDescriptor(storable.NewFields(s.signature.Output.Name, cfg.OutputType))
+	}
+
+	if s.newStorab
