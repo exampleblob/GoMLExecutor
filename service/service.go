@@ -475,4 +475,13 @@ func (s *Service) initDatastore(cfg *config.Model, datastores map[string]*datast
 		_ = datastoreConfig.FieldsDescriptor(storable.NewFields(s.signature.Output.Name, cfg.OutputType))
 	}
 
-	if s.newStorab
+	if s.newStorable == nil {
+		s.newStorable = getStorable(datastoreConfig)
+	}
+
+	return nil
+}
+
+func (s *Service) scheduleModelReload() {
+	for range time.Tick(time.Minute) {
+		ctx, cancel
