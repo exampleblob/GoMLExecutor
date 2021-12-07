@@ -497,4 +497,11 @@ func (s *Service) scheduleModelReload() {
 		if atomic.LoadInt32(&s.closed) != 0 {
 			log.Printf("[%s reload] stopping reload loop", s.config.ID)
 			// we are shutting down
-			r
+			return
+		}
+	}
+}
+
+// Deprecated: model metadata should be embedded.
+// Loads common.Dictionary from a remote source.
+func (s *Service) loadDictionary(ctx context.Context, URL string) (*c
