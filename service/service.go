@@ -490,4 +490,11 @@ func (s *Service) scheduleModelReload() {
 		// TODO extend backwards compatibility testing
 		err := s.reloadIfNeeded(ctx)
 		if err != nil {
-			log.Printf("[%s reload] fa
+			log.Printf("[%s reload] failed to reload model:%v", s.config.ID, err)
+			atomic.StoreInt32(&s.ReloadOK, 0)
+		}
+
+		if atomic.LoadInt32(&s.closed) != 0 {
+			log.Printf("[%s reload] stopping reload loop", s.config.ID)
+			// we are shutting down
+			r
