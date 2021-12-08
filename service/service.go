@@ -511,4 +511,10 @@ func (s *Service) loadDictionary(ctx context.Context, URL string) (*common.Dicti
 		return nil, err
 	}
 	defer rawReader.Close()
-	va
+	var reader io.Reader = rawReader
+	if strings.HasSuffix(URL, ".gz") {
+		if reader, err = gzip.NewReader(rawReader); err != nil {
+			return nil, err
+		}
+	}
+	if strings.Contains(U
