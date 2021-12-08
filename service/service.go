@@ -504,4 +504,11 @@ func (s *Service) scheduleModelReload() {
 
 // Deprecated: model metadata should be embedded.
 // Loads common.Dictionary from a remote source.
-func (s *Service) loadDictionary(ctx context.Context, URL string) (*c
+func (s *Service) loadDictionary(ctx context.Context, URL string) (*common.Dictionary, error) {
+	var result = &common.Dictionary{}
+	rawReader, err := s.fs.OpenURL(ctx, URL)
+	if err != nil {
+		return nil, err
+	}
+	defer rawReader.Close()
+	va
