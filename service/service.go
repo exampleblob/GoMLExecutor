@@ -526,4 +526,6 @@ func (s *Service) loadDictionary(ctx context.Context, URL string) (*common.Dicti
 }
 
 // New creates a service
-func New(ctx context.Context,
+func New(ctx context.Context, fs afs.Service, cfg *config.Model, metrics *gmetric.Service, sema *semaphore.Weighted, datastores map[string]*datastore.Service, options ...Option) (*Service, error) {
+	if metrics == nil {
+	
