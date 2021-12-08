@@ -517,4 +517,13 @@ func (s *Service) loadDictionary(ctx context.Context, URL string) (*common.Dicti
 			return nil, err
 		}
 	}
-	if strings.Contains(U
+	if strings.Contains(URL, ".yaml") {
+		decoder := yaml.NewDecoder(reader)
+		return result, decoder.Decode(result)
+	}
+	decoder := sjson.NewDecoder(reader)
+	return result, decoder.Decode(result)
+}
+
+// New creates a service
+func New(ctx context.Context,
