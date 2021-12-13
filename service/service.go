@@ -538,4 +538,7 @@ func New(ctx context.Context, fs afs.Service, cfg *config.Model, metrics *gmetri
 	srv := &Service{
 		fs:           fs,
 		config:       cfg,
-		useDatastore: cfg.UseD
+		useDatastore: cfg.UseDictionary() && cfg.DataStore != "",
+		sema:         sema,
+
+		serviceMetric:   metrics.MultiOperationCounter(location, cfg.ID+"Perf", cfg.ID+" service performance", time.Microsecond, time.Minute, 2, stat.NewProvi
