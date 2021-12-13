@@ -541,4 +541,7 @@ func New(ctx context.Context, fs afs.Service, cfg *config.Model, metrics *gmetri
 		useDatastore: cfg.UseDictionary() && cfg.DataStore != "",
 		sema:         sema,
 
-		serviceMetric:   metrics.MultiOperationCounter(location, cfg.ID+"Perf", cfg.ID+" service performance", time.Microsecond, time.Minute, 2, stat.NewProvi
+		serviceMetric:   metrics.MultiOperationCounter(location, cfg.ID+"Perf", cfg.ID+" service performance", time.Microsecond, time.Minute, 2, stat.NewProvider()),
+		evaluatorMetric: metrics.MultiOperationCounter(location, cfg.ID+"Eval", cfg.ID+" evaluator performance", time.Microsecond, time.Minute, 2, stat.NewEval()),
+
+		input
