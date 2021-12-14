@@ -567,4 +567,8 @@ func New(ctx context.Context, fs afs.Service, cfg *config.Model, metrics *gmetri
 		}
 
 		if cfg.Stream != nil {
-			srv.st
+			srv.stream, err = stream.NewService(cfg.ID, cfg.Stream, fs, func() *common.Dictionary {
+				return srv.dictionary
+			}, func() []domain.Output {
+				return srv.signature.Outputs
+			}, m
