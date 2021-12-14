@@ -544,4 +544,17 @@ func New(ctx context.Context, fs afs.Service, cfg *config.Model, metrics *gmetri
 		serviceMetric:   metrics.MultiOperationCounter(location, cfg.ID+"Perf", cfg.ID+" service performance", time.Microsecond, time.Minute, 2, stat.NewProvider()),
 		evaluatorMetric: metrics.MultiOperationCounter(location, cfg.ID+"Eval", cfg.ID+" evaluator performance", time.Microsecond, time.Minute, 2, stat.NewEval()),
 
-		input
+		inputs: make(map[string]*domain.Input),
+	}
+
+	for _, opt := range options {
+		opt.Apply(srv)
+	}
+
+	err := func() error {
+		err := srv.reloadIfNeeded(ctx)
+		if err != nil {
+			return err
+		}
+
+		srv.transform
