@@ -557,4 +557,14 @@ func New(ctx context.Context, fs afs.Service, cfg *config.Model, metrics *gmetri
 			return err
 		}
 
-		srv.transform
+		srv.transformer, err = transform.Get(cfg.Transformer)
+		if err != nil {
+			return err
+		}
+
+		if err = srv.initDatastore(cfg, datastores); err != nil {
+			return err
+		}
+
+		if cfg.Stream != nil {
+			srv.st
