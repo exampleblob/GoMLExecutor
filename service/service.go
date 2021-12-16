@@ -586,4 +586,14 @@ func New(ctx context.Context, fs afs.Service, cfg *config.Model, metrics *gmetri
 	}()
 
 	if err != nil {
-		return ni
+		return nil, err
+	}
+
+	go srv.scheduleModelReload()
+
+	return srv, err
+}
+
+func (s *Service) newObjectProvider() (*gtly.Provider, error) {
+	verbose := s.config.Debug
+	inputs := s.c
