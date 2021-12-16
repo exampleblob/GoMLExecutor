@@ -571,4 +571,19 @@ func New(ctx context.Context, fs afs.Service, cfg *config.Model, metrics *gmetri
 				return srv.dictionary
 			}, func() []domain.Output {
 				return srv.signature.Outputs
-			}, m
+			}, metrics)
+		}
+
+		if err != nil {
+			return err
+		}
+
+		if srv.inputProvider, err = srv.newObjectProvider(); err != nil {
+			return err
+		}
+
+		return nil
+	}()
+
+	if err != nil {
+		return ni
