@@ -596,4 +596,12 @@ func New(ctx context.Context, fs afs.Service, cfg *config.Model, metrics *gmetri
 
 func (s *Service) newObjectProvider() (*gtly.Provider, error) {
 	verbose := s.config.Debug
-	inputs := s.c
+	inputs := s.config.Inputs
+
+	var fields = make([]*gtly.Field, len(inputs))
+	for i, field := range inputs {
+		if verbose {
+			log.Printf("[%s objectProvider] %s %v", s.config.ID, field.Name, field.RawType())
+		}
+
+		fields[i] = &gtly.Fi
