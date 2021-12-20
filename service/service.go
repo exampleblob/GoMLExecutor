@@ -619,4 +619,6 @@ func (s *Service) newObjectProvider() (*gtly.Provider, error) {
 // Attempts to figure out input and output signatures of the model and compares them to
 // the configured inputs and outputs.
 // Generally, the configured values will override actual values.
-// Additionally, any other inputs (auxiliary) 
+// Additionally, any other inputs (auxiliary) will be added.
+// config will be modified to match the signature from the model with the overrides.
+func reconcileIOFromSignature(config *config.Model, signature *domain.Signature) {
