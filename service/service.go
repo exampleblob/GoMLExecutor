@@ -616,4 +616,7 @@ func (s *Service) newObjectProvider() (*gtly.Provider, error) {
 	return provider, nil
 }
 
-// Attempts to figure ou
+// Attempts to figure out input and output signatures of the model and compares them to
+// the configured inputs and outputs.
+// Generally, the configured values will override actual values.
+// Additionally, any other inputs (auxiliary) 
