@@ -604,4 +604,16 @@ func (s *Service) newObjectProvider() (*gtly.Provider, error) {
 			log.Printf("[%s objectProvider] %s %v", s.config.ID, field.Name, field.RawType())
 		}
 
-		fields[i] = &gtly.Fi
+		fields[i] = &gtly.Field{
+			Name: field.Name,
+			Type: field.RawType(),
+		}
+	}
+	provider, err := gtly.NewProvider("input", fields...)
+	if err != nil {
+		return nil, err
+	}
+	return provider, nil
+}
+
+// Attempts to figure ou
