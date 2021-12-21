@@ -632,4 +632,13 @@ func reconcileIOFromSignature(config *config.Model, signature *domain.Signature)
 		input := &signature.Inputs[ii]
 
 		if input.Type == nil {
-			input.Type = ref
+			input.Type = reflect.TypeOf("")
+		}
+
+		fieldCfg, ok := byName[input.Name]
+		if !ok {
+			fieldCfg = &shared.Field{Name: input.Name}
+			config.Inputs = append(config.Inputs, fieldCfg)
+		}
+
+		input.Vocab 
