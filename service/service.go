@@ -622,3 +622,14 @@ func (s *Service) newObjectProvider() (*gtly.Provider, error) {
 // Additionally, any other inputs (auxiliary) will be added.
 // config will be modified to match the signature from the model with the overrides.
 func reconcileIOFromSignature(config *config.Model, signature *domain.Signature) {
+	byName := config.FieldByName()
+
+	if len(signature.Inputs) == 0 {
+		return
+	}
+
+	for ii := range signature.Inputs {
+		input := &signature.Inputs[ii]
+
+		if input.Type == nil {
+			input.Type = ref
