@@ -641,4 +641,13 @@ func reconcileIOFromSignature(config *config.Model, signature *domain.Signature)
 			config.Inputs = append(config.Inputs, fieldCfg)
 		}
 
-		input.Vocab 
+		input.Vocab = !fieldCfg.Wildcard && fieldCfg.Precision <= 0
+
+		if fieldCfg.DataType == "" {
+			fieldCfg.SetRawType(input.Type)
+		}
+
+		delete(byName, fieldCfg.Name)
+	}
+
+	if len(signature.O
