@@ -6,4 +6,6 @@ import (
 	"github.com/viant/mly/shared/stat"
 )
 
-func TestEval(t *
+func TestEval(t *testing.T) {
+	stat.TestMapping(t, NewEval)
+}
