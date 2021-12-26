@@ -657,4 +657,14 @@ func reconcileIOFromSignature(config *config.Model, signature *domain.Signature)
 				continue
 			}
 
-			field := &shared.Field{Name: output.Name, DataT
+			field := &shared.Field{Name: output.Name, DataType: output.DataType}
+			if field.DataType == "" {
+				field.SetRawType(reflect.TypeOf(""))
+			}
+
+			config.Outputs = append(config.Outputs, field)
+		}
+	}
+
+	for k, v := range byName {
+		if v.DataType == ""
