@@ -667,4 +667,10 @@ func reconcileIOFromSignature(config *config.Model, signature *domain.Signature)
 	}
 
 	for k, v := range byName {
-		if v.DataType == ""
+		if v.DataType == "" {
+			v.SetRawType(reflect.TypeOf(""))
+		}
+
+		byName[k].Auxiliary = true
+	}
+}
