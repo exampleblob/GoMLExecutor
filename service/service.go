@@ -650,4 +650,11 @@ func reconcileIOFromSignature(config *config.Model, signature *domain.Signature)
 		delete(byName, fieldCfg.Name)
 	}
 
-	if len(signature.O
+	if len(signature.Outputs) > 0 {
+		outputIndex := config.OutputIndex()
+		for _, output := range signature.Outputs {
+			if _, has := outputIndex[output.Name]; has {
+				continue
+			}
+
+			field := &shared.Field{Name: output.Name, DataT
