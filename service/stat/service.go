@@ -10,4 +10,15 @@ const (
 	Invalid  = "invalid"
 )
 
-type service st
+type service struct{}
+
+// implements github.com/viant/gmetric/counter.Provider
+func (e service) Keys() []string {
+	return []string{
+		stat.ErrorKey,
+		Evaluate,
+		Pending,
+		stat.Timeout,
+		Invalid,
+		stat.Canceled,
+		stat.Deadlin
