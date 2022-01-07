@@ -32,4 +32,17 @@ func (e service) Map(value interface{}) int {
 	}
 	switch val := value.(type) {
 	case error:
-		ret
+		return 0
+	case string:
+		switch val {
+		case Evaluate:
+			return 1
+		case Pending:
+			return 2
+		case stat.Timeout:
+			return 3
+		case Invalid:
+			return 4
+		case stat.Canceled:
+			return 5
+		c
