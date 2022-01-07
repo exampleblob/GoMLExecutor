@@ -21,4 +21,15 @@ func (e service) Keys() []string {
 		stat.Timeout,
 		Invalid,
 		stat.Canceled,
-		stat.Deadlin
+		stat.DeadlineExceeded,
+	}
+}
+
+// implements github.com/viant/gmetric/counter.Provider
+func (e service) Map(value interface{}) int {
+	if value == nil {
+		return -1
+	}
+	switch val := value.(type) {
+	case error:
+		ret
