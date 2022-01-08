@@ -45,4 +45,14 @@ func (e service) Map(value interface{}) int {
 			return 4
 		case stat.Canceled:
 			return 5
-		c
+		case stat.DeadlineExceeded:
+			return 6
+		}
+	}
+
+	return -1
+}
+
+func NewProvider() counter.Provider {
+	return &service{}
+}
