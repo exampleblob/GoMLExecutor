@@ -237,3 +237,61 @@ func writeObject(tmsg msg.Message, hasBatchSize bool, output interface{}, output
 				case 0:
 				case 1:
 					outVec := actual[0]
+					lenOutVec := len(outVec)
+					if hasBatchSize || lenOutVec > 1 {
+						var c []float64
+						if lenOutVec > 1 {
+							c = make([]float64, lenOutVec)
+							for i, v := range outVec {
+								c[i] = float64(v)
+							}
+						} else {
+							c = []float64{float64(outVec[0])}
+						}
+
+						tmsg.PutFloats(outputName, c)
+					} else {
+						tmsg.PutFloat(outputName, float64(actual[0][0]))
+					}
+				default:
+					lOutput := len(actual[0])
+					multiOutDims := lOutput > 1
+					if multiOutDims {
+						c := make([]io.Encoder, len(actual))
+						for i, v := range actual {
+							t := make([]float64, lOutput)
+							for ii, vv := range v {
+								t[ii] = float64(vv)
+							}
+							c[i] = KVFloat64s(t)
+						}
+						tmsg.PutObjects(outputName, c)
+					} else {
+						var ints = make([]float64, len(actual))
+						for i, vec := range actual {
+							ints[i] = float64(vec[0])
+						}
+						tmsg.PutFloats(outputName, ints)
+					}
+				}
+			default:
+				return fmt.Errorf("no handler for %T", actual)
+			}
+		}
+	}
+
+	return nil
+}
+
+func getStreamID() string {
+	ID := ""
+	if UUID, err := uuid.NewUUID(); err == nil {
+		ID = UUID.String()
+	}
+	if hostname, err := os.Hostname(); err == nil {
+		if host, err := common.GetHostIPv4(hostname); err == nil {
+			ID = host
+		}
+	}
+	return ID
+}
