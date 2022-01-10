@@ -25,4 +25,7 @@ type Evaluator struct {
 
 func (e *Evaluator) feeds(feeds []interface{}) (map[tf.Output]*tf.Tensor, error) {
 	var result = make(map[tf.Output]*tf.Tensor, len(feeds))
-	for _, inpu
+	for _, input := range e.Signature.Inputs {
+		tensor, err := tf.NewTensor(feeds[input.Index])
+		if err != nil {
+			return nil, fmt.Errorf("failed to prepare feed: %v(%v), due to %w", input.Name, fee
