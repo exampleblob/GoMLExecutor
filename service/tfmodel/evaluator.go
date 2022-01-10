@@ -19,4 +19,10 @@ type Evaluator struct {
 
 	session *tf.Session
 	fetches []tf.Output
-	targets []*tf.Operat
+	targets []*tf.Operation
+	domain.Signature
+}
+
+func (e *Evaluator) feeds(feeds []interface{}) (map[tf.Output]*tf.Tensor, error) {
+	var result = make(map[tf.Output]*tf.Tensor, len(feeds))
+	for _, inpu
