@@ -10,4 +10,13 @@ import (
 
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 	"github.com/viant/mly/service/clienterr"
-	"githu
+	"github.com/viant/mly/service/domain"
+)
+
+//Evaluator represents evaluator
+type Evaluator struct {
+	id string
+
+	session *tf.Session
+	fetches []tf.Output
+	targets []*tf.Operat
