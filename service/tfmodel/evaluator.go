@@ -28,4 +28,12 @@ func (e *Evaluator) feeds(feeds []interface{}) (map[tf.Output]*tf.Tensor, error)
 	for _, input := range e.Signature.Inputs {
 		tensor, err := tf.NewTensor(feeds[input.Index])
 		if err != nil {
-			return nil, fmt.Errorf("failed to prepare feed: %v(%v), due to %w", input.Name, fee
+			return nil, fmt.Errorf("failed to prepare feed: %v(%v), due to %w", input.Name, feeds[input.Index], err)
+		}
+		result[input.Placeholder] = tensor
+	}
+	return result, nil
+}
+
+//Evaluate evaluates model
+func (e *Evaluator) Evaluate(params []interface{}) ([]interface{}, e
