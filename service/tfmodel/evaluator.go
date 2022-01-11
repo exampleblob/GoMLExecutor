@@ -36,4 +36,13 @@ func (e *Evaluator) feeds(feeds []interface{}) (map[tf.Output]*tf.Tensor, error)
 }
 
 //Evaluate evaluates model
-func (e *Evaluator) Evaluate(params []interface{}) ([]interface{}, e
+func (e *Evaluator) Evaluate(params []interface{}) ([]interface{}, error) {
+	ctx := context.Background()
+
+	if TFSessionPanicDuration > 0 {
+		var cancel func()
+		ctx, cancel = context.WithTimeout(ctx, TFSessionPanicDuration)
+		defer cancel()
+	}
+
+	errc := make(ch
