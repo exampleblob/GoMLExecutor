@@ -45,4 +45,13 @@ func (e *Evaluator) Evaluate(params []interface{}) ([]interface{}, error) {
 		defer cancel()
 	}
 
-	errc := make(ch
+	errc := make(chan error)
+	done := make(chan struct{})
+
+	var tensorValues []interface{}
+	go func() {
+		debug.SetPanicOnFault(true)
+		defer debug.SetPanicOnFault(false)
+
+		defer func() {
+		
