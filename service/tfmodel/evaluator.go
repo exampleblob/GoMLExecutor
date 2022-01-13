@@ -65,4 +65,14 @@ func (e *Evaluator) Evaluate(params []interface{}) ([]interface{}, error) {
 		trr := trace.StartRegion(ctx, "Evaluator.feeds")
 		feeds, err := e.feeds(params)
 		trr.End()
-		if er
+		if err != nil {
+			errc <- clienterr.Wrap(err)
+		}
+
+		trr = trace.StartRegion(ctx, "Evaluator.Session")
+		output, err := e.session.Run(feeds, e.fetches, e.targets)
+		trr.End()
+
+		if err != nil {
+			errc <- err
+		}
