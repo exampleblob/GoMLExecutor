@@ -54,4 +54,7 @@ func (e *Evaluator) Evaluate(params []interface{}) ([]interface{}, error) {
 		defer debug.SetPanicOnFault(false)
 
 		defer func() {
-		
+			if r := recover(); r != nil {
+				log.Printf("[%s Evaluator.Evaluate] recover()=%v - %+v - TERMINATING PROCESS", e.id, r, params)
+				// we are potentially recovering from a segment fault
+				// we will ex
