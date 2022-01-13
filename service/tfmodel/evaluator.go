@@ -57,4 +57,12 @@ func (e *Evaluator) Evaluate(params []interface{}) ([]interface{}, error) {
 			if r := recover(); r != nil {
 				log.Printf("[%s Evaluator.Evaluate] recover()=%v - %+v - TERMINATING PROCESS", e.id, r, params)
 				// we are potentially recovering from a segment fault
-				// we will ex
+				// we will exit like we would if there was a segment fault
+				os.Exit(139)
+			}
+		}()
+
+		trr := trace.StartRegion(ctx, "Evaluator.feeds")
+		feeds, err := e.feeds(params)
+		trr.End()
+		if er
