@@ -76,3 +76,14 @@ func (e *Evaluator) Evaluate(params []interface{}) ([]interface{}, error) {
 		if err != nil {
 			errc <- err
 		}
+
+		tensorValues = make([]interface{}, len(output))
+		for i := range tensorValues {
+			tensorValues[i] = output[i].Value()
+		}
+
+		done <- struct{}{}
+	}()
+
+	select {
+	case err := <-
