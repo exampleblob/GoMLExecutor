@@ -91,4 +91,18 @@ func (e *Evaluator) Evaluate(params []interface{}) ([]interface{}, error) {
 	case <-done:
 		return tensorValues, nil
 	case <-ctx.Done():
-		debugStr := fmt.Sprintf("Forced panic invocation, Tensorflow Session took longer tha
+		debugStr := fmt.Sprintf("Forced panic invocation, Tensorflow Session took longer than %s", TFSessionPanicDuration)
+		log.Printf(debugStr)
+		debug.PrintStack()
+		os.Exit(5)
+		panic(debugStr)
+	}
+
+}
+
+//Close closes evaluator
+func (e *Evaluator) Close() error {
+	return e.session.Close()
+}
+
+//New
