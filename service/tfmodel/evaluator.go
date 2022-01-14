@@ -86,4 +86,9 @@ func (e *Evaluator) Evaluate(params []interface{}) ([]interface{}, error) {
 	}()
 
 	select {
-	case err := <-
+	case err := <-errc:
+		return nil, err
+	case <-done:
+		return tensorValues, nil
+	case <-ctx.Done():
+		debugStr := fmt.Sprintf("Forced panic invocation, Tensorflow Session took longer tha
