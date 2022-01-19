@@ -105,4 +105,7 @@ func (e *Evaluator) Close() error {
 	return e.session.Close()
 }
 
-//New
+//NewEvaluator creates new evaluator
+func NewEvaluator(id string, signature *domain.Signature, session *tf.Session) *Evaluator {
+	fetches := []tf.Output{}
+	for _, output := range signa
