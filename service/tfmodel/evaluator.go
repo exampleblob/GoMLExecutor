@@ -118,4 +118,6 @@ func NewEvaluator(id string, signature *domain.Signature, session *tf.Session) *
 		Signature: *signature,
 		session:   session,
 		fetches:   fetches,
-		targets:   make
+		targets:   make([]*tf.Operation, 0),
+	}
+}
