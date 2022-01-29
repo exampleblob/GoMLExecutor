@@ -7,4 +7,11 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
-	"github.com/viant/mly/se
+	"github.com/viant/mly/service/tfmodel"
+)
+
+func TestBasic(t *testing.T) {
+	_, filename, _, _ := runtime.Caller(0)
+	root := filepath.Join(filepath.Dir(filename), "../..")
+	t.Logf("Root %s", root)
+	modelDe
