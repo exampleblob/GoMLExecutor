@@ -20,4 +20,9 @@ func TestBasic(t *testing.T) {
 	assert.Nil(t, err)
 
 	signature, err := tfmodel.Signature(model)
-	ass
+	assert.Nil(t, err)
+	evaluator := tfmodel.NewEvaluator("test", signature, model.Session)
+
+	feeds := make([]interface{}, 0)
+	feeds = append(feeds, [][]string{{"a"}})
+	feeds = append(fe
