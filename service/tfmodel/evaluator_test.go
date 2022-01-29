@@ -25,4 +25,12 @@ func TestBasic(t *testing.T) {
 
 	feeds := make([]interface{}, 0)
 	feeds = append(feeds, [][]string{{"a"}})
-	feeds = append(fe
+	feeds = append(feeds, [][]string{{"c"}})
+
+	_, err = evaluator.Evaluate(feeds)
+	assert.Nil(t, err)
+}
+
+func TestBasicV2(t *testing.T) {
+	_, filename, _, _ := runtime.Caller(0)
+	root := filepath.Join(filepath.D
