@@ -33,4 +33,9 @@ func TestBasic(t *testing.T) {
 
 func TestBasicV2(t *testing.T) {
 	_, filename, _, _ := runtime.Caller(0)
-	root := filepath.Join(filepath.D
+	root := filepath.Join(filepath.Dir(filename), "../..")
+	t.Logf("Root %s", root)
+	modelDest := filepath.Join(root, "example/model/vectorization_int_model")
+
+	model, err := tf.LoadSavedModel(modelDest, []string{"serve"}, nil)
+	assert.Nil
