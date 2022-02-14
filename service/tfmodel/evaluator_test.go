@@ -38,4 +38,10 @@ func TestBasicV2(t *testing.T) {
 	modelDest := filepath.Join(root, "example/model/vectorization_int_model")
 
 	model, err := tf.LoadSavedModel(modelDest, []string{"serve"}, nil)
-	assert.Nil
+	assert.Nil(t, err)
+
+	signature, err := tfmodel.Signature(model)
+	assert.Nil(t, err)
+	evaluator := tfmodel.NewEvaluator("test", signature, model.Session)
+	feeds := make([]interface{}, 0)
+	feeds = append(
