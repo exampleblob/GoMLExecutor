@@ -44,4 +44,9 @@ func TestBasicV2(t *testing.T) {
 	assert.Nil(t, err)
 	evaluator := tfmodel.NewEvaluator("test", signature, model.Session)
 	feeds := make([]interface{}, 0)
-	feeds = append(
+	feeds = append(feeds, [][]string{{"a b c"}, {"b d d"}})
+	feeds = append(feeds, [][]string{{"c"}, {"d"}})
+
+	_, err = evaluator.Evaluate(feeds)
+	assert.Nil(t, err)
+}
