@@ -10,4 +10,7 @@ import (
 	"github.com/viant/mly/service/domain"
 )
 
-// Signature sea
+// Signature searches the Tensorflow operation graph for inputs and outputs.
+func Signature(model *tf.SavedModel) (*domain.Signature, error) {
+	signature, ok := model.Signatures[domain.DefaultSignatureKey]
+	if !ok {
