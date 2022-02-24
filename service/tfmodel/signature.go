@@ -14,3 +14,12 @@ import (
 func Signature(model *tf.SavedModel) (*domain.Signature, error) {
 	signature, ok := model.Signatures[domain.DefaultSignatureKey]
 	if !ok {
+		return nil, fmt.Errorf("failed to lookup signature: %v", domain.DefaultSignatureKey)
+	}
+
+	sig := &domain.Signature{
+		Method: signature.MethodName,
+	}
+
+	for layerName, tfInfo := range signature.Outputs {
+		output 
