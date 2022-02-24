@@ -52,3 +52,10 @@ func RunExport(session *tf.Session, exportOp *tf.Operation) (interface{}, error)
 	feeds := map[tf.Output]*tf.Tensor{}
 	fetches := []tf.Output{ipOutput}
 	targets := []*tf.Operation{exportOp}
+	output, err := session.Run(feeds, fetches, targets)
+	if err != nil {
+		return nil, err
+	}
+	value := output[0].Value()
+	return value, nil
+}
