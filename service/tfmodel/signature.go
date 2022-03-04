@@ -29,4 +29,9 @@ func Signature(model *tf.SavedModel) (*domain.Signature, error) {
 		// tfInfo.Name is the Tensor name
 		operationName := tfInfo.Name
 		if index := strings.Index(operationName, ":"); index != -1 {
-			
+			indexValue := operationName[index+1:]
+			operationName = operationName[:index]
+			output.Index, _ = strconv.Atoi(indexValue)
+		}
+
+		if output.Operation = model.Graph.Operation(operationName); output.Oper
