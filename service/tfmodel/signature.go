@@ -22,4 +22,11 @@ func Signature(model *tf.SavedModel) (*domain.Signature, error) {
 	}
 
 	for layerName, tfInfo := range signature.Outputs {
-		output 
+		output := domain.Output{
+			Name: layerName,
+		}
+
+		// tfInfo.Name is the Tensor name
+		operationName := tfInfo.Name
+		if index := strings.Index(operationName, ":"); index != -1 {
+			
