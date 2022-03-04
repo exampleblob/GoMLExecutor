@@ -34,4 +34,9 @@ func Signature(model *tf.SavedModel) (*domain.Signature, error) {
 			output.Index, _ = strconv.Atoi(indexValue)
 		}
 
-		if output.Operation = model.Graph.Operation(operationName); output.Oper
+		if output.Operation = model.Graph.Operation(operationName); output.Operation == nil {
+			return nil, fmt.Errorf("failed to lookup output operation '%v' for output: %v", operationName, layerName)
+		}
+
+		tryAssignDataType(tfInfo, &output)
+		sig.Outputs = append
