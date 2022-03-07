@@ -50,4 +50,9 @@ func Signature(model *tf.SavedModel) (*domain.Signature, error) {
 		inputs = append(inputs, k)
 	}
 
-	sort.String
+	sort.Strings(inputs)
+	for _, k := range inputs {
+		tfInfo := sigInputs[k]
+		operationName := domain.DefaultSignatureKey + "_" + k
+		operation := model.Graph.Operation(operationName)
+		if operation == nil 
