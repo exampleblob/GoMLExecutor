@@ -39,4 +39,15 @@ func Signature(model *tf.SavedModel) (*domain.Signature, error) {
 		}
 
 		tryAssignDataType(tfInfo, &output)
-		sig.Outputs = append
+		sig.Outputs = append(sig.Outputs, output)
+	}
+
+	sig.Output = sig.Outputs[0]
+
+	sigInputs := signature.Inputs
+	var inputs = make([]string, 0, len(sigInputs))
+	for k := range sigInputs {
+		inputs = append(inputs, k)
+	}
+
+	sort.String
