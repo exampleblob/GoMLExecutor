@@ -62,4 +62,14 @@ func Signature(model *tf.SavedModel) (*domain.Signature, error) {
 		sig.Inputs = append(sig.Inputs, domain.Input{
 			Name:        k,
 			Index:       len(sig.Inputs),
-			Typ
+			Type:        tf.TypeOf(tfInfo.DType, []int64{}),
+			Placeholder: operation.Output(0),
+		})
+	}
+
+	return sig, nil
+}
+
+func tryAssignDataType(v tf.TensorInfo, output *domain.Output) {
+	defer func() {
+		_ = recover
