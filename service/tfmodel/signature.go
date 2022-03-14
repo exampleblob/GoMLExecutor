@@ -55,4 +55,11 @@ func Signature(model *tf.SavedModel) (*domain.Signature, error) {
 		tfInfo := sigInputs[k]
 		operationName := domain.DefaultSignatureKey + "_" + k
 		operation := model.Graph.Operation(operationName)
-		if operation == nil 
+		if operation == nil {
+			return nil, fmt.Errorf("failed to lookup input operation: %v", operationName)
+		}
+
+		sig.Inputs = append(sig.Inputs, domain.Input{
+			Name:        k,
+			Index:       len(sig.Inputs),
+			Typ
