@@ -20,4 +20,6 @@ func Get(name string) (domain.Transformer, error) {
 	return domain.Transform, nil
 }
 
-func ExecuteTransform() in
+func ExecuteTransform() interface{} {
+	return nil
+}
