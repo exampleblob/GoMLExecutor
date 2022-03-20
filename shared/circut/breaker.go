@@ -16,4 +16,14 @@ type Breaker struct {
 	initialResetDuration time.Duration
 }
 
-//IsUp returns true i
+//IsUp returns true if resource is up
+func (b *Breaker) IsUp() bool {
+	isUp := atomic.LoadInt32(&b.Down) == 0
+	if !isUp {
+		b.resetIfDue()
+	}
+	return isUp
+}
+
+//FlagUp flags resource down
+func (b *Breaker) F
