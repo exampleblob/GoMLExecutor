@@ -26,4 +26,13 @@ func (b *Breaker) IsUp() bool {
 }
 
 //FlagUp flags resource down
-func (b *Breaker) F
+func (b *Breaker) FlagUp() {
+	b.mux.Lock()
+	b.Down = 0
+	b.mux.Unlock()
+	b.resetDuration = b.initialResetDuration
+}
+
+//resetIfDue reset connection onDisconnect status if reset time is due,
+func (b *Breaker) resetIfDue() {
+	b.mux.
