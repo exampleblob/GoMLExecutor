@@ -35,4 +35,14 @@ func (b *Breaker) FlagUp() {
 
 //resetIfDue reset connection onDisconnect status if reset time is due,
 func (b *Breaker) resetIfDue() {
-	b.mux.
+	b.mux.RLock()
+	dueTime := time.Now().After(b.resetTime)
+	b.mux.RUnlock()
+	if !dueTime {
+		return
+	}
+	b.mux.Lock()
+	dueTime = time.Now().After(b.resetTime)
+	if !dueTime {
+		b.mux.Unlock()
+		ret
