@@ -45,4 +45,13 @@ func (b *Breaker) resetIfDue() {
 	dueTime = time.Now().After(b.resetTime)
 	if !dueTime {
 		b.mux.Unlock()
-		ret
+		return
+	}
+	b.resetTime = time.Now().Add(b.resetDuration)
+	b.resetDuration = time.Duration(float32(b.resetDuration) * 1.5)
+	b.mux.Unlock()
+	go b.prober.Probe()
+}
+
+//FlagDown flags connection Down
+func (b *Br
