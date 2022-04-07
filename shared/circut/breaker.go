@@ -54,4 +54,15 @@ func (b *Breaker) resetIfDue() {
 }
 
 //FlagDown flags connection Down
-func (b *Br
+func (b *Breaker) FlagDown() {
+	down := atomic.LoadInt32(&b.Down)
+	if down == 1 {
+		return
+	}
+	b.mux.Lock()
+	defer b.mux.Unlock()
+	if b.Down == 1 {
+		return
+	}
+	b.Down = 1
+	b.resetTime = time.Now().Add(b.resetDurat
