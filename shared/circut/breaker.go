@@ -65,4 +65,10 @@ func (b *Breaker) FlagDown() {
 		return
 	}
 	b.Down = 1
-	b.resetTime = time.Now().Add(b.resetDurat
+	b.resetTime = time.Now().Add(b.resetDuration)
+	b.resetDuration *= 2 //double reset time each time service is Down
+}
+
+//New creates a new circut breaker
+func New(resetDuration time.Duration, prober Prober) *Breaker {
+	return &Breaker{
