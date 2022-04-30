@@ -72,3 +72,8 @@ func (b *Breaker) FlagDown() {
 //New creates a new circut breaker
 func New(resetDuration time.Duration, prober Prober) *Breaker {
 	return &Breaker{
+		prober:               prober,
+		resetDuration:        resetDuration,
+		initialResetDuration: resetDuration,
+	}
+}
