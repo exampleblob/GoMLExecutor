@@ -9,3 +9,12 @@ type Config struct {
 	Hosts              []*Host
 	Model              string
 	CacheSizeMb        int
+	CacheScope         *CacheScope
+	Datastore          *config.Remote
+	MaxRetry           int
+	Debug              bool
+	DictHashValidation bool
+}
+
+//CacheSize returns cache size
+func (c *Config) CacheSize
