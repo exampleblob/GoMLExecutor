@@ -8,4 +8,15 @@ import (
 
 //Remote represents client datastore
 type Remote struct {
-	Connections [
+	Connections []*datastore.Connection
+	config.Datastore
+	shared.MetaInput
+}
+
+func (d *Remote) Init() {
+	d.MetaInput.Init()
+}
+
+func (d *Remote) Validate() error {
+	return nil
+}
