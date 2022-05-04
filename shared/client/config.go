@@ -29,4 +29,18 @@ func (c *Config) updateCache() {
 		return
 	}
 	if c.CacheSizeMb > 0 {
-		if c.Datastore != nil && c.Datasto
+		if c.Datastore != nil && c.Datastore.Cache != nil {
+			c.Datastore.Cache.SizeMb = c.CacheSizeMb
+		}
+	}
+
+	scope := c.CacheScope
+	if scope == nil {
+		return
+	}
+	if !scope.IsLocal() {
+		c.Datastore = nil
+		return
+	}
+	if !scope.IsL2() {
+		c.Datastore.Da
