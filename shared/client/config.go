@@ -43,4 +43,10 @@ func (c *Config) updateCache() {
 		return
 	}
 	if !scope.IsL2() {
-		c.Datastore.Da
+		c.Datastore.Datastore.L2 = nil
+	}
+	if !scope.IsL1() {
+		c.Datastore.Datastore.Connection = ""
+		c.Datastore.Connections = nil
+	}
+}
