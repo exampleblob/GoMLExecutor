@@ -16,4 +16,8 @@ const (
 
 	defaultPrec = 10
 
-	unknownKeyField = fiel
+	unknownKeyField = fieldOffset(-1)
+)
+
+// Dictionary helps identify any out-of-vocabulary input values for reducing the cache space - this enables us to leverage any
+// dimensionality reduction within the mo
