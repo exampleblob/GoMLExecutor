@@ -23,4 +23,17 @@ const (
 // dimensionality reduction within the model to optimize wall-clock performance. This is primarily useful for categorical inputs
 // as well as any continous inputs with an acceptable quantization.
 type Dictionary struct {
-	hash     i
+	hash     int
+	registry map[string]*entry
+	inputs   map[string]*shared.Field
+}
+
+func (d *Dictionary) KeysLen() int {
+	return len(d.inputs)
+}
+
+func (d *Dictionary) inputSize() int {
+	return len(d.inputs)
+}
+
+func (d *Dictionary) s
