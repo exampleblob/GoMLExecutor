@@ -36,4 +36,13 @@ func (d *Dictionary) inputSize() int {
 	return len(d.inputs)
 }
 
-func (d *Dictionary) s
+func (d *Dictionary) size() int {
+	return len(d.registry)
+}
+
+// TODO refactor, this has a singular use case
+func (d *Dictionary) Fields() map[string]*shared.Field {
+	return d.inputs
+}
+
+func (d *Dict
