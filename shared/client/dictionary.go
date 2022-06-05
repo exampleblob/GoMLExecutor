@@ -45,4 +45,18 @@ func (d *Dictionary) Fields() map[string]*shared.Field {
 	return d.inputs
 }
 
-func (d *Dict
+func (d *Dictionary) getInput(n string) *shared.Field {
+	if d == nil {
+		return nil
+	}
+
+	input, ok := d.inputs[n]
+	if !ok {
+		return nil
+	}
+
+	return input
+}
+
+func (d *Dictionary) getEntry(n string) *entry {
+	i
