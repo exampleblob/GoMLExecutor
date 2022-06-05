@@ -59,4 +59,21 @@ func (d *Dictionary) getInput(n string) *shared.Field {
 }
 
 func (d *Dictionary) getEntry(n string) *entry {
-	i
+	if d == nil {
+		return nil
+	}
+
+	if len(d.registry) == 0 {
+		return nil
+	}
+
+	elem, ok := d.registry[n]
+	if !ok {
+		return nil
+	}
+
+	if elem == nil {
+		log.Printf("registry entry was nil for %v", n)
+	}
+
+	return ele
