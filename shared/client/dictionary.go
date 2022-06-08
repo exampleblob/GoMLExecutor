@@ -76,4 +76,13 @@ func (d *Dictionary) getEntry(n string) *entry {
 		log.Printf("registry entry was nil for %v", n)
 	}
 
-	return ele
+	return elem
+}
+
+func (d *Dictionary) lookupString(key string, value string) (string, fieldOffset) {
+	input := d.getInput(key)
+	if input == nil {
+		return "", unknownKeyField
+	}
+
+	ii := fieldOffset(inpu
