@@ -98,3 +98,12 @@ func (d *Dictionary) lookupString(key string, value string) (string, fieldOffset
 
 	if entr.hasString(value) {
 		return value, ii
+	}
+
+	return oovString, ii
+}
+
+// TODO integration and boundary testing; OOV may depend on vocabulary
+func (d *Dictionary) lookupInt(key string, value int) (int, fieldOffset) {
+	input := d.getInput(key)
+	if input 
