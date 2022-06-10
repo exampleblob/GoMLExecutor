@@ -85,4 +85,16 @@ func (d *Dictionary) lookupString(key string, value string) (string, fieldOffset
 		return "", unknownKeyField
 	}
 
-	ii := fieldOffset(inpu
+	ii := fieldOffset(input.Index)
+
+	if input.Wildcard {
+		return value, ii
+	}
+
+	entr := d.getEntry(key)
+	if entr == nil {
+		return "", unknownKeyField
+	}
+
+	if entr.hasString(value) {
+		return value, ii
