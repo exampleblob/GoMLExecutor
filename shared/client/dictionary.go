@@ -106,4 +106,16 @@ func (d *Dictionary) lookupString(key string, value string) (string, fieldOffset
 // TODO integration and boundary testing; OOV may depend on vocabulary
 func (d *Dictionary) lookupInt(key string, value int) (int, fieldOffset) {
 	input := d.getInput(key)
-	if input 
+	if input == nil {
+		return 0, unknownKeyField
+	}
+
+	ii := fieldOffset(input.Index)
+
+	if input.Wildcard {
+		return value, ii
+	}
+
+	entr := d.getEntry(key)
+	if entr == nil {
+		return 0, 
