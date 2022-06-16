@@ -118,4 +118,15 @@ func (d *Dictionary) lookupInt(key string, value int) (int, fieldOffset) {
 
 	entr := d.getEntry(key)
 	if entr == nil {
-		return 0, 
+		return 0, unknownKeyField
+	}
+
+	if entr.hasInt(value) {
+		return value, ii
+	}
+
+	return oovInt, ii
+}
+
+func (d *Dictionary) reduceFloat(key string, value float32) (float32, int, fieldOffset) {
+	inp
