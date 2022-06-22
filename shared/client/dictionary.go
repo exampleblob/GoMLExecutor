@@ -129,4 +129,13 @@ func (d *Dictionary) lookupInt(key string, value int) (int, fieldOffset) {
 }
 
 func (d *Dictionary) reduceFloat(key string, value float32) (float32, int, fieldOffset) {
-	inp
+	input := d.getInput(key)
+	if input == nil {
+		return value, defaultPrec, unknownKeyField
+	}
+
+	ii := fieldOffset(input.Index)
+
+	if input.Wildcard {
+		// this isn't really a valid case
+		return value, defaultPrec, ii
