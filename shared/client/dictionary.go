@@ -151,4 +151,10 @@ func (d *Dictionary) reduceFloat(key string, value float32) (float32, int, field
 		usePrec = int(entr.prec)
 	}
 
-	return entr.reduceFloat32(val
+	return entr.reduceFloat32(value), usePrec, ii
+}
+
+// NewDictionary creates new Dictionary
+func NewDictionary(dict *common.Dictionary, inputs []*shared.Field) *Dictionary {
+	// index by name
+	inputIdx := make(map[string]*shared.Fiel
