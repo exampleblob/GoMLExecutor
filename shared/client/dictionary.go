@@ -139,3 +139,16 @@ func (d *Dictionary) reduceFloat(key string, value float32) (float32, int, field
 	if input.Wildcard {
 		// this isn't really a valid case
 		return value, defaultPrec, ii
+	}
+
+	entr := d.getEntry(key)
+	if entr == nil {
+		return value, defaultPrec, unknownKeyField
+	}
+
+	usePrec := defaultPrec
+	if entr.prec > 0 {
+		usePrec = int(entr.prec)
+	}
+
+	return entr.reduceFloat32(val
