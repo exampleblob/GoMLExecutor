@@ -157,4 +157,16 @@ func (d *Dictionary) reduceFloat(key string, value float32) (float32, int, field
 // NewDictionary creates new Dictionary
 func NewDictionary(dict *common.Dictionary, inputs []*shared.Field) *Dictionary {
 	// index by name
-	inputIdx := make(map[string]*shared.Fiel
+	inputIdx := make(map[string]*shared.Field)
+
+	for i, input := range inputs {
+		inputIdx[input.Name] = inputs[i]
+	}
+
+	var result = &Dictionary{
+		inputs:   inputIdx,
+		hash:     dict.Hash,
+		registry: make(map[string]*entry),
+	}
+
+	
