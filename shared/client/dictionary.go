@@ -169,4 +169,14 @@ func NewDictionary(dict *common.Dictionary, inputs []*shared.Field) *Dictionary 
 		registry: make(map[string]*entry),
 	}
 
-	
+	if dict == nil {
+		return result
+	}
+
+	layerIdx := make(map[string]*common.Layer)
+
+	for _, layer := range dict.Layers {
+		e := new(entry)
+
+		if len(layer.Ints) > 0 {
+			values := 
