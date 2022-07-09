@@ -200,4 +200,14 @@ func NewDictionary(dict *common.Dictionary, inputs []*shared.Field) *Dictionary 
 	for _, input := range inputs {
 		iName := input.Name
 
-		if _, ok := layerIdx[iName]; ok 
+		if _, ok := layerIdx[iName]; ok {
+			continue
+		}
+
+		if input.Precision > 0 {
+			result.registry[iName] = FloatEntry(input.Precision)
+		}
+	}
+
+	return result
+}
