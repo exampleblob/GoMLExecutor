@@ -187,4 +187,17 @@ func NewDictionary(dict *common.Dictionary, inputs []*shared.Field) *Dictionary 
 		} else if len(layer.Strings) > 0 {
 			values := make(map[string]bool)
 			for _, item := range layer.Strings {
-		
+				values[item] = true
+			}
+			e.strings = values
+		}
+
+		ln := layer.Name
+
+		result.registry[ln] = e
+	}
+
+	for _, input := range inputs {
+		iName := input.Name
+
+		if _, ok := layerIdx[iName]; ok 
