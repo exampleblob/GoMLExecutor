@@ -179,4 +179,12 @@ func NewDictionary(dict *common.Dictionary, inputs []*shared.Field) *Dictionary 
 		e := new(entry)
 
 		if len(layer.Ints) > 0 {
-			values := 
+			values := make(map[int]bool)
+			for _, item := range layer.Ints {
+				values[item] = true
+			}
+			e.ints = values
+		} else if len(layer.Strings) > 0 {
+			values := make(map[string]bool)
+			for _, item := range layer.Strings {
+		
