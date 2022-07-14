@@ -121,3 +121,14 @@ func BenchmarkHasString(b *testing.B) {
 	e := entry{
 		strings: ivm,
 	}
+
+	var trs int64
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			rf := e.hasString("verylongdomainname.com")
+			if rf {
+				trs += 1
+			}
+		}
+	})
+}
