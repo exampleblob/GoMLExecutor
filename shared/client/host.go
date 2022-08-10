@@ -27,4 +27,8 @@ func (h *Host) IsSecurePort() bool {
 }
 
 //URL returns model eval URL
-func (h *Host) evalURL(model string) st
+func (h *Host) evalURL(model string) string {
+	if h.IsSecurePort() {
+		return "https://" + h.Name + ":" + strconv.Itoa(h.Port) + fmt.Sprintf(common.ModelURI, model)
+	}
+	return "http://" + h.Name + ":"
