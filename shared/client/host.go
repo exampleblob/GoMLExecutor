@@ -39,4 +39,10 @@ func (h *Host) metaConfigURL(model string) string {
 	if h.IsSecurePort() {
 		return "https://" + h.Name + ":" + strconv.Itoa(h.Port) + fmt.Sprintf(common.MetaConfigURI, model)
 	}
-	return "http://" + h.Name + ":" + strconv.Itoa(h.Port) + fmt
+	return "http://" + h.Name + ":" + strconv.Itoa(h.Port) + fmt.Sprintf(common.MetaConfigURI, model)
+}
+
+//URL returns meta config model eval URL
+func (h *Host) metaDictionaryURL(model string) string {
+	if h.IsSecurePort() {
+		return "https://" + 
