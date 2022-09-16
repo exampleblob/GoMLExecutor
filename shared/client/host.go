@@ -47,4 +47,16 @@ func (h *Host) metaDictionaryURL(model string) string {
 	if h.IsSecurePort() {
 		return "https://" + h.Name + ":" + strconv.Itoa(h.Port) + fmt.Sprintf(common.MetaDictionaryURI, model)
 	}
-	return "http://" + h.Name + ":" + strconv.Itoa(h.Port) + fmt.Sprintf(common.MetaDictionaryURI, mod
+	return "http://" + h.Name + ":" + strconv.Itoa(h.Port) + fmt.Sprintf(common.MetaDictionaryURI, model)
+}
+
+func (h *Host) Probe() {
+	if h.isConnectionUp() {
+		h.FlagUp()
+		return
+	}
+}
+
+func (h *Host) isConnectionUp() bool {
+	port := h.Port
+	connection, err := net.DialTimeout("tcp", fmt.S
