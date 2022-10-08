@@ -59,4 +59,14 @@ func (h *Host) Probe() {
 
 func (h *Host) isConnectionUp() bool {
 	port := h.Port
-	connection, err := net.DialTimeout("tcp", fmt.S
+	connection, err := net.DialTimeout("tcp", fmt.Sprintf("%v:%v", h.Name, port), requestTimeout)
+	if err != nil {
+		return false
+	}
+	defer connection.Close()
+	return true
+}
+
+func (h *Host) Init() {
+	if h.Breaker == nil {
+		h
