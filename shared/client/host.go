@@ -79,3 +79,10 @@ func NewHost(name string, port int) *Host {
 		port = 80
 	}
 	return &Host{Name: name, Port: port}
+}
+
+//NewHosts creates hosts
+func NewHosts(port int, names []string) []*Host {
+	var result = make([]*Host, 0)
+	for _, name := range names {
+		result = append(result, &
