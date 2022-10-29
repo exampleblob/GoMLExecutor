@@ -69,4 +69,13 @@ func (h *Host) isConnectionUp() bool {
 
 func (h *Host) Init() {
 	if h.Breaker == nil {
-		h
+		h.Breaker = circut.New(requestTimeout, h)
+	}
+}
+
+//NewHost returns new host
+func NewHost(name string, port int) *Host {
+	if port == 0 {
+		port = 80
+	}
+	return &Host{Name: name, Port: port}
