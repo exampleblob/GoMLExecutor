@@ -85,4 +85,7 @@ func NewHost(name string, port int) *Host {
 func NewHosts(port int, names []string) []*Host {
 	var result = make([]*Host, 0)
 	for _, name := range names {
-		result = append(result, &
+		result = append(result, &Host{Name: name, Port: port})
+	}
+	return result
+}
