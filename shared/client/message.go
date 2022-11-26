@@ -382,3 +382,189 @@ func (m *Message) trim(ch byte) {
 		m.index--
 	}
 }
+
+func (m *Message) isValid() bool {
+	m.mux.RLock()
+	pool := m.pool
+	m.mux.RUnlock()
+	return pool != nil
+}
+
+// Release releases message to the grpcPool
+func (m *Message) Release() {
+	m.mux.Lock()
+	defer m.mux.Unlock()
+	if m.pool == nil {
+		return
+	}
+	pool := m.pool
+	m.pool = nil
+	pool.put(m)
+}
+
+func (m *Message) FlagCacheHit(index int) {
+	diff := (index - len(m.cacheHits)) + 1
+	if diff > 0 {
+		m.cacheHits = append(m.cacheHits, make([]bool, diff)...)
+	}
+	m.cacheHits[index] = true
+}
+
+// CacheKeyAt returns cache key for supplied index
+func (m *Message) CacheKeyAt(index int) string {
+	m.keyLock.Lock()
+	defer m.keyLock.Unlock()
+	if m.batchSize == 0 {
+		return m.CacheKey()
+	}
+
+	if len(m.multiKey) == 0 {
+		m.multiKey = make([]string, len(m.multiKeys))
+	}
+
+	if m.multiKey[index] != "" {
+		return m.multiKey[index]
+	}
+
+	m.multiKey[index] = buildKey(m.multiKeys[index], m.buffer)
+	m.buffer.Reset()
+	return m.multiKey[index]
+}
+
+// CacheKey returns cache key
+func (m *Message) CacheKey() string {
+	if m.key != "" || len(m.keys) == 0 {
+		return m.key
+	}
+	m.key = buildKey(m.keys, m.buffer)
+	return m.key
+}
+
+func buildKey(keys []string, buffer *bytes.Buffer) string {
+	buffer.WriteString(keys[0])
+
+	for i := 1; i < len(keys); i++ {
+		buffer.WriteByte(common.KeyDelimiter)
+		buffer.WriteString(keys[i])
+	}
+	rawKey := buffer.Bytes()
+	return string(rawKey)
+}
+
+func (m *Message) addCacheKey() {
+	aKey := m.CacheKey()
+	if aKey == "" {
+		return
+	}
+	m.StringKey(common.CacheKey, aKey)
+}
+
+func (m *Message) stringsKey(key string, values []string) {
+	m.appendByte('"')
+	m.appendString(key)
+	m.appendString(`":[`)
+	for i, item := range values {
+		if i > 0 {
+			m.appendByte(',')
+		}
+		m.appendByte('"')
+		m.appendString(item)
+		m.appendByte('"')
+	}
+	m.appendString(`],`)
+}
+
+func (m *Message) intsKey(key string, values []int) {
+	m.appendByte('"')
+	m.appendString(key)
+	m.appendString(`":[`)
+	for i, item := range values {
+		if i > 0 {
+			m.appendByte(',')
+		}
+		m.appendString(strconv.Itoa(item))
+	}
+	m.appendString(`],`)
+}
+
+func (m *Message) endInMultiKeyMode() error {
+	hasCacheHit := m.hasCacheHit()
+
+	m.intKey(common.BatchSizeKey, m.requestBatchSize())
+	for _, item := range m.transient {
+		if err := m.flushTransient(item, hasCacheHit); err != nil {
+			return err
+		}
+	}
+
+	var multiKey []string
+	if len(m.multiKeys) > 0 {
+		for i := range m.multiKeys {
+			if m.CacheHit(i) {
+				continue
+			}
+			multiKey = append(multiKey, m.CacheKeyAt(i))
+		}
+		m.stringsKey(common.CacheKey, multiKey)
+	}
+	return nil
+}
+
+func (m *Message) flushTransient(dim *transient, hasCacheHit bool) error {
+	switch actual := dim.values.(type) {
+	case []string:
+		if hasCacheHit && len(actual) > 1 {
+			var result = make([]string, m.requestBatchSize())
+			j := 0
+			for i, item := range actual {
+				if m.CacheHit(i) {
+					continue
+				}
+				result[j] = item
+				j++
+			}
+			actual = result
+		}
+		m.stringsKey(dim.name, actual)
+	case []int:
+		if hasCacheHit && len(actual) > 1 {
+			var result = make([]int, m.requestBatchSize())
+			j := 0
+			for i, item := range actual {
+				if m.CacheHit(i) {
+					continue
+				}
+				result[j] = item
+				j++
+			}
+			actual = result
+		}
+		m.intsKey(dim.name, actual)
+	case []float32:
+		if hasCacheHit && len(actual) > 1 {
+			var result = make([]float32, m.requestBatchSize())
+			j := 0
+			for i, item := range actual {
+				if m.CacheHit(i) {
+					continue
+				}
+				result[j] = item
+				j++
+			}
+			actual = result
+		}
+		m.floatsKey(dim.name, actual)
+	default:
+		return fmt.Errorf("unsupported message type: %T", actual)
+	}
+	return nil
+
+}
+
+func (m *Message) requestBatchSize() int {
+	cacheHits := 0
+	for _, hit := range m.cacheHits {
+		if hit {
+			cacheHits++
+		}
+	}
