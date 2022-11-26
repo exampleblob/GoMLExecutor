@@ -194,3 +194,191 @@ func (m *Message) IntsKey(key string, values []int) {
 	var index fieldOffset
 	var intKeyValue int
 	var keyValue string
+	for i, value := range values {
+		if len(m.multiKeys[i]) == 0 {
+			m.multiKeys[i] = make([]string, m.dictionary.inputSize())
+		}
+
+		if intKeyValue, index = m.dictionary.lookupInt(key, value); index != unknownKeyField {
+			keyValue = strconv.Itoa(intKeyValue)
+			m.multiKeys[i][index] = keyValue
+		}
+	}
+
+	m.expandKeysIfNeeds(len(values), index, keyValue)
+}
+
+// since messages supports batchSize > 1 while valuesLen == 1, in that case copy the value
+// to fill out the cache keys such that all multiKeys[0 <= i < batchSize] contains
+// the copy of the value
+func (m *Message) expandKeysIfNeeds(valuesLen int, index fieldOffset, keyValue string) {
+	if index < 0 {
+		return
+	}
+
+	if valuesLen > 1 || m.batchSize <= 1 {
+		return
+	}
+
+	for i := 1; i < m.batchSize; i++ {
+		if len(m.multiKeys[i]) == 0 {
+			m.multiKeys[i] = make([]string, m.dictionary.inputSize())
+		}
+
+		m.multiKeys[i][index] = keyValue
+	}
+}
+
+// IntKey sets key/value pair
+func (m *Message) IntKey(key string, value int) {
+	m.panicIfBatch("Ints")
+	if key, index := m.dictionary.lookupInt(key, value); index != unknownKeyField {
+		m.keys[index] = strconv.Itoa(key)
+	}
+	m.intKey(key, value)
+}
+
+func (m *Message) intKey(key string, value int) {
+	m.appendByte('"')
+	m.appendString(key)
+	m.appendString(`":`)
+	m.appendString(strconv.Itoa(value))
+	m.appendString(`,`)
+}
+
+// FloatKey sets key/value pair
+func (m *Message) FloatKey(key string, value float32) {
+	m.panicIfBatch("Floats")
+
+	newValue := value
+	if rep, prec, index := m.dictionary.reduceFloat(key, value); index != unknownKeyField {
+		newValue = rep
+		m.keys[index] = strconv.FormatFloat(float64(newValue), 'f', prec, 32)
+	}
+
+	m.appendByte('"')
+	m.appendString(key)
+	m.appendString(`":`)
+	m.appendFloat(newValue, 32)
+	m.appendString(`,`)
+}
+
+// FloatsKey sets key/values pair
+func (m *Message) FloatsKey(key string, values []float32) {
+	vlen := len(values)
+	m.ensureMultiKeys(vlen)
+
+	var index fieldOffset
+	var keyValue string
+
+	newValues := make([]float32, vlen)
+	for i, value := range values {
+		if len(m.multiKeys[i]) == 0 {
+			m.multiKeys[i] = make([]string, m.dictionary.inputSize())
+		}
+
+		newValue, prec, index := m.dictionary.reduceFloat(key, value)
+		newValues[i] = newValue
+
+		if index != unknownKeyField {
+			keyValue = strconv.FormatFloat(float64(newValue), 'f', prec, 32)
+			m.multiKeys[i][index] = keyValue
+		}
+	}
+
+	// for floats, the values need to be modified before being sent to the server
+	m.transient = append(m.transient, &transient{name: key, values: newValues, kind: reflect.Float32})
+
+	m.expandKeysIfNeeds(vlen, index, keyValue)
+}
+
+func (m *Message) floatsKey(key string, values []float32) {
+	m.appendByte('"')
+	m.appendString(key)
+	m.appendString(`":[`)
+	for i, item := range values {
+		if i > 0 {
+			m.appendByte(',')
+		}
+		m.appendFloat(item, 32)
+	}
+	m.appendString(`],`)
+}
+
+func (m *Message) appendBytes(bs []byte) {
+	bsLen := len(bs)
+	if bsLen == 0 {
+		return
+	}
+	if bsLen+m.index >= len(m.buf) {
+		size := bufferSize
+		if size < bsLen {
+			size = bsLen
+		}
+		m.buf = append(m.buf, make([]byte, size)...)
+	}
+	copy(m.buf[m.index:], bs)
+	m.index += bsLen
+}
+
+func (m *Message) appendByte(bs byte) {
+	if m.index+1 >= len(m.buf) {
+		newBuffer := make([]byte, bufferSize)
+		m.buf = append(m.buf, newBuffer...)
+	}
+	m.buf[m.index] = bs
+	m.index++
+}
+
+func (m *Message) appendString(s string) {
+	sLen := len(s)
+	if sLen == 0 {
+		return
+	}
+	if sLen+m.index >= len(m.buf) {
+		size := bufferSize
+		if size < sLen {
+			size = sLen
+		}
+		newBuffer := make([]byte, size)
+		m.buf = append(m.buf, newBuffer...)
+	}
+	copy(m.buf[m.index:], s)
+	m.index += sLen
+}
+
+// Bytes returns message bytes
+func (m *Message) Bytes() []byte {
+	return m.buf[:m.index]
+}
+
+// appendInt appends an integer to the underlying buffer (assuming base 10).
+func (m *Message) appendInt(i int64) {
+	s := strconv.FormatInt(i, 10)
+	m.appendString(s)
+}
+
+// appendUint appends an unsigned integer to the underlying buffer (assuming base 10).
+func (m *Message) appendUint(i uint64) {
+	s := strconv.FormatUint(i, 10)
+	m.appendString(s)
+}
+
+// appendBool appends a bool to the underlying buffer.
+func (m *Message) appendBool(v bool) {
+	s := strconv.FormatBool(v)
+	m.appendString(s)
+}
+
+// AppendFloat appends a float to the underlying buffer.
+func (m *Message) appendFloat(f float32, bitSize int) {
+	s := strconv.FormatFloat(float64(f), 'f', -1, bitSize)
+	m.appendString(s)
+}
+
+// trim removes the last character from the buffer
+func (m *Message) trim(ch byte) {
+	if m.buf[m.index-1] == ch && m.index > 0 {
+		m.index--
+	}
+}
