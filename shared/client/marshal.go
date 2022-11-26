@@ -23,4 +23,13 @@ func Marshal(data interface{}, id string) ([]byte, error) {
 		if id != "" {
 			fmt.Printf("[%s Marshal] Message\n", id)
 		}
-	
+		return val.Bytes(), nil
+	case gojay.MarshalerJSONObject:
+		data, err := gojay.Marshal(val)
+		if err != nil {
+			return nil, err
+		}
+		if id != "" {
+			fmt.Printf("[%s Marshal] gojay\n", id)
+		}
+		return data, nil
