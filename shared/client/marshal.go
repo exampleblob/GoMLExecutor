@@ -33,3 +33,14 @@ func Marshal(data interface{}, id string) ([]byte, error) {
 			fmt.Printf("[%s Marshal] gojay\n", id)
 		}
 		return data, nil
+	default:
+		data, err := json.Marshal(val)
+		if err != nil {
+			return nil, err
+		}
+		if id != "" {
+			fmt.Printf("[%s json] json\n", id)
+		}
+		return data, nil
+	}
+}
