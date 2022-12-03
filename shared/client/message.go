@@ -568,3 +568,26 @@ func (m *Message) requestBatchSize() int {
 			cacheHits++
 		}
 	}
+	return m.batchSize - cacheHits
+}
+
+func (m *Message) ensureMultiKeys(l int) {
+	if m.batchSize == 0 {
+		m.batchSize = l
+	}
+	if len(m.multiKeys) == 0 {
+		m.multiKeys = make([][]string, m.batchSize)
+	}
+}
+
+func (m *Message) hasCacheHit() bool {
+	if len(m.cacheHits) == 0 {
+		return false
+	}
+	for _, hit := range m.cacheHits {
+		if hit {
+			return true
+		}
+	}
+	return false
+}
