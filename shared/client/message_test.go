@@ -154,3 +154,42 @@ type mcpb struct {
 	Multi     []string `json:"multi"`
 	Copied    []string `json:"copied"`
 	BatchSize int      `json:"batch_size"`
+	CacheKeys []string `json:"cache_key"`
+}
+
+func TestMessageBug(t *testing.T) {
+	msgs := makeMessages([]fakeLayer{
+		{
+			name:    "multi",
+			strings: []string{"a", "b"},
+			typen:   "string",
+		},
+		{
+			name:  "copied",
+			typen: "string",
+		},
+	})
+
+	m := msgs.Borrow()
+	m.start()
+
+	m.SetBatchSize(3)
+
+	m.StringsKey("multi", []string{"a", "b", "c"})
+	m.StringsKey("copied", []string{"1"})
+
+	m.FlagCacheHit(0)
+
+	err := m.end()
+	assert.Nil(t, err)
+
+	bytes := m.Bytes()
+
+	pl := new(mcpb)
+	json.Unmarshal(bytes, pl)
+
+	fmt.Printf("%+v\n", pl)
+	assert.Equal(t, []string{"1"}, pl.Copied)
+
+	assert.Equal(t, []string{"b", "c"}, pl.Multi)
+}
