@@ -10,4 +10,6 @@ import (
 )
 
 // ReconcileData reconciles target with cached and predicted data
-// targ
+// target is either the pointer to the result or a pointer to a slice of results from
+// the prediction server
+func reconcileData(prefix string, target interface{}, cachable Cachable, ca
