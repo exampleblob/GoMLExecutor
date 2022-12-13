@@ -89,3 +89,28 @@ func (o *clientRemoteOption) Apply(c *Service) {
 func WithRemoteConfig(config *cconfig.Remote) Option {
 	return &clientRemoteOption{config: config}
 }
+
+type dictionaryOption struct {
+	dictionary *Dictionary
+}
+
+func (o *dictionaryOption) Apply(c *Service) {
+	c.dict = o.dictionary
+}
+
+// WithDictionary creates dictionary option
+func WithDictionary(dictionary *Dictionary) Option {
+	return &dictionaryOption{dictionary: dictionary}
+}
+
+type storerOption struct {
+	storer datastore.Storer
+}
+
+func (o *storerOption) Apply(c *Service) {
+	c.datastore = o.storer
+}
+
+func WithDataStorer(storer datastore.Storer) Option {
+	return &storerOption{storer: storer}
+}
