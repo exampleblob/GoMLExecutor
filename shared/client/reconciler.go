@@ -17,4 +17,14 @@ func reconcileData(prefix string, target interface{}, cachable Cachable, cached 
 	targetPtr := xunsafe.AsPointer(target)
 
 	if prefix != "" {
-		log.Printf("%s reconciling: %T %+v", p
+		log.Printf("%s reconciling: %T %+v", prefix, target, target)
+	}
+
+	switch targetType.Kind() {
+	case reflect.Struct:
+		if !cachable.CacheHit(0) {
+			// the target memory already has actual value
+			return nil
+		}
+
+		// directly replace the ta
