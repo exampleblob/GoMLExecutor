@@ -27,4 +27,10 @@ func reconcileData(prefix string, target interface{}, cachable Cachable, cached 
 			return nil
 		}
 
-		// directly replace the ta
+		// directly replace the target memory with cached value
+		*(*unsafe.Pointer)(targetPtr) = *(*unsafe.Pointer)(xunsafe.AsPointer(cached[0]))
+		return nil
+	case reflect.Slice:
+		// noop
+	default:
+		return fmt.Errorf("unsupported target type
