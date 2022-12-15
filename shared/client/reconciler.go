@@ -33,4 +33,9 @@ func reconcileData(prefix string, target interface{}, cachable Cachable, cached 
 	case reflect.Slice:
 		// noop
 	default:
-		return fmt.Errorf("unsupported target type
+		return fmt.Errorf("unsupported target type expected *T or []*T, but had: %T", target)
+	}
+
+	// create a new slice since target slice needs to incorporate cache data
+	xSlice := xunsafe.NewSlice(targetType.Elem())
+	batchSize := cach
