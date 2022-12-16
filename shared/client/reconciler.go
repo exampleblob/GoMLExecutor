@@ -38,4 +38,8 @@ func reconcileData(prefix string, target interface{}, cachable Cachable, cached 
 
 	// create a new slice since target slice needs to incorporate cache data
 	xSlice := xunsafe.NewSlice(targetType.Elem())
-	batchSize := cach
+	batchSize := cachable.BatchSize()
+
+	// copy all cache values (including nils)
+	newData := reflect.MakeSlice(xSlice.Type, batchSize, batchSize)
+	newDataPtr := xunsafe.ValuePointer(&n
