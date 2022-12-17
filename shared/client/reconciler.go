@@ -42,4 +42,11 @@ func reconcileData(prefix string, target interface{}, cachable Cachable, cached 
 
 	// copy all cache values (including nils)
 	newData := reflect.MakeSlice(xSlice.Type, batchSize, batchSize)
-	newDataPtr := xunsafe.ValuePointer(&n
+	newDataPtr := xunsafe.ValuePointer(&newData)
+	hadDataOnlyInCache := len(cached) > 0
+	for i, cacheEntry := range cached {
+		if cacheEntry == nil {
+			hadDataOnlyInCache = false
+		}
+
+		itemPtrAddr := xSlice.PointerAt(newDataPtr, u
