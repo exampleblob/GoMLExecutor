@@ -49,4 +49,12 @@ func reconcileData(prefix string, target interface{}, cachable Cachable, cached 
 			hadDataOnlyInCache = false
 		}
 
-		itemPtrAddr := xSlice.PointerAt(newDataPtr, u
+		itemPtrAddr := xSlice.PointerAt(newDataPtr, uintptr(i))
+		*(*unsafe.Pointer)(itemPtrAddr) = xunsafe.AsPointer(cached[i])
+
+		if prefix != "" {
+			log.Printf("%s cache->output[%v] %+v", prefix, i, cacheEntry)
+		}
+	}
+
+	oldSlice := (*reflect
