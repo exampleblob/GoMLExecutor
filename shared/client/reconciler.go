@@ -57,4 +57,9 @@ func reconcileData(prefix string, target interface{}, cachable Cachable, cached 
 		}
 	}
 
-	oldSlice := (*reflect
+	oldSlice := (*reflect.SliceHeader)(targetPtr)
+	if !hadDataOnlyInCache {
+		// copy all predicted values to nil spots from cache
+		offsets := buildOffsets(batchSize, cachable)
+		if prefix != "" {
+			log.Printf("%s offsets ma
