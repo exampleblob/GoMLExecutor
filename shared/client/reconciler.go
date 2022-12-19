@@ -62,4 +62,9 @@ func reconcileData(prefix string, target interface{}, cachable Cachable, cached 
 		// copy all predicted values to nil spots from cache
 		offsets := buildOffsets(batchSize, cachable)
 		if prefix != "" {
-			log.Printf("%s offsets ma
+			log.Printf("%s offsets map: %+v, oldSlice.Len:%d", prefix, offsets, oldSlice.Len)
+		}
+
+		for index := 0; index < oldSlice.Len; index++ {
+			value := xSlice.ValuePointerAt(targetPtr, index)
+			cacheableIndex := offsets[in
