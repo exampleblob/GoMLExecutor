@@ -67,4 +67,13 @@ func reconcileData(prefix string, target interface{}, cachable Cachable, cached 
 
 		for index := 0; index < oldSlice.Len; index++ {
 			value := xSlice.ValuePointerAt(targetPtr, index)
-			cacheableIndex := offsets[in
+			cacheableIndex := offsets[index]
+			if cachable.CacheHit(cacheableIndex) {
+				if prefix != "" {
+					log.Printf("%s cache hit %d for index:%d", prefix, cacheableIndex, index)
+				}
+
+				continue
+			}
+
+			itemPtrAddr := xSlice.PointerAt(newDat
