@@ -76,4 +76,9 @@ func reconcileData(prefix string, target interface{}, cachable Cachable, cached 
 				continue
 			}
 
-			itemPtrAddr := xSlice.PointerAt(newDat
+			itemPtrAddr := xSlice.PointerAt(newDataPtr, uintptr(cacheableIndex))
+			*(*unsafe.Pointer)(itemPtrAddr) = xunsafe.AsPointer(value)
+
+			if prefix != "" {
+				// means mly server response
+				log.Printf("%s 
