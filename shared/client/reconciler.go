@@ -88,4 +88,11 @@ func reconcileData(prefix string, target interface{}, cachable Cachable, cached 
 
 	nextSlice := *(*reflect.SliceHeader)(newDataPtr)
 	oldSlice.Cap = nextSlice.Cap
-	oldSlice.Len = nextSlice.Le
+	oldSlice.Len = nextSlice.Len
+	oldSlice.Data = nextSlice.Data
+
+	return nil
+}
+
+func buildOffsets(batchSize int, cachable Cachable) []int {
+	var offsets = make([]int, batchSize) //index offsets to rec
