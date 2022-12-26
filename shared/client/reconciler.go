@@ -95,4 +95,14 @@ func reconcileData(prefix string, target interface{}, cachable Cachable, cached 
 }
 
 func buildOffsets(batchSize int, cachable Cachable) []int {
-	var offsets = make([]int, batchSize) //index offsets to rec
+	var offsets = make([]int, batchSize) //index offsets to recncile local cache hits
+
+	offset := 0
+	for i := 0; i < batchSize; i++ {
+		offsets[offset] = i
+		if !cachable.CacheHit(i) {
+			offset++
+		}
+	}
+	return offsets
+}
