@@ -232,3 +232,84 @@ func TestReconcileData(t *testing.T) {
 					Output: 1.42,
 				},
 			},
+
+			Cachable: func() Cachable {
+				msg := messages.Borrow()
+				msg.StringsKey("initMessage", []string{"ab", "cd", "ef", "yz"})
+				msg.FlagCacheHit(0)
+				msg.FlagCacheHit(1)
+				msg.FlagCacheHit(2)
+				msg.FlagCacheHit(3)
+
+				return msg
+			},
+			target: func() interface{} {
+				var result = []*Prediction{}
+				return &result
+			},
+			expect: []*Prediction{
+				{
+					Output: 1.1,
+				},
+				{
+					Output: 2.1,
+				},
+				{
+					Output: 3.4,
+				},
+				{
+					Output: 1.42,
+				},
+			},
+		},
+		{
+			description: "multiKey: nothing cached",
+			cached:      []interface{}{},
+			Cachable: func() Cachable {
+				msg := messages.Borrow()
+				msg.StringsKey("initMessage", []string{"ab", "cd", "ef", "yz"})
+				return msg
+			},
+			target: func() interface{} {
+				var result = []*Prediction{
+					{
+						Output: 1.1,
+					},
+					{
+						Output: 2.1,
+					},
+					{
+						Output: 3.4,
+					},
+					{
+						Output: 1.42,
+					},
+				}
+				return &result
+			},
+			expect: []*Prediction{
+				{
+					Output: 1.1,
+				},
+				{
+					Output: 2.1,
+				},
+				{
+					Output: 3.4,
+				},
+				{
+					Output: 1.42,
+				},
+			},
+		},
+	}
+
+	for _, testCase := range testCases {
+		target := testCase.target()
+		err := reconcileData("test", target, testCase.Cachable(), testCase.cached)
+		assert.Nil(t, err, testCase.description)
+		actual := reflect.ValueOf(target).Elem().Interface()
+		assert.EqualValues(t, testCase.expect, actual, testCase.description)
+	}
+
+}
