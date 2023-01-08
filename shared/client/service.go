@@ -29,4 +29,14 @@ import (
 	"github.com/viant/mly/shared/tracker"
 	"github.com/viant/mly/shared/tracker/mg"
 	"github.com/viant/xunsafe"
-	"g
+	"golang.org/x/net/http2"
+)
+
+//Service represent mly client
+type Service struct {
+	Config
+	hostIndex   int64
+	httpClient  http.Client
+	newStorable func() common.Storable
+
+	messages Messages
