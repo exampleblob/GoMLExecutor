@@ -40,3 +40,12 @@ type Service struct {
 	newStorable func() common.Storable
 
 	messages Messages
+	poolErr  error
+
+	sync.RWMutex
+	dict               *Dictionary
+	dictRefreshPending int32
+	datastore          datastore.Storer
+
+	// container for Datastore gmetric objects
+	gmetrics *gmetric
