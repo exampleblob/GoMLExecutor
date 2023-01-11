@@ -48,4 +48,14 @@ type Service struct {
 	datastore          datastore.Storer
 
 	// container for Datastore gmetric objects
-	gmetrics *gmetric
+	gmetrics *gmetric.Service
+
+	counter     *gmetric.Operation
+	dictCounter *gmetric.Operation
+
+	ErrorHistory tracker.Tracker
+}
+
+// NewMessage returns a new message
+func (s *Service) NewMessage() *Message {
+	message 
