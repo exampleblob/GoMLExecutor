@@ -58,4 +58,11 @@ type Service struct {
 
 // NewMessage returns a new message
 func (s *Service) NewMessage() *Message {
-	message 
+	message := s.messages.Borrow()
+	message.start()
+	return message
+}
+
+// Run run model prediction
+func (s *Service) Run(ctx context.Context, input interface{}, response *Response) error {
+	onDone := s.c
