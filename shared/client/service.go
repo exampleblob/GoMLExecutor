@@ -65,4 +65,12 @@ func (s *Service) NewMessage() *Message {
 
 // Run run model prediction
 func (s *Service) Run(ctx context.Context, input interface{}, response *Response) error {
-	onDone := s.c
+	onDone := s.counter.Begin(time.Now())
+	stats := stat.NewValues()
+	defer func() {
+		onDone(time.Now(), *stats...)
+		s.releaseMessage(input)
+	}()
+
+	if response.Data == nil {
+		return fmt.Errorf("response data 
