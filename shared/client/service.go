@@ -83,4 +83,14 @@ func (s *Service) Run(ctx context.Context, input interface{}, response *Response
 
 	batchSize := 0
 	if isCachable {
-		batchSize = cacha
+		batchSize = cachable.BatchSize()
+
+		cachedCount, err = s.loadFromCache(ctx, &cached, batchSize, response, cachable)
+		if err != nil {
+			return err
+		}
+	}
+
+	isDebug := s.Config.Debug
+
+	var modelName stri
