@@ -73,4 +73,14 @@ func (s *Service) Run(ctx context.Context, input interface{}, response *Response
 	}()
 
 	if response.Data == nil {
-		return fmt.Errorf("response data 
+		return fmt.Errorf("response data was empty - aborting request")
+	}
+
+	cachable, isCachable := input.(Cachable)
+	var err error
+	var cachedCount int
+	var cached []interface{}
+
+	batchSize := 0
+	if isCachable {
+		batchSize = cacha
