@@ -93,4 +93,11 @@ func (s *Service) Run(ctx context.Context, input interface{}, response *Response
 
 	isDebug := s.Config.Debug
 
-	var modelName stri
+	var modelName string
+	if isDebug {
+		modelName = s.Config.Model
+		s.reportBatch(cachedCount, cached)
+	}
+
+	if (batchSize > 0 && cachedCount == batchSize) || (batchSize == 0 && cachedCount > 0) {
+		r
