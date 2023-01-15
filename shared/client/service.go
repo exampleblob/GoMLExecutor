@@ -100,4 +100,13 @@ func (s *Service) Run(ctx context.Context, input interface{}, response *Response
 	}
 
 	if (batchSize > 0 && cachedCount == batchSize) || (batchSize == 0 && cachedCount > 0) {
-		r
+		response.Status = common.StatusCached
+		return s.handleResponse(ctx, response.Data, cached, cachable)
+	}
+
+	data, err := Marshal(input, modelName)
+	if err != nil {
+		return err
+	}
+
+	stats.Append(sta
