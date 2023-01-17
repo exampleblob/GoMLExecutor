@@ -109,4 +109,11 @@ func (s *Service) Run(ctx context.Context, input interface{}, response *Response
 		return err
 	}
 
-	stats.Append(sta
+	stats.Append(stat.NoSuchKey)
+	if isDebug {
+		fmt.Printf("[%s] request: %s\n", modelName, strings.Trim(string(data), " \n"))
+	}
+
+	body, err := s.postRequest(ctx, data)
+	if isDebug {
+		fmt.Prin
