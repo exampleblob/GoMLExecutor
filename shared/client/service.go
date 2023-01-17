@@ -116,4 +116,12 @@ func (s *Service) Run(ctx context.Context, input interface{}, response *Response
 
 	body, err := s.postRequest(ctx, data)
 	if isDebug {
-		fmt.Prin
+		fmt.Printf("[%s] response.Body:%s\n", modelName, body)
+		fmt.Printf("[%s] error:%s\n", modelName, err)
+	}
+
+	if err != nil {
+		stats.AppendError(err)
+
+		if ctx.Err() == nil && s.ErrorHistory != nil {
+			go 
