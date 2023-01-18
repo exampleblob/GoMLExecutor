@@ -124,4 +124,14 @@ func (s *Service) Run(ctx context.Context, input interface{}, response *Response
 		stats.AppendError(err)
 
 		if ctx.Err() == nil && s.ErrorHistory != nil {
-			go 
+			go s.ErrorHistory.AddBytes([]byte(err.Error()))
+		}
+
+		return err
+	}
+
+	err = gojay.Unmarshal(body, response)
+	if err != nil {
+		return fmt.Errorf("failed to unmarshal: '%s'; due to %w", body, err)
+	}
+
