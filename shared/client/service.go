@@ -135,3 +135,13 @@ func (s *Service) Run(ctx context.Context, input interface{}, response *Response
 		return fmt.Errorf("failed to unmarshal: '%s'; due to %w", body, err)
 	}
 
+	if isDebug {
+		fmt.Printf("[%v] response.Data: %s, %v\n", modelName, response.Data, err)
+	}
+
+	if response.Status != common.StatusOK {
+		// TODO is this correct?
+		return nil
+	}
+
+	if err = s.handleRe
