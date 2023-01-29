@@ -144,4 +144,9 @@ func (s *Service) Run(ctx context.Context, input interface{}, response *Response
 		return nil
 	}
 
-	if err = s.handleRe
+	if err = s.handleResponse(ctx, response.Data, cached, cachable); err != nil {
+		return fmt.Errorf("failed to handle resp: %w", err)
+	}
+
+	s.updatedCache(ctx, response.Data, cachable, s.dict.hash)
+	s.assertDictHash(response
