@@ -149,4 +149,10 @@ func (s *Service) Run(ctx context.Context, input interface{}, response *Response
 	}
 
 	s.updatedCache(ctx, response.Data, cachable, s.dict.hash)
-	s.assertDictHash(response
+	s.assertDictHash(response)
+
+	return nil
+}
+
+func (s *Service) loadFromCache(ctx context.Context, cached *[]interface{}, batchSize int, response *Response, cachable Cachable) (int, error) {
+	*cached = make([]interface{}, batchS
