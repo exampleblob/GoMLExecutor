@@ -162,4 +162,13 @@ func (s *Service) loadFromCache(ctx context.Context, cached *[]interface{}, batc
 	}
 
 	if batchSize > 0 {
-		cachedCount, err := s.readFromCacheInBatch(ctx, batchSize, dataType, cachable, response, *ca
+		cachedCount, err := s.readFromCacheInBatch(ctx, batchSize, dataType, cachable, response, *cached)
+		if err != nil && !common.IsTransientError(err) {
+			log.Printf("cache error: %v", err)
+		}
+
+		return cachedCount, nil
+	}
+
+	key := cachable.CacheKey()
+	has, dictHash, err := s.readFromCache
