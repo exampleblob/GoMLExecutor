@@ -171,4 +171,11 @@ func (s *Service) loadFromCache(ctx context.Context, cached *[]interface{}, batc
 	}
 
 	key := cachable.CacheKey()
-	has, dictHash, err := s.readFromCache
+	has, dictHash, err := s.readFromCache(ctx, key, response.Data)
+	if err != nil && !common.IsTransientError(err) {
+		log.Printf("cache error: %v", err)
+	}
+	cachedCount := 0
+	if has {
+		cachedCount = 1
+		response.S
