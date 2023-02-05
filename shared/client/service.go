@@ -178,4 +178,10 @@ func (s *Service) loadFromCache(ctx context.Context, cached *[]interface{}, batc
 	cachedCount := 0
 	if has {
 		cachedCount = 1
-		response.S
+		response.Status = common.StatusCached
+		response.DictHash = dictHash
+	}
+	return cachedCount, nil
+}
+
+func (s *Service) readFromCacheInBatch(ctx context.Context, batchSize int, dataType reflect.Type, cachable 
