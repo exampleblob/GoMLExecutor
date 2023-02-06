@@ -184,4 +184,10 @@ func (s *Service) loadFromCache(ctx context.Context, cached *[]interface{}, batc
 	return cachedCount, nil
 }
 
-func (s *Service) readFromCacheInBatch(ctx context.Context, batchSize int, dataType reflect.Type, cachable 
+func (s *Service) readFromCacheInBatch(ctx context.Context, batchSize int, dataType reflect.Type, cachable Cachable, response *Response, cached []interface{}) (int, error) {
+	waitGroup := sync.WaitGroup{}
+	waitGroup.Add(batchSize)
+	var err error
+	mux := sync.Mutex{}
+	var cachedCount = 0
+	for k := 0; k < batchSize; k+
