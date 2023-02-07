@@ -195,4 +195,13 @@ func (s *Service) readFromCacheInBatch(ctx context.Context, batchSize int, dataT
 			defer waitGroup.Done()
 			cacheEntry := reflect.New(dataType.Elem()).Interface()
 			key := cachable.CacheKeyAt(index)
-			has, dictHash, e := s.readFromCache(ctx, key
+			has, dictHash, e := s.readFromCache(ctx, key, cacheEntry)
+			mux.Lock()
+			defer mux.Unlock()
+			if e != nil {
+				err = e
+				return
+			}
+			if has {
+				response.DictHash = dictHash
+				cachable.FlagCac
