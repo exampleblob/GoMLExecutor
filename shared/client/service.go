@@ -190,4 +190,9 @@ func (s *Service) readFromCacheInBatch(ctx context.Context, batchSize int, dataT
 	var err error
 	mux := sync.Mutex{}
 	var cachedCount = 0
-	for k := 0; k < batchSize; k+
+	for k := 0; k < batchSize; k++ {
+		go func(index int) {
+			defer waitGroup.Done()
+			cacheEntry := reflect.New(dataType.Elem()).Interface()
+			key := cachable.CacheKeyAt(index)
+			has, dictHash, e := s.readFromCache(ctx, key
