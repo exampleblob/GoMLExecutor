@@ -204,4 +204,14 @@ func (s *Service) readFromCacheInBatch(ctx context.Context, batchSize int, dataT
 			}
 			if has {
 				response.DictHash = dictHash
-				cachable.FlagCac
+				cachable.FlagCacheHit(index)
+				cached[index] = cacheEntry
+				cachedCount++
+			}
+		}(k)
+	}
+	waitGroup.Wait()
+	return cachedCount, err
+}
+
+func (s *Service) readFromCache(ctx context.Context, key st
