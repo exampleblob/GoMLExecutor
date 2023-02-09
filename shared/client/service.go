@@ -214,4 +214,10 @@ func (s *Service) readFromCacheInBatch(ctx context.Context, batchSize int, dataT
 	return cachedCount, err
 }
 
-func (s *Service) readFromCache(ctx context.Context, key st
+func (s *Service) readFromCache(ctx context.Context, key string, target interface{}) (bool, int, error) {
+	if s.datastore == nil || !s.datastore.Enabled() {
+		return false, 0, nil
+	}
+
+	dataType := reflect.TypeOf(target)
+	if dataType.Kind() != reflect.Ptr
