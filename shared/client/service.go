@@ -220,4 +220,9 @@ func (s *Service) readFromCache(ctx context.Context, key string, target interfac
 	}
 
 	dataType := reflect.TypeOf(target)
-	if dataType.Kind() != reflect.Ptr
+	if dataType.Kind() != reflect.Ptr {
+		return false, 0, fmt.Errorf("invalid response data type: expeted ptr but had: %T", target)
+	}
+
+	storeKey := s.datastore.Key(key)
+	dictHash, err := s.datastore.GetInto(ctx, storeKe
