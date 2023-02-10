@@ -225,4 +225,14 @@ func (s *Service) readFromCache(ctx context.Context, key string, target interfac
 	}
 
 	storeKey := s.datastore.Key(key)
-	dictHash, err := s.datastore.GetInto(ctx, storeKe
+	dictHash, err := s.datastore.GetInto(ctx, storeKey, target)
+	if err == nil {
+		if (!s.Config.DictHashValidation) || dictHash == 0 || dictHash == s.dictionary().hash {
+			return true, dictHash, nil
+		}
+	}
+
+	return false, 0, err
+}
+
+func (s *Service) rel
