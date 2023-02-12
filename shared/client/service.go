@@ -235,4 +235,14 @@ func (s *Service) readFromCache(ctx context.Context, key string, target interfac
 	return false, 0, err
 }
 
-func (s *Service) rel
+func (s *Service) releaseMessage(input interface{}) {
+	releaser, ok := input.(Releaser)
+	if ok {
+		releaser.Release()
+	}
+}
+
+func (s *Service) dictionary() *Dictionary {
+	s.RWMutex.RLock()
+	dict := s.dict
+	s.RWMutex.RUnloc
