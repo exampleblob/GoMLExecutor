@@ -245,4 +245,14 @@ func (s *Service) releaseMessage(input interface{}) {
 func (s *Service) dictionary() *Dictionary {
 	s.RWMutex.RLock()
 	dict := s.dict
-	s.RWMutex.RUnloc
+	s.RWMutex.RUnlock()
+	return dict
+}
+
+func (s *Service) init(options []Option) error {
+	for _, option := range options {
+		option.Apply(s)
+	}
+
+	if s.gmetrics == nil {
+		s.gmetrics = gmetric.
