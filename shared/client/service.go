@@ -255,4 +255,8 @@ func (s *Service) init(options []Option) error {
 	}
 
 	if s.gmetrics == nil {
-		s.gmetrics = gmetric.
+		s.gmetrics = gmetric.New()
+	}
+
+	location := reflect.TypeOf(Service{}).PkgPath()
+	s.counter = s.gmetrics.MultiOperationCounter(location, s.Model+"Client", s.Model+" client performance", time.Microsecond, time.Minute, 2, stat.New
