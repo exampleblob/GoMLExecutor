@@ -263,4 +263,18 @@ func (s *Service) init(options []Option) error {
 	s.dictCounter = s.gmetrics.MultiOperationCounter(location, s.Model+"ClientDict", s.Model+" client dictionary performance", time.Microsecond, time.Minute, 1, stat.ErrorOnly())
 
 	if s.ErrorHistory == nil {
-		
+		impl := misragries.NewMisraGries(20)
+		s.ErrorHistory = mg.New(impl)
+	}
+
+	if s.Config.MaxRetry == 0 {
+		s.Config.MaxRetry = 3
+	}
+
+	err := s.initHTTPClient()
+	if err != nil {
+		return err
+	}
+
+	if s.Config.Datastore == nil {
+	
