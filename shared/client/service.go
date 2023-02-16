@@ -277,4 +277,13 @@ func (s *Service) init(options []Option) error {
 	}
 
 	if s.Config.Datastore == nil {
-	
+		if err := s.loadModelConfig(); err != nil {
+			return err
+		}
+	}
+	if s.dict == nil {
+		if err := s.loadModelDictionary(); err != nil {
+			return err
+		}
+	}
+	if ds := s.Config.Da
