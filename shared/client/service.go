@@ -295,4 +295,14 @@ func (s *Service) init(options []Option) error {
 
 	if s.datastore == nil {
 		err := s.initDatastore()
-		retur
+		return err
+	}
+	s.messages = NewMessages(s.dictionary)
+	return nil
+}
+
+func (s *Service) initHTTPClient() error {
+	host, _ := s.getHost()
+	var tslConfig *tls.Config
+	if host != nil && host.IsSecurePort() {
+		cert, err := getCe
