@@ -286,4 +286,13 @@ func (s *Service) init(options []Option) error {
 			return err
 		}
 	}
-	if ds := s.Config.Da
+	if ds := s.Config.Datastore; ds != nil {
+		ds.Init()
+		if err = ds.Validate(); err != nil {
+			return err
+		}
+	}
+
+	if s.datastore == nil {
+		err := s.initDatastore()
+		retur
