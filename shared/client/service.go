@@ -305,4 +305,16 @@ func (s *Service) initHTTPClient() error {
 	host, _ := s.getHost()
 	var tslConfig *tls.Config
 	if host != nil && host.IsSecurePort() {
-		cert, err := getCe
+		cert, err := getCertPool()
+		if err != nil {
+			return fmt.Errorf("failed to create certificate: %v", err)
+		}
+
+		tslConfig = &tls.Config{
+			RootCAs: cert,
+		}
+	}
+
+	http2Transport := &http2.Transport{
+		TLSClientConfig: tslConfig,
+	}
