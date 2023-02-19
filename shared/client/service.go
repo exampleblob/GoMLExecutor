@@ -318,3 +318,10 @@ func (s *Service) initHTTPClient() error {
 	http2Transport := &http2.Transport{
 		TLSClientConfig: tslConfig,
 	}
+
+	if host == nil || !host.IsSecurePort() {
+		http2Transport.AllowHTTP = true
+		http2Transport.DialTLS = func(network, addr string, cfg *tls.Config) (net.Conn, error) {
+			return net.Dial(network, addr)
+		}
+	}
