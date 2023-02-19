@@ -325,3 +325,15 @@ func (s *Service) initHTTPClient() error {
 			return net.Dial(network, addr)
 		}
 	}
+
+	s.httpClient.Transport = http2Transport
+	return nil
+}
+
+func (s *Service) loadModelConfig() error {
+	var err error
+	host, err := s.getHost()
+	if err != nil {
+		return err
+	}
+	if s.Config.Dat
