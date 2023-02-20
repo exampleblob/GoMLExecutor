@@ -336,4 +336,11 @@ func (s *Service) loadModelConfig() error {
 	if err != nil {
 		return err
 	}
-	if s.Config.Dat
+	if s.Config.Datastore, err = s.discoverConfig(host, host.metaConfigURL(s.Model)); err != nil {
+		return err
+	}
+	s.Config.updateCache()
+	return nil
+}
+
+func (s *Service) loadModelDictionary() error {
