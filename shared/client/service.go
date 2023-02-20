@@ -344,3 +344,14 @@ func (s *Service) loadModelConfig() error {
 }
 
 func (s *Service) loadModelDictionary() error {
+	stats := stat.NewValues()
+
+	onDone := s.dictCounter.Begin(time.Now())
+	defer func() {
+		onDone(time.Now(), stats.Values()...)
+	}()
+
+	host, err := s.getHost()
+	if err != nil {
+		stats.Append(err)
+		retu
