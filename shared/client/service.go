@@ -362,4 +362,10 @@ func (s *Service) loadModelDictionary() error {
 	response, err := httpClient.Get(URL)
 	if err != nil {
 		// no context errors supported
-		
+		stats.Append(err)
+		return fmt.Errorf("failed to load Dictionary: %w", err)
+	}
+
+	if response.Body == nil {
+		err = fmt.Errorf("unable to load dictioanry body was empty")
+		stats.Append(err
