@@ -354,4 +354,12 @@ func (s *Service) loadModelDictionary() error {
 	host, err := s.getHost()
 	if err != nil {
 		stats.Append(err)
-		retu
+		return err
+	}
+	URL := host.metaDictionaryURL(s.Model)
+
+	httpClient := s.getHTTPClient(host)
+	response, err := httpClient.Get(URL)
+	if err != nil {
+		// no context errors supported
+		
