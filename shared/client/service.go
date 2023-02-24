@@ -368,4 +368,15 @@ func (s *Service) loadModelDictionary() error {
 
 	if response.Body == nil {
 		err = fmt.Errorf("unable to load dictioanry body was empty")
-		stats.Append(err
+		stats.Append(err)
+		return err
+	}
+
+	data, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		stats.Append(err)
+		return fmt.Errorf("failed to read body: %w", err)
+	}
+
+	dict := &common.Dictionary{}
+	if e
