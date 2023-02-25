@@ -379,4 +379,10 @@ func (s *Service) loadModelDictionary() error {
 	}
 
 	dict := &common.Dictionary{}
-	if e
+	if err = json.Unmarshal(data, dict); err != nil {
+		stats.Append(err)
+		return fmt.Errorf("failed to unmarshal dict: %w", err)
+	}
+
+	s.RWMutex.Lock()
+	s.dict = NewDictionary(dict, s.Datastore.I
