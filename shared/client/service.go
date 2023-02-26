@@ -394,4 +394,13 @@ func (s *Service) loadModelDictionary() error {
 
 func (s *Service) getHTTPClient(host *Host) *http.Client {
 	httpClient := http.DefaultClient
-	if host.Is
+	if host.IsSecurePort() {
+		httpClient = &s.httpClient
+	}
+	return httpClient
+}
+
+func (s *Service) initDatastore() error {
+	remoteCfg := s.Config.Datastore
+	if remoteCfg == nil {
+		retur
