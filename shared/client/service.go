@@ -385,4 +385,13 @@ func (s *Service) loadModelDictionary() error {
 	}
 
 	s.RWMutex.Lock()
-	s.dict = NewDictionary(dict, s.Datastore.I
+	s.dict = NewDictionary(dict, s.Datastore.Inputs)
+	s.RWMutex.Unlock()
+
+	s.messages = NewMessages(s.dictionary)
+	return nil
+}
+
+func (s *Service) getHTTPClient(host *Host) *http.Client {
+	httpClient := http.DefaultClient
+	if host.Is
