@@ -413,4 +413,12 @@ func (s *Service) initDatastore() error {
 	var stores = map[string]*datastore.Service{}
 	var err error
 	datastores := &sconfig.DatastoreList{
-		Datastores:  []*sconfig.
+		Datastores:  []*sconfig.Datastore{&remoteCfg.Datastore},
+		Connections: remoteCfg.Connections,
+	}
+
+	if stores, err = datastore.NewStores(datastores, s.gmetrics); err != nil {
+		return err
+	}
+
+	s.datast
