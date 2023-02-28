@@ -403,4 +403,14 @@ func (s *Service) getHTTPClient(host *Host) *http.Client {
 func (s *Service) initDatastore() error {
 	remoteCfg := s.Config.Datastore
 	if remoteCfg == nil {
-		retur
+		return nil
+	}
+
+	if remoteCfg.Datastore.ID == "" {
+		return nil
+	}
+
+	var stores = map[string]*datastore.Service{}
+	var err error
+	datastores := &sconfig.DatastoreList{
+		Datastores:  []*sconfig.
