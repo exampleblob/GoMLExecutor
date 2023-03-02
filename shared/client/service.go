@@ -421,4 +421,9 @@ func (s *Service) initDatastore() error {
 		return err
 	}
 
-	s.datast
+	s.datastore = stores[remoteCfg.ID]
+	if len(remoteCfg.Fields) > 0 {
+		if err := remoteCfg.FieldsDescriptor(remoteCfg.Fields); err != nil {
+			return err
+		}
+		s.newStorable = func() common.Storab
