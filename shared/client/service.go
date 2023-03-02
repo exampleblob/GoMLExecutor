@@ -426,4 +426,17 @@ func (s *Service) initDatastore() error {
 		if err := remoteCfg.FieldsDescriptor(remoteCfg.Fields); err != nil {
 			return err
 		}
-		s.newStorable = func() common.Storab
+		s.newStorable = func() common.Storable {
+			return storable.New(remoteCfg.Fields)
+		}
+	}
+
+	if s.datastore != nil {
+		s.datastore.SetMode(datastore.ModeClient)
+	}
+
+	return nil
+}
+
+func (s *Service) Close() error {
+	s.httpClient.Cl
