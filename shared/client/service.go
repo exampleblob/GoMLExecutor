@@ -449,4 +449,17 @@ func (s *Service) Close() error {
 
 // New creates new client.
 func New(model string, hosts []*Host, options ...Option) (*Service, error) {
-	for i := range host
+	for i := range hosts {
+		hosts[i].Init()
+	}
+	aClient := &Service{
+		Config: Config{
+			Model: model,
+			Hosts: hosts,
+		},
+	}
+	err := aClient.init(options)
+	return aClient, err
+}
+
+func (s *Service) discoverConfig(host *Host, URL str
