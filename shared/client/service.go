@@ -439,4 +439,14 @@ func (s *Service) initDatastore() error {
 }
 
 func (s *Service) Close() error {
-	s.httpClient.Cl
+	s.httpClient.CloseIdleConnections()
+	if s.ErrorHistory != nil {
+		s.ErrorHistory.Close()
+	}
+
+	return nil
+}
+
+// New creates new client.
+func New(model string, hosts []*Host, options ...Option) (*Service, error) {
+	for i := range host
