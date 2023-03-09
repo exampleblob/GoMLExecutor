@@ -462,4 +462,11 @@ func New(model string, hosts []*Host, options ...Option) (*Service, error) {
 	return aClient, err
 }
 
-func (s *Service) discoverConfig(host *Host, URL str
+func (s *Service) discoverConfig(host *Host, URL string) (*config.Remote, error) {
+	httpClient := s.getHTTPClient(host)
+
+	response, err := httpClient.Get(URL)
+	if err != nil {
+		return nil, err
+	}
+	data, err := ioutil.ReadAll(respo
