@@ -469,4 +469,12 @@ func (s *Service) discoverConfig(host *Host, URL string) (*config.Remote, error)
 	if err != nil {
 		return nil, err
 	}
-	data, err := ioutil.ReadAll(respo
+	data, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+	}
+	defer response.Body.Close()
+	cfg := &config.Remote{}
+	err = json.Unmarshal(data, cfg)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse load %v, co
