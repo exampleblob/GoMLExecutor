@@ -484,4 +484,10 @@ func (s *Service) discoverConfig(host *Host, URL string) (*config.Remote, error)
 		prefix := fmt.Sprintf("[%s] config.Remote.", s.Config.Model)
 
 		for i, c := range cfg.Connections {
-			log.Printf("%
+			log.Printf("%sConnections[%d]:%+v", prefix, i, c)
+		}
+
+		ds := cfg.Datastore
+		if ds.Reference != nil {
+			log.Printf("%sDatastore:[%s].Cache: %+v", prefix, ds.ID, ds.Cache)
+			log.Printf("%sDatastore:[%s].L1: %+v", pre
