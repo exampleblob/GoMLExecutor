@@ -490,4 +490,12 @@ func (s *Service) discoverConfig(host *Host, URL string) (*config.Remote, error)
 		ds := cfg.Datastore
 		if ds.Reference != nil {
 			log.Printf("%sDatastore:[%s].Cache: %+v", prefix, ds.ID, ds.Cache)
-			log.Printf("%sDatastore:[%s].L1: %+v", pre
+			log.Printf("%sDatastore:[%s].L1: %+v", prefix, ds.ID, ds.Connection)
+
+			if ds.L2 != nil {
+				log.Printf("%sDatastore:[%s].L2: %+v", prefix, cfg.Datastore.ID, cfg.Datastore.L2)
+			}
+		}
+
+		for i, mi := range cfg.MetaInput.Inputs {
+			log.Print
