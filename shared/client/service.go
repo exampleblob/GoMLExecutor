@@ -498,4 +498,8 @@ func (s *Service) discoverConfig(host *Host, URL string) (*config.Remote, error)
 		}
 
 		for i, mi := range cfg.MetaInput.Inputs {
-			log.Print
+			log.Printf("%sMetaInput.Inputs[%d]:%+v", prefix, i, *mi)
+		}
+
+		log.Printf("%sMetaInput.Auxiliary:%v", prefix, cfg.MetaInput.Auxiliary)
+		log.Printf("%sMetaInput.KeyFields:%v", prefix, cfg.MetaInput.KeyF
