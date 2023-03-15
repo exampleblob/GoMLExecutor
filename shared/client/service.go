@@ -502,4 +502,14 @@ func (s *Service) discoverConfig(host *Host, URL string) (*config.Remote, error)
 		}
 
 		log.Printf("%sMetaInput.Auxiliary:%v", prefix, cfg.MetaInput.Auxiliary)
-		log.Printf("%sMetaInput.KeyFields:%v", prefix, cfg.MetaInput.KeyF
+		log.Printf("%sMetaInput.KeyFields:%v", prefix, cfg.MetaInput.KeyFields)
+
+		for i, mo := range cfg.MetaInput.Outputs {
+			log.Printf("%sMetaInput.Outputs[%d]:%+v", prefix, i, *mo)
+		}
+	}
+
+	return cfg, err
+}
+
+func (s *Service) handleResponse(ctx context.Context, targe
