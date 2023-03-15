@@ -512,4 +512,11 @@ func (s *Service) discoverConfig(host *Host, URL string) (*config.Remote, error)
 	return cfg, err
 }
 
-func (s *Service) handleResponse(ctx context.Context, targe
+func (s *Service) handleResponse(ctx context.Context, target interface{}, cached []interface{}, cachable Cachable) error {
+	if cachable == nil {
+		return nil
+	}
+	targetType := reflect.TypeOf(target).Elem()
+	switch targetType.Kind() {
+	case reflect.Struct:
+		retu
