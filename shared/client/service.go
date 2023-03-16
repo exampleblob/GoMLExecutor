@@ -519,4 +519,12 @@ func (s *Service) handleResponse(ctx context.Context, target interface{}, cached
 	targetType := reflect.TypeOf(target).Elem()
 	switch targetType.Kind() {
 	case reflect.Struct:
-		retu
+		return nil
+	case reflect.Slice:
+	default:
+		return fmt.Errorf("invalid response type expected []*T, but had: %T", target)
+	}
+
+	var debugPrefix string
+	if s.Config.Debug {
+		debugP
