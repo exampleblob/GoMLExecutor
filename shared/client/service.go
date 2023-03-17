@@ -527,4 +527,11 @@ func (s *Service) handleResponse(ctx context.Context, target interface{}, cached
 
 	var debugPrefix string
 	if s.Config.Debug {
-		debugP
+		debugPrefix = fmt.Sprintf("[%s]", s.Config.Model)
+	}
+	err := reconcileData(debugPrefix, target, cachable, cached)
+	return err
+}
+
+func (s *Service) assertDictHash(response *Response) {
+	dict
