@@ -534,4 +534,12 @@ func (s *Service) handleResponse(ctx context.Context, target interface{}, cached
 }
 
 func (s *Service) assertDictHash(response *Response) {
-	dict
+	dict := s.dictionary()
+	if dict != nil && response.DictHash != dict.hash {
+		if atomic.CompareAndSwapInt32(&s.dictRefreshPending, 0, 1) {
+			go s.refreshMetadata()
+		}
+	}
+}
+
+func (s *Service) refreshMetadata
