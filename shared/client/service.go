@@ -545,4 +545,14 @@ func (s *Service) assertDictHash(response *Response) {
 func (s *Service) refreshMetadata() {
 	defer atomic.StoreInt32(&s.dictRefreshPending, 0)
 	if err := s.loadModelDictionary(); err != nil {
-		log.Printf("failed to refresh meta data: %v", er
+		log.Printf("failed to refresh meta data: %v", err)
+	}
+}
+
+func (s *Service) postRequest(ctx context.Context, data []byte) ([]byte, error) {
+	host, err := s.getHost()
+	if err != nil {
+		return nil, err
+	}
+	var output []byte
+	output, err = s.h
