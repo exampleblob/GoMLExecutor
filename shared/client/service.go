@@ -563,4 +563,9 @@ func (s *Service) postRequest(ctx context.Context, data []byte) ([]byte, error) 
 }
 
 func (s *Service) httpPost(ctx context.Context, data []byte, host *Host) ([]byte, error) {
-	eva
+	evalUrl := host.evalURL(s.Model)
+	var postErr error
+	for i := 0; i < s.MaxRetry; i++ {
+		postErr = nil
+		request, err := http.NewRequestWithContext(ctx, http.MethodPost, evalUrl, bytes.NewReader(data))
+		if err != nil {
