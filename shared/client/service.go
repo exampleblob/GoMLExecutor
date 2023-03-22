@@ -580,4 +580,9 @@ func (s *Service) httpPost(ctx context.Context, data []byte, host *Host) ([]byte
 
 		var data []byte
 		if response.StatusCode != http.StatusOK {
-		
+			return nil, fmt.Errorf("invalid response: %v, %s", response.StatusCode, data)
+		}
+
+		if response.Body != nil {
+			data, err = io.ReadAll(response.Body)
+			_ = resp
