@@ -569,3 +569,15 @@ func (s *Service) httpPost(ctx context.Context, data []byte, host *Host) ([]byte
 		postErr = nil
 		request, err := http.NewRequestWithContext(ctx, http.MethodPost, evalUrl, bytes.NewReader(data))
 		if err != nil {
+			return nil, err
+		}
+
+		response, err := s.httpClient.Do(request)
+		if err != nil {
+			postErr = err
+			continue
+		}
+
+		var data []byte
+		if response.StatusCode != http.StatusOK {
+		
