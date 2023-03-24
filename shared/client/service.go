@@ -585,4 +585,21 @@ func (s *Service) httpPost(ctx context.Context, data []byte, host *Host) ([]byte
 
 		if response.Body != nil {
 			data, err = io.ReadAll(response.Body)
-			_ = resp
+			_ = response.Body.Close()
+
+			if err != nil {
+				postErr = err
+				continue
+			}
+
+			return data, nil
+		}
+	}
+
+	return nil, postErr
+}
+
+func (s *Service) getHost() (*Host, error) {
+	count := len(s.Hosts)
+	switch count {
+	case 0:
