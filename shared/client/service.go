@@ -603,3 +603,10 @@ func (s *Service) getHost() (*Host, error) {
 	count := len(s.Hosts)
 	switch count {
 	case 0:
+
+	case 1:
+		candidate := s.Hosts[0]
+		if !candidate.IsUp() {
+			return nil, fmt.Errorf("%v:%v %w", candidate.Name, candidate.Port, common.ErrNodeDown)
+		}
+		return candi
