@@ -616,4 +616,13 @@ func (s *Service) getHost() (*Host, error) {
 		if candidate.IsUp() {
 			return candidate, nil
 		}
-		for i := 0; i < len(s.Ho
+		for i := 0; i < len(s.Hosts); i++ {
+			if s.Hosts[i].IsUp() {
+				return s.Hosts[i], nil
+			}
+		}
+	}
+	return nil, fmt.Errorf("%v:%v %w", s.Hosts[0].Name, s.Hosts[0].Port, common.ErrNodeDown)
+}
+
+func (s *S
