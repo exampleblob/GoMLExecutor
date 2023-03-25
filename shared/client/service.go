@@ -609,4 +609,11 @@ func (s *Service) getHost() (*Host, error) {
 		if !candidate.IsUp() {
 			return nil, fmt.Errorf("%v:%v %w", candidate.Name, candidate.Port, common.ErrNodeDown)
 		}
-		return candi
+		return candidate, nil
+	default:
+		index := atomic.AddInt64(&s.hostIndex, 1) % int64(count)
+		candidate := s.Hosts[index]
+		if candidate.IsUp() {
+			return candidate, nil
+		}
+		for i := 0; i < len(s.Ho
