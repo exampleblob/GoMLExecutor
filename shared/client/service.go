@@ -625,4 +625,9 @@ func (s *Service) getHost() (*Host, error) {
 	return nil, fmt.Errorf("%v:%v %w", s.Hosts[0].Name, s.Hosts[0].Port, common.ErrNodeDown)
 }
 
-func (s *S
+func (s *Service) updatedCache(ctx context.Context, target interface{}, cachable Cachable, hash int) {
+	if s.datastore == nil || !s.datastore.Enabled() {
+		return
+	}
+	targetType := reflect.TypeOf(target).Elem()
+	switch ta
