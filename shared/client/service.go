@@ -630,4 +630,13 @@ func (s *Service) updatedCache(ctx context.Context, target interface{}, cachable
 		return
 	}
 	targetType := reflect.TypeOf(target).Elem()
-	switch ta
+	switch targetType.Kind() {
+	case reflect.Struct:
+		s.updateSingleEntry(ctx, target, cachable)
+		return
+	case reflect.Slice:
+	default:
+		fmt.Printf("unspportd target type: %T", target)
+	}
+
+	batchSize :
