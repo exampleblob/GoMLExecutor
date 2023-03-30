@@ -639,4 +639,9 @@ func (s *Service) updatedCache(ctx context.Context, target interface{}, cachable
 		fmt.Printf("unspportd target type: %T", target)
 	}
 
-	batchSize :
+	batchSize := cachable.BatchSize()
+	offsets := mapNonCachedPositions(batchSize, cachable)
+
+	xSlice := xunsafe.NewSlice(targetType)
+	dataPtr := xunsafe.AsPointer(target)
+	xSliceLen := xSlice.Len(dataPtr) //re
