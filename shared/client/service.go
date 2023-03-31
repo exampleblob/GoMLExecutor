@@ -644,4 +644,9 @@ func (s *Service) updatedCache(ctx context.Context, target interface{}, cachable
 
 	xSlice := xunsafe.NewSlice(targetType)
 	dataPtr := xunsafe.AsPointer(target)
-	xSliceLen := xSlice.Len(dataPtr) //re
+	xSliceLen := xSlice.Len(dataPtr) //response data is a slice, iterate vi slice to update response
+	if xSliceLen > batchSize {
+		xSliceLen = batchSize
+	}
+	for index := 0; index < xSliceLen; index++ {
+		value := xSlice.ValuePointerAt(data
