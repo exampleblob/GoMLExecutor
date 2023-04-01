@@ -649,4 +649,12 @@ func (s *Service) updatedCache(ctx context.Context, target interface{}, cachable
 		xSliceLen = batchSize
 	}
 	for index := 0; index < xSliceLen; index++ {
-		value := xSlice.ValuePointerAt(data
+		value := xSlice.ValuePointerAt(dataPtr, index)
+		if value == nil { //no actual value was returned from mly service
+			continue
+		}
+		cacheableIndex := offsets[index]
+		if cachable.CacheHit(cacheableIndex) {
+			return
+		}
+		key := s.da
