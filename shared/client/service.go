@@ -663,3 +663,7 @@ func (s *Service) updatedCache(ctx context.Context, target interface{}, cachable
 }
 
 //mapNonCachedPositions maps non cachable original slice element position  into actial request slice positions
+/*
+	client.data:[v1, v2, v3, v4]
+	assuming v1 and v3 are found in local cache
+	only v2, v3 needs to send to mly server, and once we receive response we need to map index 0, 1, into original item 
