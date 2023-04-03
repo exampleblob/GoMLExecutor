@@ -657,4 +657,9 @@ func (s *Service) updatedCache(ctx context.Context, target interface{}, cachable
 		if cachable.CacheHit(cacheableIndex) {
 			return
 		}
-		key := s.da
+		key := s.datastore.Key(cachable.CacheKeyAt(cacheableIndex))
+		s.datastore.Put(ctx, key, value, hash)
+	}
+}
+
+//mapNonCachedPositions maps non cachable original slice element position  into actial request slice positions
