@@ -671,4 +671,13 @@ func (s *Service) updatedCache(ctx context.Context, target interface{}, cachable
 func mapNonCachedPositions(batchSize int, cachable Cachable) []int {
 	var offsets = make([]int, batchSize) //index offsets to recncile local cache hits
 	offset := 0
-	fo
+	for i := 0; i < batchSize; i++ {
+		offsets[offset] = i
+		if !cachable.CacheHit(i) {
+			offset++
+		}
+	}
+	return offsets
+}
+
+func (s *Service) updateSingleEntry(ctx context.Context, target in
