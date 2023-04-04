@@ -666,4 +666,9 @@ func (s *Service) updatedCache(ctx context.Context, target interface{}, cachable
 /*
 	client.data:[v1, v2, v3, v4]
 	assuming v1 and v3 are found in local cache
-	only v2, v3 needs to send to mly server, and once we receive response we need to map index 0, 1, into original item 
+	only v2, v3 needs to send to mly server, and once we receive response we need to map index 0, 1, into original item positions: 1, 3
+*/
+func mapNonCachedPositions(batchSize int, cachable Cachable) []int {
+	var offsets = make([]int, batchSize) //index offsets to recncile local cache hits
+	offset := 0
+	fo
