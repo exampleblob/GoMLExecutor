@@ -680,4 +680,10 @@ func mapNonCachedPositions(batchSize int, cachable Cachable) []int {
 	return offsets
 }
 
-func (s *Service) updateSingleEntry(ctx context.Context, target in
+func (s *Service) updateSingleEntry(ctx context.Context, target interface{}, cachable Cachable) {
+	key := cachable.CacheKey()
+	storeKey := s.datastore.Key(cachable.CacheKey())
+	if key == "" {
+		return
+	}
+	if err := s.datastore.Put(ctx, storeKey, target, s.dict.hash); e
