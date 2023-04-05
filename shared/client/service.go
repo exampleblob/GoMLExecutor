@@ -686,4 +686,11 @@ func (s *Service) updateSingleEntry(ctx context.Context, target interface{}, cac
 	if key == "" {
 		return
 	}
-	if err := s.datastore.Put(ctx, storeKey, target, s.dict.hash); e
+	if err := s.datastore.Put(ctx, storeKey, target, s.dict.hash); err != nil {
+		log.Printf("[%s] failed to write to cache: %v", s.Model, err)
+	}
+	return
+}
+
+func (s *Service) reportBatch(count int, cached []interface{}) {
+	log.Printf("[%s] batchSize: %v, found in ca
