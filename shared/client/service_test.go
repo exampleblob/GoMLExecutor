@@ -12,4 +12,16 @@ import (
 	"github.com/viant/mly/shared/config"
 	"github.com/viant/mly/shared/datastore/mock"
 	"github.com/viant/scache"
-	"github.com
+	"github.com/viant/toolbox"
+	"path"
+	"reflect"
+	"testing"
+	"time"
+)
+
+type TestOutput struct {
+	Prediction float32
+}
+
+func (t *TestOutput) EncodeBinary(stream *bintly.Writer) error {
+	stream.Float32(
