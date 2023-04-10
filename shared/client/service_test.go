@@ -24,4 +24,14 @@ type TestOutput struct {
 }
 
 func (t *TestOutput) EncodeBinary(stream *bintly.Writer) error {
-	stream.Float32(
+	stream.Float32(t.Prediction)
+	return nil
+}
+
+func (t *TestOutput) DecodeBinary(stream *bintly.Reader) error {
+	stream.Float32(&t.Prediction)
+	return nil
+}
+
+func TestService_Run(t *testing.T) {
+	baseURL := toolbox.CallerDirect
