@@ -34,4 +34,10 @@ func (t *TestOutput) DecodeBinary(stream *bintly.Reader) error {
 }
 
 func TestService_Run(t *testing.T) {
-	baseURL := toolbox.CallerDirect
+	baseURL := toolbox.CallerDirectory(3)
+
+	server := faker.Server{URL: path.Join(baseURL, "testdata"), Port: 8087, Debug: true}
+	go server.Start()
+	time.Sleep(time.Second)
+	defer server.Stop()
+	var metaInput = shared.MetaInp
