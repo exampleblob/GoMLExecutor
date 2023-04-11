@@ -54,4 +54,17 @@ func TestService_Run(t *testing.T) {
 
 	var dictionary = NewDictionary(&common.Dictionary{
 		Layers: []common.Layer{
-	
+			{
+				Name: "i1",
+				Strings: []string{
+					"v1", "v2",
+				},
+			},
+		},
+		Hash: 123,
+	}, metaInput.Inputs)
+
+	var testCases = []struct {
+		description string
+		model       string
+		opt
