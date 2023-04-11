@@ -67,4 +67,11 @@ func TestService_Run(t *testing.T) {
 	var testCases = []struct {
 		description string
 		model       string
-		opt
+		options     []Option
+		initMessage func(msg *Message)
+		response    func() *Response
+		expect      interface{}
+	}{
+		{
+			description: "single prediction",
+			model:       "case001
