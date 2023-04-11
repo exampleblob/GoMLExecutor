@@ -40,4 +40,18 @@ func TestService_Run(t *testing.T) {
 	go server.Start()
 	time.Sleep(time.Second)
 	defer server.Stop()
-	var metaInput = shared.MetaInp
+	var metaInput = shared.MetaInput{
+		Inputs: []*shared.Field{
+			{
+				Name: "i1",
+			},
+			{
+				Name:     "i2",
+				Wildcard: true,
+			},
+		},
+	}
+
+	var dictionary = NewDictionary(&common.Dictionary{
+		Layers: []common.Layer{
+	
