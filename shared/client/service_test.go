@@ -74,4 +74,11 @@ func TestService_Run(t *testing.T) {
 	}{
 		{
 			description: "single prediction",
-			model:       "case001
+			model:       "case001",
+			options: []Option{
+				WithRemoteConfig(&cconfig.Remote{
+					Datastore: config.Datastore{
+						Cache: &scache.Config{SizeMb: 64, Shards: 10, EntrySize: 1024},
+					},
+					MetaInput: metaInput,
+				}),
