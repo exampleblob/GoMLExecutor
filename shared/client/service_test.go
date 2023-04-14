@@ -82,3 +82,9 @@ func TestService_Run(t *testing.T) {
 					},
 					MetaInput: metaInput,
 				}),
+				WithCacheScope(CacheScopeLocal),
+				WithDictionary(dictionary),
+				WithDataStorer(mock.New()),
+			},
+			response: func() *Response {
+				return &Response{Data: &TestOutput{}}
