@@ -88,3 +88,13 @@ func TestService_Run(t *testing.T) {
 			},
 			response: func() *Response {
 				return &Response{Data: &TestOutput{}}
+			},
+			initMessage: func(msg *Message) {
+				msg.StringKey("i1", "v1")
+				msg.StringKey("i2", "v10")
+
+			},
+			expect: TestOutput{Prediction: 3.2},
+		},
+		{
+			descrip
