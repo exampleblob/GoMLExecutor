@@ -116,4 +116,20 @@ func TestService_Run(t *testing.T) {
 			},
 			initMessage: func(msg *Message) {
 				msg.StringsKey("i1", []string{"v1", "v2", "v4"})
-				msg.StringsKe
+				msg.StringsKey("i2", []string{"v10", "v10", "v10"})
+			},
+			expect: []*TestOutput{
+				{
+					Prediction: 3.2,
+				},
+				{
+					Prediction: 4.2,
+				},
+				{
+					Prediction: 7.6,
+				},
+			},
+		},
+	}
+
+	for _, test
