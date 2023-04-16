@@ -110,4 +110,10 @@ func TestService_Run(t *testing.T) {
 				WithDictionary(dictionary),
 				WithDataStorer(mock.New()),
 			},
-			response:
+			response: func() *Response {
+				predictions := []*TestOutput{}
+				return &Response{Data: &predictions}
+			},
+			initMessage: func(msg *Message) {
+				msg.StringsKey("i1", []string{"v1", "v2", "v4"})
+				msg.StringsKe
