@@ -97,4 +97,9 @@ func TestService_Run(t *testing.T) {
 			expect: TestOutput{Prediction: 3.2},
 		},
 		{
-			descrip
+			description: "multi prediction",
+			model:       "case002",
+			options: []Option{
+				WithRemoteConfig(&cconfig.Remote{
+					Datastore: config.Datastore{
+						Cache: &scache.Config{Si
