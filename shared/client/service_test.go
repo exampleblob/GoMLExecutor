@@ -102,4 +102,12 @@ func TestService_Run(t *testing.T) {
 			options: []Option{
 				WithRemoteConfig(&cconfig.Remote{
 					Datastore: config.Datastore{
-						Cache: &scache.Config{Si
+						Cache: &scache.Config{SizeMb: 64, Shards: 10, EntrySize: 1024},
+					},
+					MetaInput: metaInput,
+				}),
+				WithCacheScope(CacheScopeLocal),
+				WithDictionary(dictionary),
+				WithDataStorer(mock.New()),
+			},
+			response:
