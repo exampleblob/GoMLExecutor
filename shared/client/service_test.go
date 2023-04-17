@@ -145,4 +145,9 @@ func TestService_Run(t *testing.T) {
 
 			msgs := msg.Strings()
 			fmt.Printf("MMM :%v\n", msgs)
-			err = srv.Run(context.Background(), msg, respons
+			err = srv.Run(context.Background(), msg, response)
+			if !assert.Nil(t, err, testCase.description) {
+				continue
+			}
+			actual := reflect.ValueOf(response.Data).Elem().Interface()
+			assert.EqualValues(t, testCase.exp
