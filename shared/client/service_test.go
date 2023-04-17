@@ -132,4 +132,11 @@ func TestService_Run(t *testing.T) {
 		},
 	}
 
-	for _, test
+	for _, testCase := range testCases {
+		srv, err := New(testCase.model, testHosts(), testCase.options...)
+
+		for i := 0; i < 2; i++ {
+			if !assert.Nil(t, err, testCase.description) {
+				continue
+			}
+			respo
