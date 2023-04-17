@@ -139,4 +139,10 @@ func TestService_Run(t *testing.T) {
 			if !assert.Nil(t, err, testCase.description) {
 				continue
 			}
-			respo
+			response := testCase.response()
+			msg := srv.NewMessage()
+			testCase.initMessage(msg)
+
+			msgs := msg.Strings()
+			fmt.Printf("MMM :%v\n", msgs)
+			err = srv.Run(context.Background(), msg, respons
