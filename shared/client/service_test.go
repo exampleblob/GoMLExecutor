@@ -150,4 +150,9 @@ func TestService_Run(t *testing.T) {
 				continue
 			}
 			actual := reflect.ValueOf(response.Data).Elem().Interface()
-			assert.EqualValues(t, testCase.exp
+			assert.EqualValues(t, testCase.expect, actual, testCase.description)
+			expectStatus := common.StatusOK
+			if i == 1 {
+				expectStatus = common.StatusCached
+			}
+			assert.EqualValues(t, expectStatus, response.Status, testC
