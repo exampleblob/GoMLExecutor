@@ -155,4 +155,19 @@ func TestService_Run(t *testing.T) {
 			if i == 1 {
 				expectStatus = common.StatusCached
 			}
-			assert.EqualValues(t, expectStatus, response.Status, testC
+			assert.EqualValues(t, expectStatus, response.Status, testCase.description)
+			time.Sleep(300 * time.Microsecond)
+		}
+
+	}
+
+}
+
+func testHosts() []*Host {
+	return []*Host{
+		{
+			Name: "localhost",
+			Port: 8087,
+		},
+	}
+}
