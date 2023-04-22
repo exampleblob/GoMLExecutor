@@ -11,4 +11,9 @@ func IsAuthorized(request *http.Request, allowedSubset []string) bool {
 		return true
 	}
 	for _, allowed := range allowedSubset {
-		if strings.HasPr
+		if strings.HasPrefix(request.RemoteAddr, allowed) {
+			return true
+		}
+	}
+	return false
+}
