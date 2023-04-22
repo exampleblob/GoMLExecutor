@@ -19,4 +19,9 @@ func SetHash(dest interface{}, hash int) {
 }
 
 //Hash returns hash or zero
-func
+func Hash(source interface{}) int {
+	if hasher, ok := source.(Hashed); ok {
+		return hasher.Hash()
+	}
+	return 0
+}
