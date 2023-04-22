@@ -38,3 +38,52 @@ func IsKeyNotFound(err error) bool {
 func IsTimeout(err error) bool {
 	if err == nil {
 		return false
+	}
+	aeroError, ok := err.(types.AerospikeError)
+	if !ok {
+		err = errors.Unwrap(err)
+		if err == nil {
+			return false
+		}
+		if aeroError, ok = err.(types.AerospikeError); !ok {
+			return false
+		}
+
+	}
+	return aeroError.ResultCode() == types.TIMEOUT
+}
+
+//IsTransientError returns if transient error
+func IsTransientError(err error) bool {
+	return IsKeyNotFound(err) || IsInvalidNode(err) || IsTimeout(err) || IsInvalidNode(err) || IsConnectionError(err)
+}
+
+//IsInvalidNode returns true is node/cluster is down
+func IsInvalidNode(err error) bool {
+	if err == nil {
+		return false
+	}
+	if err == ErrNodeDown {
+		return true
+	}
+	aeroError, ok := err.(types.AerospikeError)
+	if !ok {
+		err = errors.Unwrap(err)
+		if err == nil {
+			return false
+		}
+		if aeroError, ok = err.(types.AerospikeError); !ok {
+			return strings.Contains(err.Error(), "connection refused")
+		}
+
+	}
+	return aeroError.ResultCode() == types.INVALID_NODE_ERROR
+}
+
+//IsConnectionError returns true if error is connection errpr
+func IsConnectionError(err error) bool {
+	if err == nil {
+		return false
+	}
+	return strings.Contains(err.Error(), dialTCPFragment) || strings.Contains(err.Error(), connRefusedError)
+}
