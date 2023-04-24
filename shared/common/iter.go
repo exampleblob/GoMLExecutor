@@ -23,3 +23,8 @@ func MapToIterator(aMap map[string]interface{}) Iterator {
 		for k, v := range aMap {
 			if err := pair(k, v); err != nil {
 				return err
+			}
+		}
+		return nil
+	}
+}
