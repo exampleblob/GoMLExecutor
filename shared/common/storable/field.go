@@ -22,4 +22,11 @@ func (f *Field) Init() (err error) {
 	if f.dataType != nil {
 		return nil
 	}
-	f.data
+	f.dataType, err = common.DataType(f.DataType)
+	return err
+}
+
+//NewFields create new Inputs
+func NewFields(name string, dataType string) []*Field {
+	field := &Field{Name: name, DataType: dataType}
+	_ = field.Init()
