@@ -30,3 +30,7 @@ func (f *Field) Init() (err error) {
 func NewFields(name string, dataType string) []*Field {
 	field := &Field{Name: name, DataType: dataType}
 	_ = field.Init()
+	return []*Field{
+		field,
+	}
+}
