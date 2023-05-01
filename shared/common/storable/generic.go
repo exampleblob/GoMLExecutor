@@ -17,4 +17,11 @@ func (s Generic) Iterator() common.Iterator {
 	if v.Kind() == reflect.Ptr {
 		v = v.Elem()
 	}
-	var aStruct *reflectS
+	var aStruct *reflectStruct
+	if v.Kind() == reflect.Struct {
+		aStruct = _reflect.lookup(v.Type())
+	}
+	return func(pair common.Pair) error {
+		switch v.Kind() {
+		case reflect.Struct:
+			for _, fieldType := range a
