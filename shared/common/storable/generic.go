@@ -31,4 +31,12 @@ func (s Generic) Iterator() common.Iterator {
 				}
 			}
 		case reflect.Map:
-			switch aMap := s.Valu
+			switch aMap := s.Value.(type) {
+			case map[string]interface{}:
+				for k, v := range aMap {
+					if err := pair(k, v); err != nil {
+						return err
+					}
+				}
+			case map[interface{}]interface{}:
+				for k
