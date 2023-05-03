@@ -24,4 +24,11 @@ func (s Generic) Iterator() common.Iterator {
 	return func(pair common.Pair) error {
 		switch v.Kind() {
 		case reflect.Struct:
-			for _, fieldType := range a
+			for _, fieldType := range aStruct.fields {
+				field := v.Field(fieldType.index)
+				if err := pair(fieldType.name, field.Interface()); err != nil {
+					return err
+				}
+			}
+		case reflect.Map:
+			switch aMap := s.Valu
