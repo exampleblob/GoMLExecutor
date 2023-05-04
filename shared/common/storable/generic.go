@@ -65,4 +65,12 @@ func (s *Generic) Set(iter common.Iterator) error {
 	return iter(func(key string, value interface{}) error {
 		switch v.Kind() {
 		case reflect.Struct:
-			fieldType,
+			fieldType, ok := aStruct.byName[key]
+			if !ok {
+				return fmt.Errorf("unknown field")
+			}
+			field := v.Field(fieldType.index)
+			if value == nil {
+				return nil
+			}
+			rValue := reflect.Value
