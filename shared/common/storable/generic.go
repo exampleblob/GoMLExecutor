@@ -81,4 +81,11 @@ func (s *Generic) Set(iter common.Iterator) error {
 			}
 			return nil
 		case reflect.Map:
-			swi
+			switch aMap := s.Value.(type) {
+			case map[string]interface{}:
+				aMap[key] = value
+			case map[interface{}]interface{}:
+				aMap[key] = value
+			}
+		default:
+			return fmt.Errorf("unsupported gen
