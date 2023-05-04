@@ -46,4 +46,16 @@ func (s Generic) Iterator() common.Iterator {
 				}
 			}
 		default:
-			return fmt.Errorf("unsupported generic type: %T", s.Val
+			return fmt.Errorf("unsupported generic type: %T", s.Value)
+		}
+		return nil
+	}
+}
+
+//Set sets values
+func (s *Generic) Set(iter common.Iterator) error {
+	v := reflect.ValueOf(s.Value)
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+	va
