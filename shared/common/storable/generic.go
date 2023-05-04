@@ -88,4 +88,13 @@ func (s *Generic) Set(iter common.Iterator) error {
 				aMap[key] = value
 			}
 		default:
-			return fmt.Errorf("unsupported gen
+			return fmt.Errorf("unsupported generic type: %T", s.Value)
+		}
+		return nil
+	})
+}
+
+//NewGeneric creates a Generic storable (for struct/map)
+func NewGeneric(value interface{}) *Generic {
+	return &Generic{Value: value}
+}
