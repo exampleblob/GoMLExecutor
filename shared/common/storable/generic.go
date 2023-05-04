@@ -39,4 +39,11 @@ func (s Generic) Iterator() common.Iterator {
 					}
 				}
 			case map[interface{}]interface{}:
-				for k
+				for k, v := range aMap {
+					if err := pair(fmt.Sprintf("%s", k), v); err != nil {
+						return err
+					}
+				}
+			}
+		default:
+			return fmt.Errorf("unsupported generic type: %T", s.Val
