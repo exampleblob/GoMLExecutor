@@ -58,4 +58,11 @@ func (s *Generic) Set(iter common.Iterator) error {
 	if v.Kind() == reflect.Ptr {
 		v = v.Elem()
 	}
-	va
+	var aStruct *reflectStruct
+	if v.Kind() == reflect.Struct {
+		aStruct = _reflect.lookup(v.Type())
+	}
+	return iter(func(key string, value interface{}) error {
+		switch v.Kind() {
+		case reflect.Struct:
+			fieldType,
