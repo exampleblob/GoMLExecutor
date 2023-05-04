@@ -73,4 +73,12 @@ func (s *Generic) Set(iter common.Iterator) error {
 			if value == nil {
 				return nil
 			}
-			rValue := reflect.Value
+			rValue := reflect.ValueOf(value)
+			if rValue.Kind() == field.Kind() {
+				field.Set(reflect.ValueOf(value))
+			} else {
+				field.Set(rValue.Convert(field.Type()))
+			}
+			return nil
+		case reflect.Map:
+			swi
