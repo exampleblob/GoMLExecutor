@@ -24,4 +24,15 @@ func TestGeneric_Iterator(t *testing.T) {
 	}, aMap)
 }
 
-func TestGeneric_Set(t *
+func TestGeneric_Set(t *testing.T) {
+
+	aMap := map[string]interface{}{
+		"A": 1,
+		"B": "abc",
+		"C": []int{2, 4},
+		"D": []float64(nil),
+	}
+
+	aFoo := &foo{}
+	g := NewGeneric(aFoo)
+	err := g
