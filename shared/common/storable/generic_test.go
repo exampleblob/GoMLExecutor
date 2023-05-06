@@ -35,4 +35,14 @@ func TestGeneric_Set(t *testing.T) {
 
 	aFoo := &foo{}
 	g := NewGeneric(aFoo)
-	err := g
+	err := g.Set(func(pair common.Pair) error {
+		for k, v := range aMap {
+			if err := pair(k, v); err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+	assert.Nil(t, err)
+
+	cloneMap := map[string]in
