@@ -28,3 +28,15 @@ func (c *reflectCache) lookup(aType reflect.Type) *reflectStruct {
 }
 
 type reflectStruct struct {
+	byName map[string]*reflectField
+	fields []*reflectField
+}
+
+type reflectField struct {
+	index int
+	name  string
+	reflect.StructField
+}
+
+func newReflectStruct(aType reflect.Type) *reflectStruct {
+	
