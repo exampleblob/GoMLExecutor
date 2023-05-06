@@ -45,4 +45,12 @@ func TestGeneric_Set(t *testing.T) {
 	})
 	assert.Nil(t, err)
 
-	cloneMap := map[string]in
+	cloneMap := map[string]interface{}{}
+	iter := g.Iterator()
+	err = iter(func(key string, value interface{}) error {
+		cloneMap[key] = value
+		return nil
+	})
+	assert.Nil(t, err)
+	assert.EqualValues(t, aMap, cloneMap)
+}
