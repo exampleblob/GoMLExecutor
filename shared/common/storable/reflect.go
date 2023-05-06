@@ -39,4 +39,7 @@ type reflectField struct {
 }
 
 func newReflectStruct(aType reflect.Type) *reflectStruct {
-	
+	result := &reflectStruct{byName: make(map[string]*reflectField)}
+	for i := 0; i < aType.NumField(); i++ {
+		fieldType := aType.Field(i)
+		aField := &reflectField{index: i, name: fieldType.Name}
