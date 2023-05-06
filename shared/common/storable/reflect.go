@@ -8,4 +8,11 @@ import (
 
 var _reflect = &reflectCache{cache: make(map[string]*reflectStruct)}
 
-type refle
+type reflectCache struct {
+	cache map[string]*reflectStruct
+	mux   sync.RWMutex
+}
+
+func (c *reflectCache) lookup(aType reflect.Type) *reflectStruct {
+	c.mux.RLock()
+	result, ok := c.cache[aType.Nam
