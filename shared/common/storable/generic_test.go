@@ -54,3 +54,10 @@ func TestGeneric_Set(t *testing.T) {
 	assert.Nil(t, err)
 	assert.EqualValues(t, aMap, cloneMap)
 }
+
+type foo struct {
+	A int
+	B string
+	C []int
+	D []float64
+}
