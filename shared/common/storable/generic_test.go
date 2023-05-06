@@ -13,4 +13,15 @@ func TestGeneric_Iterator(t *testing.T) {
 	iter := g.Iterator()
 	err := iter(func(key string, value interface{}) error {
 		aMap[key] = value
-		r
+		return nil
+	})
+	assert.Nil(t, err)
+	assert.EqualValues(t, map[string]interface{}{
+		"A": afoo.A,
+		"B": afoo.B,
+		"C": afoo.C,
+		"D": afoo.D,
+	}, aMap)
+}
+
+func TestGeneric_Set(t *
