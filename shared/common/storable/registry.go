@@ -12,4 +12,10 @@ type Registry struct {
 
 //Register represents storable registry
 func (r *Registry) Register(key string, fn func() common.Storable) {
-	r.reg
+	r.registry[key] = fn
+}
+
+//Lookup returns storable provider or error
+func (r *Registry) Lookup(key string) (func() common.Storable, error) {
+	fn, ok := r.registry[key]
+	if !ok 
