@@ -43,3 +43,10 @@ func newReflectStruct(aType reflect.Type) *reflectStruct {
 	for i := 0; i < aType.NumField(); i++ {
 		fieldType := aType.Field(i)
 		aField := &reflectField{index: i, name: fieldType.Name}
+		if JSON, ok := fieldType.Tag.Lookup("json"); ok {
+			if name := strings.Split(JSON, ",")[0]; name != "" {
+				aField.name = name
+			}
+		}
+		result.fields = append(result.fields, aField)
+		result.by
