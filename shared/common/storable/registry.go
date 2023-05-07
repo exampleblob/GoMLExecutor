@@ -28,4 +28,7 @@ var registry = &Registry{
 	registry: make(map[string]func() common.Storable),
 }
 
-//S
+//Singleton return fn registry
+func Singleton() *Registry {
+	return registry
+}
