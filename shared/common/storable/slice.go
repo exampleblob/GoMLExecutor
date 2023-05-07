@@ -126,3 +126,103 @@ func (s *Slice) MarshalJSONObject(enc *gojay.Encoder) {
 			enc.ArrayKey(key, gojay.EncodeArrayFunc(func(enc *gojay.Encoder) {
 				for _, i := range value {
 					enc.Int(int(i))
+				}
+			}))
+
+		case []int64:
+			enc.ArrayKey(key, gojay.EncodeArrayFunc(func(enc *gojay.Encoder) {
+				for _, i := range value {
+					enc.Int(int(i))
+				}
+			}))
+		}
+	}
+}
+
+//IsNil returns nil
+func (s *Slice) IsNil() bool {
+	return s == nil
+}
+
+//UnmarshalJSONObject unmarshal json with gojay parser
+func (s *Slice) UnmarshalJSONObject(dec *gojay.Decoder, key string) error {
+	s.Values = make([]interface{}, len(s.Fields))
+	for i, field := range s.Fields {
+		if field.Name == key {
+			switch field.Type().Kind() {
+			case reflect.Float32:
+				value := float32(0)
+				if err := dec.Float32(&value); err != nil {
+					return err
+				}
+				s.Values[i] = value
+			case reflect.Float64:
+				value := float64(0)
+				if err := dec.Float64(&value); err != nil {
+					return err
+				}
+				s.Values[i] = value
+			case reflect.Int:
+				value := 0
+				if err := dec.Int(&value); err != nil {
+					return err
+				}
+				s.Values[i] = value
+			case reflect.Int64:
+				value := 0
+				if err := dec.Int(&value); err != nil {
+					return err
+				}
+				s.Values[i] = int64(value)
+			case reflect.String:
+				value := ""
+				if err := dec.String(&value); err != nil {
+					return err
+				}
+				s.Values[i] = value
+			default:
+				return fmt.Errorf("not yey unuspported type: %v", field.Type().Name())
+			}
+			break
+		}
+	}
+	return nil
+}
+
+//NKeys returns object key count
+func (s *Slice) NKeys() int {
+	return 0
+}
+
+//MarshalJSON default json marshaler
+func (s *Slice) MarshalJSON() ([]byte, error) {
+	builder := strings.Builder{}
+	builder.WriteByte('{')
+	for i := range s.Fields {
+		if i > 0 {
+			builder.WriteByte(',')
+		}
+		builder.WriteByte('"')
+		builder.WriteString(s.Fields[i].Name)
+		isText := s.Fields[i].Type().Kind() == reflect.String
+		if isText {
+			builder.WriteString(`":"`)
+		} else {
+			builder.WriteString(`":`)
+		}
+		builder.WriteString(toolbox.AsString(s.Values[i]))
+		if isText {
+			builder.WriteString(`"`)
+		}
+	}
+	builder.WriteByte('}')
+	return []byte(builder.String()), nil
+}
+
+//New return new storable
+func New(fields []*Field) *Slice {
+	if len(fields) == 0 {
+		panic("field were empty\n")
+	}
+	return &Slice{Fields: fields}
+}
