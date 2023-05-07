@@ -49,4 +49,8 @@ func newReflectStruct(aType reflect.Type) *reflectStruct {
 			}
 		}
 		result.fields = append(result.fields, aField)
-		result.by
+		result.byName[fieldType.Name] = aField
+		result.byName[aField.name] = aField
+	}
+	return result
+}
