@@ -15,4 +15,11 @@ func DataType(dataType string) (reflect.Type, error) {
 		return reflect.TypeOf(float64(0)), nil
 	case "float32":
 		return reflect.TypeOf(float32(0)), nil
-	
+	case "int":
+		return reflect.TypeOf(int(0)), nil
+	case "int64":
+		return reflect.TypeOf(int64(0)), nil
+	case "int32":
+		return reflect.TypeOf(int32(0)), nil
+	case "bool":
+		return reflect.Ty
