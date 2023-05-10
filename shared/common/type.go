@@ -22,4 +22,10 @@ func DataType(dataType string) (reflect.Type, error) {
 	case "int32":
 		return reflect.TypeOf(int32(0)), nil
 	case "bool":
-		return reflect.Ty
+		return reflect.TypeOf(true), nil
+	case "[]int":
+		return reflect.TypeOf([]int{}), nil
+	case "[]int32":
+		return reflect.TypeOf([]int32{}), nil
+	case "[]int64":
+		return reflect.TypeOf([]int64{}), nil
