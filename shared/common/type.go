@@ -29,3 +29,10 @@ func DataType(dataType string) (reflect.Type, error) {
 		return reflect.TypeOf([]int32{}), nil
 	case "[]int64":
 		return reflect.TypeOf([]int64{}), nil
+	case "[]float32":
+		return reflect.TypeOf([]float32{}), nil
+	case "[]float64":
+		return reflect.TypeOf([]float64{}), nil
+	default:
+		if dataType == "" {
+			return reflect.TypeOf("
