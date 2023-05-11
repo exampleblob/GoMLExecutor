@@ -35,4 +35,8 @@ func DataType(dataType string) (reflect.Type, error) {
 		return reflect.TypeOf([]float64{}), nil
 	default:
 		if dataType == "" {
-			return reflect.TypeOf("
+			return reflect.TypeOf(""), nil
+		}
+		return nil, fmt.Errorf("unsupported data type: %v", dataType)
+	}
+}
