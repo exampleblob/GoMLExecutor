@@ -11,4 +11,9 @@ const (
 type Reference struct {
 	Connection   string
 	Namespace    string
-	Data
+	Dataset      string
+	TimeToLiveMs int `json:",omitempty" yaml:",omitempty"`
+	timeToLive   time.Duration
+	RetryTimeMs  int `json:",omitempty" yaml:",omitempty"`
+	retryTime    time.Duration
+	ReadOnly 
