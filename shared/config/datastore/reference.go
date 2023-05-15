@@ -16,4 +16,11 @@ type Reference struct {
 	timeToLive   time.Duration
 	RetryTimeMs  int `json:",omitempty" yaml:",omitempty"`
 	retryTime    time.Duration
-	ReadOnly 
+	ReadOnly     bool `json:",omitempty" yaml:",omitempty"`
+}
+
+func (d *Reference) TimeToLive() time.Duration {
+	if d.timeToLive > 0 {
+		return d.timeToLive
+	}
+	d.timeToLive = time.Duration(d.TimeToLiveM
