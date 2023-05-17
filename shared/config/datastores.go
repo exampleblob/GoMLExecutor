@@ -18,4 +18,13 @@ func (d *DatastoreList) Init() {
 			d.Connections[i].Init()
 		}
 	}
-	if len(d.D
+	if len(d.Datastores) > 0 {
+		for i := range d.Datastores {
+			d.Datastores[i].Init()
+		}
+	}
+}
+
+//Validate checks if datastore list is valid
+func (d *DatastoreList) Validate() error {
+	if len(d.Connections) == 0
