@@ -9,4 +9,14 @@ import (
 type Timeout struct {
 	Unit       string
 	Connection int
-	So
+	Socket     int
+	Total      int
+}
+
+func (t *Timeout) DurationUnit() time.Duration {
+	if t.Unit == "" {
+		t.Unit = "ms"
+	}
+	switch strings.ToLower(t.Unit) {
+	case "ms":
+		return time.Millise
