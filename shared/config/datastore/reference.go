@@ -40,4 +40,6 @@ func (d *Reference) Init() {
 		d.TimeToLiveMs = defaultTimeToLiveMs
 	}
 	if d.RetryTimeMs == 0 {
-		d.Retr
+		d.RetryTimeMs = defaultRetryTimeMs
+	}
+}
