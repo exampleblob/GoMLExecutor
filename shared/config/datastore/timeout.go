@@ -19,4 +19,12 @@ func (t *Timeout) DurationUnit() time.Duration {
 	}
 	switch strings.ToLower(t.Unit) {
 	case "ms":
-		return time.Millise
+		return time.Millisecond
+	case "sec":
+		return time.Second
+	case "min":
+		return time.Minute
+	default:
+		return time.Millisecond
+	}
+}
