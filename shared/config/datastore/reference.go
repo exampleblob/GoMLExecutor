@@ -31,4 +31,13 @@ func (d *Reference) RetryTime() time.Duration {
 	if d.retryTime > 0 {
 		return d.retryTime
 	}
-	d.retryTime = time.Duration(d
+	d.retryTime = time.Duration(d.RetryTimeMs) * time.Millisecond
+	return d.retryTime
+}
+
+func (d *Reference) Init() {
+	if d.TimeToLiveMs == 0 {
+		d.TimeToLiveMs = defaultTimeToLiveMs
+	}
+	if d.RetryTimeMs == 0 {
+		d.Retr
