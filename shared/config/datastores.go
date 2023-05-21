@@ -27,4 +27,11 @@ func (d *DatastoreList) Init() {
 
 //Validate checks if datastore list is valid
 func (d *DatastoreList) Validate() error {
-	if len(d.Connections) == 0
+	if len(d.Connections) == 0 && len(d.Datastores) == 0 {
+		return nil
+	}
+	if len(d.Connections) > 0 && len(d.Datastores) == 0 {
+		return fmt.Errorf("item were empty, but item defined")
+	}
+	if len(d.Connections) > 0 {
+		for _, item := range d.Connec
