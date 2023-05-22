@@ -34,4 +34,14 @@ func (d *DatastoreList) Validate() error {
 		return fmt.Errorf("item were empty, but item defined")
 	}
 	if len(d.Connections) > 0 {
-		for _, item := range d.Connec
+		for _, item := range d.Connections {
+			if err := item.Validate(); err != nil {
+				return err
+			}
+		}
+	}
+	for _, item := range d.Datastores {
+		if err := item.Validate(); err != nil {
+			return err
+		}
+	
