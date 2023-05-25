@@ -91,3 +91,29 @@ func (s *Service) hosts() []*aero.Host {
 
 func (s *Service) init() {
 	clientPolicy := aero.NewClientPolicy()
+	basePolicy := aero.NewPolicy()
+
+	timeout := s.config.Timeout
+	if timeout.Connection > 0 {
+		clientPolicy.Timeout = timeout.DurationUnit() * time.Duration(timeout.Connection)
+	}
+	if timeout.Socket > 0 {
+		basePolicy.SocketTimeout = timeout.DurationUnit() * time.Duration(timeout.Socket)
+	}
+	if timeout.Total > 0 {
+		basePolicy.TotalTimeout = timeout.DurationUnit() * time.Duration(timeout.Total)
+	}
+	s.basePolicy = basePolicy
+	s.clientPolicy = clientPolicy
+}
+
+//New creates a new Aerospike service
+func New(config *datastore.Connection) (*Service, error) {
+	srv := &Service{
+		config: config,
+	}
+	srv.init()
+	breaker := circut.New(time.Second, srv)
+	srv.Breaker = breaker
+	return srv, srv.connect()
+}
