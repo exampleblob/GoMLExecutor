@@ -44,4 +44,6 @@ func (d *DatastoreList) Validate() error {
 		if err := item.Validate(); err != nil {
 			return err
 		}
-	
+	}
+	return nil
+}
