@@ -8,3 +8,8 @@ type Entry struct {
 	Data     EntryData
 	Hash     int
 	NotFound bool
+	Expiry   time.Time
+}
+
+//EntryData
+type EntryData interface{}
