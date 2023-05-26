@@ -59,4 +59,10 @@ func NewKey(cfg *config.Datastore, key string) *Key {
 	if cfg.L2 != nil {
 		storeKey.L2 = &Key{
 			Namespace:  cfg.L2.Namespace,
-			Set:        cf
+			Set:        cfg.L2.Dataset,
+			Value:      key,
+			TimeToLive: cfg.L2.TimeToLive(),
+		}
+	}
+	return storeKey
+}
