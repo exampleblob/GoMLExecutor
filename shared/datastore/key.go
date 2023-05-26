@@ -33,4 +33,12 @@ func (k *Key) AsString() string {
 }
 
 func (k *Key) Key() (*aero.Key, error) {
-	return aero.NewKey(k.Namespace, k.Set, k.Val
+	return aero.NewKey(k.Namespace, k.Set, k.Value)
+}
+
+func (k *Key) WritePolicy(generation uint32) *aero.WritePolicy {
+	policy := aero.NewWritePolicy(0, 0)
+	if k.TimeToLive == 0 {
+		k.TimeToLive = time.Hour
+	}
+	policy.Expiration = uint32(k.TimeToLive / time.Seco
