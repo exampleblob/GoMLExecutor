@@ -51,4 +51,12 @@ func (k *Key) WritePolicy(generation uint32) *aero.WritePolicy {
 
 func NewKey(cfg *config.Datastore, key string) *Key {
 	storeKey := &Key{
-		Namespa
+		Namespace:  cfg.Namespace,
+		Set:        cfg.Dataset,
+		Value:      key,
+		TimeToLive: cfg.TimeToLive(),
+	}
+	if cfg.L2 != nil {
+		storeKey.L2 = &Key{
+			Namespace:  cfg.L2.Namespace,
+			Set:        cf
