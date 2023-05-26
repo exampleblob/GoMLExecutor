@@ -221,3 +221,201 @@ func (s *Service) updateCache(keyString string, entryData EntryData, dictHash in
 	if entryData == nil {
 		return fmt.Errorf("entry was nil")
 	}
+
+	if s.cache == nil {
+		return nil
+	}
+
+	if aMap, ok := entryData.(map[string]interface{}); ok {
+		if data, err := json.Marshal(aMap); err == nil {
+			entryData = data
+		}
+	}
+
+	entry := &Entry{
+		Hash:   dictHash,
+		Key:    keyString,
+		Data:   entryData,
+		Expiry: time.Now().Add(s.config.TimeToLive()),
+	}
+
+	data, err := bintly.Encode(entry)
+	if err != nil {
+		return fmt.Errorf("failed to marshal cache: %v, due to:%w ", keyString, err)
+	}
+
+	err = s.cache.Set(keyString, data)
+	if err != nil {
+		return fmt.Errorf("failed to set cache " + err.Error())
+	}
+
+	if s.debug() {
+		log.Printf("[%s datastore update] local cache:\"%s\" (%d bytes) set", s.id(), keyString, len(data))
+	}
+
+	return nil
+}
+
+// reads from local
+func (s *Service) readFromCache(keyString string, value Value, stats *stat.Values) (CacheStatus, int, error) {
+	data, _ := s.cache.Get(keyString)
+	if len(data) == 0 {
+		return CacheStatusNotFound, 0, nil
+	}
+
+	aMap, useMap := value.(map[string]interface{})
+	var rawData = []byte{}
+	if useMap {
+		value = &rawData
+	}
+
+	entry := &Entry{Data: EntryData(value)}
+	defer func() {
+		if err := recover(); err != nil {
+			stats.Append(err)
+			log.Printf("[%s datastore readFromCache] key:\"%s\" panic:\"%v\" stack:%s", s.id(), keyString, err, string(debug.Stack()))
+		}
+	}()
+
+	err := bintly.Decode(data, entry)
+	if err != nil {
+		stats.Append(err)
+		return CacheStatusNotFound, 0, fmt.Errorf("failed to unmarshal cache data: %s, err: %w", data, err)
+	}
+
+	if useMap {
+		if err = json.Unmarshal(rawData, &aMap); err != nil {
+			stats.Append(err)
+			return CacheStatusNotFound, 0, fmt.Errorf("failed to unmarshal cache data: %s, err: %w", data, err)
+		}
+	}
+
+	if entry.Expiry.Before(time.Now()) {
+		stats.Append(stat.CacheExpired)
+		s.cache.Delete(keyString)
+		return CacheStatusNotFound, 0, nil
+	}
+
+	// cached a not found - prevents repeat downstream cache lookups
+	if entry.NotFound {
+		stats.Append(stat.LocalNoSuchKey)
+		return CacheStatusFoundNoSuchKey, 0, nil
+	}
+
+	common.SetHash(entry.Data, entry.Hash)
+
+	if keyString != entry.Key {
+		if s.debug() {
+			log.Printf("[%s datastore readFromCache] key:\"%s\" entry.Key:\"%s\"", s.id(), keyString, entry.Key)
+		}
+
+		stats.Append(stat.CacheCollision)
+		return CacheStatusNotFound, 0, nil
+	}
+
+	stats.Append(stat.LocalHasValue)
+	return CacheStatusFound, entry.Hash, nil
+}
+
+func (s *Service) getFromClient(ctx context.Context, key *Key, storable Value, stats *stat.Values) (int, error) {
+	dictHash, err := s.fromClient(ctx, s.l1Client, key, storable)
+	if common.IsKeyNotFound(err) {
+		stats.Append(stat.L1NoSuchKey)
+		if s.l2Client == nil || key.L2 == nil {
+			return 0, err
+		}
+
+		dictHash, err = s.fromClient(ctx, s.l2Client, key.L2, storable)
+		if err != nil {
+			if common.IsKeyNotFound(err) {
+				stats.Append(stat.L2NoSuchKey)
+			} else if common.IsTimeout(err) {
+				stats.Append(stat.Timeout)
+				stats.Append(err)
+			} else {
+				stats.Append(err)
+			}
+			return 0, err
+		}
+		// TODO don't ignore error
+		_ = s.copyTOL1(ctx, storable, key, dictHash, stats)
+		return dictHash, nil
+	}
+
+	if err != nil {
+		if common.IsTimeout(err) {
+			stats.Append(stat.Timeout)
+		}
+		stats.Append(err)
+		return dictHash, err
+	}
+
+	stats.Append(stat.L1HasValue)
+	return dictHash, nil
+}
+
+func (s *Service) copyTOL1(ctx context.Context, value Value, key *Key, dictHash int, stats *stat.Values) error {
+	storable := getStorable(value)
+	bins, err := storable.Iterator().ToMap()
+	if err != nil {
+		return err
+	}
+	writeKey, _ := key.Key()
+	if dictHash != 0 && len(bins) > 0 {
+		bins[common.HashBin] = dictHash
+	}
+
+	err = s.l1Client.Put(key.WritePolicy(0), writeKey, aerospike.BinMap(bins))
+	if err != nil {
+		// TODO track as separate error?
+		stats.Append(err)
+		return err
+	}
+	stats.Append(stat.L1Copy)
+	return nil
+}
+
+func (s *Service) fromClient(ctx context.Context, client *client.Service, key *Key, value Value) (int, error) {
+	clientKey, err := key.Key()
+	if err != nil {
+		return 0, fmt.Errorf("failed to create key: %+v, due to %w", key, err)
+	}
+	record, err := client.Get(ctx, clientKey)
+	if err != nil {
+		return 0, err
+	}
+	if record == nil && len(record.Bins) == 0 {
+		return 0, nil
+	}
+
+	storable := getStorable(value)
+	if s.debug() {
+		log.Printf("[%s datastore from] storable: %T %+v", s.id(), storable, storable)
+		log.Printf("[%s datastore from] bins: %+v", s.id(), record.Bins)
+	}
+
+	err = storable.Set(common.MapToIterator(record.Bins))
+	if err != nil {
+		return 0, fmt.Errorf("failed to map record: %+v, due to %w", key, err)
+	}
+
+	dictHash := 0
+	if value, ok := record.Bins[common.HashBin]; ok {
+		dictHash = toolbox.AsInt(value)
+		common.SetHash(storable, dictHash)
+	}
+	return dictHash, nil
+}
+
+// NewWithCache creates a cache optionally
+func NewWithCache(config *config.Datastore, l1Client, l2Client *client.Service, counter *gmetric.Operation, writeCounter *gmetric.Operation) (*Service, error) {
+	srv := &Service{
+		config: config,
+
+		l1Client: l1Client,
+		l2Client: l2Client,
+		useLocal: config.Cache != nil,
+
+		readCounter:  counter,
+		writeCounter: writeCounter,
+	}
