@@ -41,4 +41,14 @@ func (k *Key) WritePolicy(generation uint32) *aero.WritePolicy {
 	if k.TimeToLive == 0 {
 		k.TimeToLive = time.Hour
 	}
-	policy.Expiration = uint32(k.TimeToLive / time.Seco
+	policy.Expiration = uint32(k.TimeToLive / time.Second)
+	policy.Generation = generation
+	if k.GenerationPolicy != nil {
+		policy.GenerationPolicy = *k.GenerationPolicy
+	}
+	return policy
+}
+
+func NewKey(cfg *config.Datastore, key string) *Key {
+	storeKey := &Key{
+		Namespa
