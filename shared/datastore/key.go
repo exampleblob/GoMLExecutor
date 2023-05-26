@@ -25,3 +25,12 @@ func (k *Key) AsString() string {
 		return value
 	case int:
 		return strconv.Itoa(value)
+	case int64:
+		return strconv.Itoa(int(value))
+	default:
+		return fmt.Sprintf("%v", value)
+	}
+}
+
+func (k *Key) Key() (*aero.Key, error) {
+	return aero.NewKey(k.Namespace, k.Set, k.Val
