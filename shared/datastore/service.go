@@ -419,3 +419,13 @@ func NewWithCache(config *config.Datastore, l1Client, l2Client *client.Service, 
 		readCounter:  counter,
 		writeCounter: writeCounter,
 	}
+
+	// in server mode, cache hit rate is low, i.e., the chance a key exists not in L1 but in local cache is very low
+	// the only time this would happen is when a client makes a request while another client's request is populating L1
+	var err error
+	if config.Cache != nil {
+		srv.cache, err = scache.New(config.Cache)
+	}
+
+	return srv, err
+}
