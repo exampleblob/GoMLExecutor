@@ -22,4 +22,19 @@ type Stats struct {
 	Canceled,
 	CanceledDone,
 	WaitDone,
-	WaitCancele
+	WaitCanceled uint64
+}
+
+func NewSemaph(max int32) *Semaph {
+	s := new(Semaph)
+	s.r = max
+	s.max = max
+
+	s.l = sync.Mutex{}
+	s.c = sync.NewCond(&s.l)
+
+	return s
+}
+
+func (s *Semaph) Internals() (int32, Stats) {
+	r
