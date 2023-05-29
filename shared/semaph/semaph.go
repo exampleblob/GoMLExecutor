@@ -37,4 +37,8 @@ func NewSemaph(max int32) *Semaph {
 }
 
 func (s *Semaph) Internals() (int32, Stats) {
-	r
+	return s.r, s.stats
+}
+
+// Acquire will block if there are no more "tickets" left; otherwise will decrement number of tickets and continue.
+// Caller must call Release() later, unless an error is return
