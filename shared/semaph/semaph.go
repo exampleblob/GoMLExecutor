@@ -48,4 +48,14 @@ func (s *Semaph) Acquire(ctx context.Context) error {
 	atomic.AddUint64(&s.stats.Acquired, 1)
 
 	l := new(sync.Mutex)
-	
+	c := make(chan bool, 1)
+	for s.r <= 0 {
+		var done, canceled bool
+		go func(cc *bool) {
+			// this should unlock
+			s.c.Wait()
+			// this would lock
+			l.Lock()
+			defer l.Unlock()
+
+			if *cc
