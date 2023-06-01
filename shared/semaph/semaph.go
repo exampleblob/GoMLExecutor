@@ -58,4 +58,10 @@ func (s *Semaph) Acquire(ctx context.Context) error {
 			l.Lock()
 			defer l.Unlock()
 
-			if *cc
+			if *cc {
+				atomic.AddUint64(&s.stats.WaitCanceled, 1)
+
+				// outer routine would exist without unlocking
+				defer s.l.Unlock()
+				// "pass the torch" to next thing Wait()-ing
+				s.c.Si
