@@ -41,4 +41,11 @@ func (s *Semaph) Internals() (int32, Stats) {
 }
 
 // Acquire will block if there are no more "tickets" left; otherwise will decrement number of tickets and continue.
-// Caller must call Release() later, unless an error is return
+// Caller must call Release() later, unless an error is returned, which should always be context.Context.Err().
+func (s *Semaph) Acquire(ctx context.Context) error {
+	s.l.Lock()
+
+	atomic.AddUint64(&s.stats.Acquired, 1)
+
+	l := new(sync.Mutex)
+	
