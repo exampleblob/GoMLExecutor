@@ -79,4 +79,12 @@ func (s *Semaph) Acquire(ctx context.Context) error {
 			l.Lock()
 			defer l.Unlock()
 
-			if 
+			if done {
+				// while we were waiting, the lock was released
+				defer s.l.Unlock()
+				s.c.Signal()
+				atomic.AddUint64(&s.stats.CanceledDone, 1)
+				return ctx.Err()
+			}
+
+			// this may still incu
