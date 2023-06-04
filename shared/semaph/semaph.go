@@ -64,4 +64,19 @@ func (s *Semaph) Acquire(ctx context.Context) error {
 				// outer routine would exist without unlocking
 				defer s.l.Unlock()
 				// "pass the torch" to next thing Wait()-ing
-				s.c.Si
+				s.c.Signal()
+
+				return
+			}
+
+			atomic.AddUint64(&s.stats.WaitDone, 1)
+			done = true
+			c <- true
+		}(&canceled)
+
+		select {
+		case <-ctx.Done():
+			l.Lock()
+			defer l.Unlock()
+
+			if 
