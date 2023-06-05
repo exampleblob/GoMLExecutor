@@ -87,4 +87,11 @@ func (s *Semaph) Acquire(ctx context.Context) error {
 				return ctx.Err()
 			}
 
-			// this may still incu
+			// this may still incur the Wait call completing
+			canceled = true
+			atomic.AddUint64(&s.stats.Canceled, 1)
+
+			return ctx.Err()
+		case <-c:
+			atomic.AddUint64(&s.stats.Waited, 1)
+			// should've slept
