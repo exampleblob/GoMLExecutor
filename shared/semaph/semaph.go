@@ -105,3 +105,14 @@ func (s *Semaph) Acquire(ctx context.Context) error {
 }
 
 func (s *Semaph) acquireDebug(ctx context.Context, f func(n int32) string) error {
+	s.l.Lock()
+
+	fmt.Printf("acquiring %s", f(s.r))
+
+	c := make(chan bool, 1)
+	for s.r <= 0 {
+		canceled := false
+		go func(cc *bool) {
+			s.c.Wait()
+			if *cc {
+				fmt.Printf("waited but canc
