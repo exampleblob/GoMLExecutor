@@ -94,4 +94,14 @@ func (s *Semaph) Acquire(ctx context.Context) error {
 			return ctx.Err()
 		case <-c:
 			atomic.AddUint64(&s.stats.Waited, 1)
-			// should've slept
+			// should've slept and locked
+			// but we can wait again due to s.r == 0
+		}
+	}
+
+	defer s.l.Unlock()
+	s.r -= 1
+	return nil
+}
+
+func (s *Semaph) acquireDebug(ctx context.Context, f func(n int32) string) error {
