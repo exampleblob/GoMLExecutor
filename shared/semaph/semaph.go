@@ -138,4 +138,15 @@ func (s *Semaph) acquireDebug(ctx context.Context, f func(n int32) string) error
 	return nil
 }
 
-// Release will free up a "ticket", and if there were
+// Release will free up a "ticket", and if there were any waiting goroutines, will Signal() (one of) them.
+func (s *Semaph) Release() {
+	s.l.Lock()
+	defer s.l.Unlock()
+
+	if s.r < s.max {
+		s.r += 1
+		s.c.Signal()
+	}
+}
+
+func (s *Semaph) releaseDebug(f fun
