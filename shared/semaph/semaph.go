@@ -126,4 +126,16 @@ func (s *Semaph) acquireDebug(ctx context.Context, f func(n int32) string) error
 		select {
 		case <-ctx.Done():
 			fmt.Printf("canceled %s", f(s.r))
-			canc
+			canceled = true
+			return ctx.Err()
+		case <-c:
+			fmt.Printf("waited %s", f(s.r))
+		}
+	}
+
+	defer s.l.Unlock()
+	s.r -= 1
+	return nil
+}
+
+// Release will free up a "ticket", and if there were
