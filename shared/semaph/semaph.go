@@ -115,4 +115,15 @@ func (s *Semaph) acquireDebug(ctx context.Context, f func(n int32) string) error
 		go func(cc *bool) {
 			s.c.Wait()
 			if *cc {
-				fmt.Printf("waited but canc
+				fmt.Printf("waited but canceled %s", f(s.r))
+				defer s.l.Unlock()
+				s.c.Signal()
+				return
+			}
+			c <- true
+		}(&canceled)
+
+		select {
+		case <-ctx.Done():
+			fmt.Printf("canceled %s", f(s.r))
+			canc
