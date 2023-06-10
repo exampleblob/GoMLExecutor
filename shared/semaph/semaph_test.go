@@ -29,4 +29,10 @@ func TestCore(t *testing.T) {
 	dones := make([]bool, numWaiters)
 	var doneL bool
 
-	bctx := co
+	bctx := context.Background()
+
+	// since semaphore size is 2 and num workers is 3, we should have 1 worker block
+	for x := 1; x <= numWaiters; x++ {
+		go func(id int, marker *bool) {
+			waitAcq.Done()
+			fmt.Printf
