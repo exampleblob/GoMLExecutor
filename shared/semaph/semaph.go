@@ -149,4 +149,14 @@ func (s *Semaph) Release() {
 	}
 }
 
-func (s *Semaph) releaseDebug(f fun
+func (s *Semaph) releaseDebug(f func(n int32) string) {
+	s.l.Lock()
+	defer s.l.Unlock()
+
+	fmt.Printf("%s", f(s.r))
+
+	if s.r < s.max {
+		s.r += 1
+		s.c.Signal()
+	}
+}
