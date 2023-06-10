@@ -35,4 +35,14 @@ func TestCore(t *testing.T) {
 	for x := 1; x <= numWaiters; x++ {
 		go func(id int, marker *bool) {
 			waitAcq.Done()
-			fmt.Printf
+			fmt.Printf("i%d acquiring\n", id)
+			s.Acquire(bctx)
+			defer s.Release()
+			waitAcqd.Done()
+
+			fmt.Printf("i%d wait for m0 lock\n", id)
+			ol.Lock()
+			defer ol.Unlock()
+			*marker = true
+
+			fmt.Pr
