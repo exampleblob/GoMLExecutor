@@ -51,4 +51,11 @@ func TestCore(t *testing.T) {
 
 	fmt.Printf("m0 wait for semaphores to be acquired by goroutines\n")
 	waitAcq.Wait()
-	fmt.Printf("m0 goroutines should have acquired\n"
+	fmt.Printf("m0 goroutines should have acquired\n")
+
+	waitAcqd.Wait()
+
+	// prevent error from calling wg.Done() too many times
+	waitAcqd.Add(numWaiters - semaSize)
+
+	assert.Equal(t, s.r, int32(0), "the sempahore should not be avail
