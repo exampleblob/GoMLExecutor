@@ -17,4 +17,16 @@ func TestCore(t *testing.T) {
 
 	numWaiters := 3
 
-	waitAcq
+	waitAcq := new(sync.WaitGroup)
+	waitAcq.Add(numWaiters)
+
+	waitAcqd := new(sync.WaitGroup)
+	waitAcqd.Add(semaSize)
+
+	ol := new(sync.Mutex)
+	ol.Lock()
+
+	dones := make([]bool, numWaiters)
+	var doneL bool
+
+	bctx := co
