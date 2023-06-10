@@ -45,4 +45,10 @@ func TestCore(t *testing.T) {
 			defer ol.Unlock()
 			*marker = true
 
-			fmt.Pr
+			fmt.Printf("i%d done\n", id)
+		}(x, &dones[x-1])
+	}
+
+	fmt.Printf("m0 wait for semaphores to be acquired by goroutines\n")
+	waitAcq.Wait()
+	fmt.Printf("m0 goroutines should have acquired\n"
