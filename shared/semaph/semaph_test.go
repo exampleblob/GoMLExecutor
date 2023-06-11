@@ -58,4 +58,11 @@ func TestCore(t *testing.T) {
 	// prevent error from calling wg.Done() too many times
 	waitAcqd.Add(numWaiters - semaSize)
 
-	assert.Equal(t, s.r, int32(0), "the sempahore should not be avail
+	assert.Equal(t, s.r, int32(0), "the sempahore should not be available")
+
+	fmt.Printf("m0 unlock as enough goroutines should have started\n")
+	ol.Unlock()
+	fmt.Printf("m0 unlocked\n")
+
+	s.Acquire(bctx)
+	fmt.Printf("m0 acquire proceeded since a goroutine waiting on the lock finish
