@@ -65,4 +65,13 @@ func TestCore(t *testing.T) {
 	fmt.Printf("m0 unlocked\n")
 
 	s.Acquire(bctx)
-	fmt.Printf("m0 acquire proceeded since a goroutine waiting on the lock finish
+	fmt.Printf("m0 acquire proceeded since a goroutine waiting on the lock finished\n")
+
+	fl := new(sync.WaitGroup)
+	fl.Add(1)
+	go func() {
+		fmt.Printf("iL wait for acquire might need to wait for prior 2 goroutines\n")
+		s.Acquire(bctx)
+		defer s.Release()
+
+		assert.Eq
