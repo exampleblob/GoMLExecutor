@@ -74,4 +74,12 @@ func TestCore(t *testing.T) {
 		s.Acquire(bctx)
 		defer s.Release()
 
-		assert.Eq
+		assert.Equal(t, s.r, int32(0), "main and latest goroutine should have locked semaphore")
+		doneL = true
+
+		fmt.Printf("iL done\n")
+		fl.Done()
+	}()
+
+	fmt.Printf("m0 wait for i3 goroutine to run\n")
+	// o
