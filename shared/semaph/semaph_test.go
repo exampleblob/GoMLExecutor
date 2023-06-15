@@ -89,4 +89,16 @@ func TestCore(t *testing.T) {
 	s.Release()
 
 	for x := 0; x < numWaiters; x++ {
-		assert.True
+		assert.True(t, dones[x], fmt.Sprintf("inner bool %d", x+1))
+	}
+
+	assert.True(t, doneL, "last bool")
+}
+
+// not really a test
+func TestOrdering(t *testing.T) {
+	tests := 8
+
+	s := NewSemaph(1)
+
+	wgs
