@@ -82,4 +82,11 @@ func TestCore(t *testing.T) {
 	}()
 
 	fmt.Printf("m0 wait for i3 goroutine to run\n")
-	// o
+	// once waiting, the original 2 goroutines should've completed
+	fl.Wait()
+
+	fmt.Printf("m0 i3 goroutine has unblocked waitgroup\n")
+	s.Release()
+
+	for x := 0; x < numWaiters; x++ {
+		assert.True
