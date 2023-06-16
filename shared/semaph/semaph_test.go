@@ -111,4 +111,14 @@ func TestOrdering(t *testing.T) {
 	for i := 1; i < tests+1; i += 1 {
 		ii := i
 		go func() {
-			wgs.Done
+			wgs.Done()
+			fmt.Printf("%d-acquire\n", ii)
+			s.Acquire(context.Background())
+			defer s.Release()
+			fmt.Printf("%d-done\n", ii)
+			wgd.Done()
+		}()
+	}
+
+	wgs.Wait()
+	s.Releas
