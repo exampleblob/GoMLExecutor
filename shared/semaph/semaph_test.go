@@ -101,4 +101,14 @@ func TestOrdering(t *testing.T) {
 
 	s := NewSemaph(1)
 
-	wgs
+	wgs := new(sync.WaitGroup)
+	wgs.Add(tests)
+
+	wgd := new(sync.WaitGroup)
+	wgd.Add(tests)
+
+	s.Acquire(context.Background())
+	for i := 1; i < tests+1; i += 1 {
+		ii := i
+		go func() {
+			wgs.Done
