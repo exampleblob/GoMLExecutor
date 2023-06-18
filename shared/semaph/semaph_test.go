@@ -126,4 +126,6 @@ func TestOrdering(t *testing.T) {
 }
 
 // There is a case that doesn't seem possible to test deterministically - this will attempt to hit it.
-// In the documentation for sync.(*Cond).Signal(
+// In the documentation for sync.(*Cond).Signal(), there is a line:
+// > Signal() does not affect goroutine scheduling priority; if other goroutines are attempting to lock c.L, they may be awoken before a "waiting" goroutine.
+// This me
