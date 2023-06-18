@@ -121,4 +121,9 @@ func TestOrdering(t *testing.T) {
 	}
 
 	wgs.Wait()
-	s.Releas
+	s.Release()
+	wgd.Wait()
+}
+
+// There is a case that doesn't seem possible to test deterministically - this will attempt to hit it.
+// In the documentation for sync.(*Cond).Signal(
