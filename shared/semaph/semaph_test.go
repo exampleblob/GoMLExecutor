@@ -128,4 +128,5 @@ func TestOrdering(t *testing.T) {
 // There is a case that doesn't seem possible to test deterministically - this will attempt to hit it.
 // In the documentation for sync.(*Cond).Signal(), there is a line:
 // > Signal() does not affect goroutine scheduling priority; if other goroutines are attempting to lock c.L, they may be awoken before a "waiting" goroutine.
-// This me
+// This means that depending on how golang scheduling decides to work, 2 Release() calls could be invoked sequentially.
+// This had a bug since there was an assumption that if Semaph.r was
