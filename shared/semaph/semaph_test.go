@@ -165,4 +165,16 @@ func TestBurst(t *testing.T) {
 				maxLockWait = clw
 			}
 
-			maxLock.Unl
+			maxLock.Unlock()
+
+			wgr.Wait()
+
+			maxLock.Lock()
+			lockDone += 1
+			maxLock.Unlock()
+
+			semaLock.Lock()
+			semaAcq += 1
+			sad := semaAcq - semaRel
+			if maxSemaAcq < sad {
+				maxSemaAcq = sad
