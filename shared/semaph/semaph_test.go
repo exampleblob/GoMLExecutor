@@ -154,4 +154,15 @@ func TestBurst(t *testing.T) {
 	semaLock := new(sync.Mutex)
 	var maxLockWait, maxSemaAcq int32
 
-	for i := 0; 
+	for i := 0; i < nt; i += 1 {
+		ii := i
+		go func() {
+			maxLock.Lock()
+			lockWait += 1
+			clw := lockWait - lockDone
+
+			if maxLockWait < clw {
+				maxLockWait = clw
+			}
+
+			maxLock.Unl
