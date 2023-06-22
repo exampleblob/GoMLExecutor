@@ -131,3 +131,15 @@ func TestOrdering(t *testing.T) {
 // This means that depending on how golang scheduling decides to work, 2 Release() calls could be invoked sequentially.
 // This had a bug since there was an assumption that if Semaph.r was 0, there were goroutines Wait()-ing;
 // but if 2 Release() calls happened before a goroutine Wait()-ing was woken, then on the second Release() call, there would be no Signal().
+func TestBurst(t *testing.T) {
+	sc := int32(3)
+
+	gomaxthreads := int32(10000)
+
+	s := NewSemaph(sc)
+	nt := int(sc + gomaxthreads + 5000)
+
+	wgs := new(sync.WaitGroup)
+	wgs.Add(nt)
+
+	wgr := new(sy
