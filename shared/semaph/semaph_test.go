@@ -178,3 +178,12 @@ func TestBurst(t *testing.T) {
 			sad := semaAcq - semaRel
 			if maxSemaAcq < sad {
 				maxSemaAcq = sad
+			}
+			semaLock.Unlock()
+
+			s.acquireDebug(context.Background(), func(n int32) string {
+				return fmt.Sprintf("%d, %d\n", ii, n)
+			})
+			wgs.Done()
+			s.releaseDebug(func(n int32) string {
+				return fm
