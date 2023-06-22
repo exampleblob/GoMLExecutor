@@ -142,4 +142,16 @@ func TestBurst(t *testing.T) {
 	wgs := new(sync.WaitGroup)
 	wgs.Add(nt)
 
-	wgr := new(sy
+	wgr := new(sync.WaitGroup)
+	wgr.Add(nt)
+
+	l := new(sync.Mutex)
+	l.Lock()
+
+	var lockWait, lockDone, semaAcq, semaRel int32
+
+	maxLock := new(sync.Mutex)
+	semaLock := new(sync.Mutex)
+	var maxLockWait, maxSemaAcq int32
+
+	for i := 0; 
