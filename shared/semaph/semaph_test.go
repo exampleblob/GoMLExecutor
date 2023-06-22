@@ -186,4 +186,19 @@ func TestBurst(t *testing.T) {
 			})
 			wgs.Done()
 			s.releaseDebug(func(n int32) string {
-				return fm
+				return fmt.Sprintf("releasing %d, %d\n", ii, n)
+			})
+
+			semaLock.Lock()
+			semaRel += 1
+			semaLock.Unlock()
+
+		}()
+		wgr.Done()
+	}
+
+	l.Unlock()
+
+	wgs.Wait()
+
+	fmt.Printf("maxLockWait:%d maxSemaAcq:%d\n"
