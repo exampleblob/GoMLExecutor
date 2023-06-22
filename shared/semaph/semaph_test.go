@@ -129,4 +129,5 @@ func TestOrdering(t *testing.T) {
 // In the documentation for sync.(*Cond).Signal(), there is a line:
 // > Signal() does not affect goroutine scheduling priority; if other goroutines are attempting to lock c.L, they may be awoken before a "waiting" goroutine.
 // This means that depending on how golang scheduling decides to work, 2 Release() calls could be invoked sequentially.
-// This had a bug since there was an assumption that if Semaph.r was
+// This had a bug since there was an assumption that if Semaph.r was 0, there were goroutines Wait()-ing;
+// but if 2 Release() calls happened before a goroutine Wait()-ing was woken, then on the second Release() call, there would be no Signal().
