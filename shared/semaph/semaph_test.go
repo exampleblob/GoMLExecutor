@@ -201,4 +201,11 @@ func TestBurst(t *testing.T) {
 
 	wgs.Wait()
 
-	fmt.Printf("maxLockWait:%d maxSemaAcq:%d\n"
+	fmt.Printf("maxLockWait:%d maxSemaAcq:%d\n", maxLockWait, maxSemaAcq)
+	assert.True(t, maxLockWait > gomaxthreads, "did not check if 10000+ goroutines locked trigger thread crash")
+}
+
+func TestCtx(t *testing.T) {
+	s := NewSemaph(2)
+
+	bctx 
