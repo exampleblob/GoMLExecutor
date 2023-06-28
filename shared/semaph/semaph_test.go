@@ -208,4 +208,13 @@ func TestBurst(t *testing.T) {
 func TestCtx(t *testing.T) {
 	s := NewSemaph(2)
 
-	bctx 
+	bctx := context.Background()
+	ctx, cancel := context.WithTimeout(bctx, 1*time.Millisecond)
+	defer cancel()
+
+	s.Acquire(bctx)
+	s.Acquire(bctx)
+
+	// semaph should be full now
+
+	waitAcquire := new(sync.WaitGr
