@@ -229,4 +229,17 @@ func TestCtx(t *testing.T) {
 	// now an Acquire was canceled
 
 	go func() {
-		waitA
+		waitAcquire.Done()
+		// this should wait
+		s.Acquire(bctx)
+
+		waitRelease.Done()
+		s.Release()
+	}()
+
+	waitAcquire.Wait()
+
+	s.Release()
+
+	ctx, cancel = context.WithTimeout(bctx, 1*time.Millisecond)
+	defe
