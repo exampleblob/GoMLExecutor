@@ -217,4 +217,16 @@ func TestCtx(t *testing.T) {
 
 	// semaph should be full now
 
-	waitAcquire := new(sync.WaitGr
+	waitAcquire := new(sync.WaitGroup)
+	waitAcquire.Add(1)
+
+	waitRelease := new(sync.WaitGroup)
+	waitRelease.Add(1)
+
+	err := s.Acquire(ctx)
+	assert.NotNil(t, err)
+
+	// now an Acquire was canceled
+
+	go func() {
+		waitA
