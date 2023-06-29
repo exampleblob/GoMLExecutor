@@ -242,4 +242,14 @@ func TestCtx(t *testing.T) {
 	s.Release()
 
 	ctx, cancel = context.WithTimeout(bctx, 1*time.Millisecond)
-	defe
+	defer cancel()
+
+	waitRelease.Wait()
+
+	err = s.Acquire(ctx)
+	assert.Nil(t, err)
+}
+
+func BenchmarkSemaphParallel(b *testing.B) {
+	sizes := []int32{1, 2, 4, 8, 16}
+	for _, size := ran
