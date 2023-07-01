@@ -252,4 +252,13 @@ func TestCtx(t *testing.T) {
 
 func BenchmarkSemaphParallel(b *testing.B) {
 	sizes := []int32{1, 2, 4, 8, 16}
-	for _, size := ran
+	for _, size := range sizes {
+		b.Run(fmt.Sprintf("%d", size), func(b *testing.B) {
+			semaphBP(NewSemaph(size), b)
+		})
+	}
+}
+
+func semaphBP(s *Semaph, b *testing.B) {
+	bctx := context.Background()
+	b.RunParallel(
