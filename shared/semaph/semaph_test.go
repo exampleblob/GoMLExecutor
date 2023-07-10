@@ -276,3 +276,9 @@ func semaphBP(s *Semaph, b *testing.B) {
 		}
 	})
 }
+
+func BenchmarkSyncWeightedParallel(b *testing.B) {
+	sizes := []int64{1, 2, 4, 8, 16}
+	for _, size := range sizes {
+		b.Run(fmt.Sprintf("%d", size), func(b *testing.B) {
+	
