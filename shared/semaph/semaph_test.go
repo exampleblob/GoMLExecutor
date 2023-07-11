@@ -288,4 +288,19 @@ func BenchmarkSyncWeightedParallel(b *testing.B) {
 
 func syncWBP(s *semaphore.Weighted, b *testing.B) {
 	bctx := context.Background()
-	b.RunParallel(func(pb *testing.PB
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			r := sync.WaitGroup{}
+			r.Add(1)
+			go func() {
+				s.Acquire(bctx, 1)
+				r.Done()
+			}()
+
+			go func() {
+				r.Wait()
+				s.Release(1)
+			}()
+		}
+	})
+}
