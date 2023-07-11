@@ -281,4 +281,11 @@ func BenchmarkSyncWeightedParallel(b *testing.B) {
 	sizes := []int64{1, 2, 4, 8, 16}
 	for _, size := range sizes {
 		b.Run(fmt.Sprintf("%d", size), func(b *testing.B) {
-	
+			syncWBP(semaphore.NewWeighted(size), b)
+		})
+	}
+}
+
+func syncWBP(s *semaphore.Weighted, b *testing.B) {
+	bctx := context.Background()
+	b.RunParallel(func(pb *testing.PB
