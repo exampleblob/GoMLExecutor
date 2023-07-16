@@ -24,4 +24,5 @@ func (p errorOnly) Map(value interface{}) int {
 }
 
 func ErrorOnly() counter.Provider {
-	return &erro
+	return &errorOnly{}
+}
