@@ -11,4 +11,17 @@ func (p errorOnly) Keys() []string {
 	}
 }
 
-fun
+func (p errorOnly) Map(value interface{}) int {
+	if value == nil {
+		return -1
+	}
+
+	if _, ok := value.(error); ok {
+		return 0
+	}
+
+	return -1
+}
+
+func ErrorOnly() counter.Provider {
+	return &erro
