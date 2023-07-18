@@ -11,4 +11,16 @@ func (p store) Keys() []string {
 		Timeout,
 		Down,
 		Canceled,
-		De
+		DeadlineExceeded,
+	}
+}
+
+func (p store) Map(value interface{}) int {
+	if value == nil {
+		return -1
+	}
+	switch val := value.(type) {
+	case error:
+		return 0
+	case string:
+		switch
