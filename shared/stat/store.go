@@ -23,4 +23,20 @@ func (p store) Map(value interface{}) int {
 	case error:
 		return 0
 	case string:
-		switch
+		switch val {
+		case NoSuchKey:
+			return 1
+		case Timeout:
+			return 2
+		case Down:
+			return 3
+		case Canceled:
+			return 4
+		case DeadlineExceeded:
+			return 5
+		}
+	}
+	return -1
+}
+
+func NewS
