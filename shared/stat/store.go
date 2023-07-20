@@ -39,4 +39,6 @@ func (p store) Map(value interface{}) int {
 	return -1
 }
 
-func NewS
+func NewStore() counter.Provider {
+	return &store{}
+}
