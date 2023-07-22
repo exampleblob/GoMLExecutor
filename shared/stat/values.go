@@ -25,4 +25,18 @@ func (v *Values) Append(item interface{}) {
 	switch item.(type) {
 	case error:
 		// due to the way metrics are exported via Prometheus, we don't want to change the value
-		r
+		ri = errors.New(stat.ErrorKey)
+	default:
+		ri = item
+	}
+
+	*v = append(*v, ri)
+}
+
+func (v *Values) Values() []interface{} {
+	return *v
+}
+
+func NewValues() *Values {
+	return &Values{}
+}
