@@ -20,4 +20,9 @@ func (v *Values) AppendError(err error) {
 	}
 }
 
-func (v *Va
+func (v *Values) Append(item interface{}) {
+	var ri interface{}
+	switch item.(type) {
+	case error:
+		// due to the way metrics are exported via Prometheus, we don't want to change the value
+		r
