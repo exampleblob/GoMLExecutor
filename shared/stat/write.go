@@ -27,4 +27,15 @@ func (p write) Map(value interface{}) int {
 		return 0
 	case string:
 		switch val {
-		c
+		case L1Write:
+			return 1
+		case L2Write:
+			return 2
+		}
+	}
+	return -1
+}
+
+func NewWrite() counter.Provider {
+	return write{}
+}
