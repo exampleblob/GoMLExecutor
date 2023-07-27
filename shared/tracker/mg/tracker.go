@@ -39,3 +39,7 @@ func (m MisraGries) TopK() []tracker.Item {
 
 	return items
 }
+
+func (m MisraGries) Close() error {
+	return nil
+}
