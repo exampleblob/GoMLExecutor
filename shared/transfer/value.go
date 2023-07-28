@@ -23,4 +23,19 @@ type (
 	Values []Value
 
 	Strings struct {
-		Na
+		Name   string
+		Values []string
+	}
+	Int32s struct {
+		Name   string
+		Values []int32
+	}
+	Int64s struct {
+		Name   string
+		Values []int64
+	}
+	Bools struct {
+		Name   string
+		Values []bool
+	}
+	Float32s struct {
