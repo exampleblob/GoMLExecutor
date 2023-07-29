@@ -39,3 +39,15 @@ type (
 		Values []bool
 	}
 	Float32s struct {
+		Name   string
+		Values []float32
+	}
+	Float64s struct {
+		Name   string
+		Values []float64
+	}
+)
+
+func (s *Strings) ValueAt(index int) interface{} {
+	if index >= len(s.Values) {
+		return
