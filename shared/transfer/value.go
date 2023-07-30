@@ -50,4 +50,11 @@ type (
 
 func (s *Strings) ValueAt(index int) interface{} {
 	if index >= len(s.Values) {
-		return
+		return s.Values[0]
+	}
+	return s.Values[index]
+}
+
+func (s *Strings) Feed(batchSize int) interface{} {
+	var result = make([][]string, batchSize)
+	for i, item := range s.Val
