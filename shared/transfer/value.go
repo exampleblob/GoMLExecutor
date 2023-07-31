@@ -68,4 +68,14 @@ func (s *Strings) Feed(batchSize int) interface{} {
 	return result
 }
 
-func (s *S
+func (s *Strings) Key() string {
+	return s.Name
+}
+
+func (s *Strings) Len() int {
+	return len(s.Values)
+}
+
+func (s *Strings) Set(values ...interface{}) error {
+	s.Values = make([]string, len(values))
+	for i, v := range values {
