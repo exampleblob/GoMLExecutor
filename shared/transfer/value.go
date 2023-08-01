@@ -79,3 +79,12 @@ func (s *Strings) Len() int {
 func (s *Strings) Set(values ...interface{}) error {
 	s.Values = make([]string, len(values))
 	for i, v := range values {
+		s.Values[i] = toolbox.AsString(v)
+	}
+	return nil
+}
+
+// UnmarshalJSONArray decodes JSON array elements into slice
+func (a *Strings) UnmarshalJSONArray(dec *gojay.Decoder) error {
+	var value string
+	if err := dec.String(&value); er
