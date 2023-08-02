@@ -96,3 +96,14 @@ func (a *Strings) UnmarshalJSONArray(dec *gojay.Decoder) error {
 
 // MarshalJSONArray encodes arrays into JSON
 func (a Strings) MarshalJSONArray(enc *gojay.Encoder) {
+	for i := 0; i < len(a.Values); i++ {
+		enc.String(a.Values[i])
+	}
+}
+
+// IsNil checks if array is nil
+func (v Strings) IsNil() bool {
+	return len(v.Values) == 0
+}
+
+func (s *Int32s) Feed(batchSize int) int
