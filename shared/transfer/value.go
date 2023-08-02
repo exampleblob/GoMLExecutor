@@ -87,4 +87,12 @@ func (s *Strings) Set(values ...interface{}) error {
 // UnmarshalJSONArray decodes JSON array elements into slice
 func (a *Strings) UnmarshalJSONArray(dec *gojay.Decoder) error {
 	var value string
-	if err := dec.String(&value); er
+	if err := dec.String(&value); err != nil {
+		return err
+	}
+	a.Values = append(a.Values, value)
+	return nil
+}
+
+// MarshalJSONArray encodes arrays into JSON
+func (a Strings) MarshalJSONArray(enc *gojay.Encoder) {
