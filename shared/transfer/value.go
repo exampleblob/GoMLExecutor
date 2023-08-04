@@ -106,4 +106,11 @@ func (v Strings) IsNil() bool {
 	return len(v.Values) == 0
 }
 
-func (s *Int32s) Feed(batchSize int) int
+func (s *Int32s) Feed(batchSize int) interface{} {
+	var result = make([][]int32, batchSize)
+	for i, item := range s.Values {
+		result[i] = []int32{item}
+	}
+	for i := len(s.Values); i < batchSize; i++ {
+		result[i] = []int32{s.Values[0]}
+		s
