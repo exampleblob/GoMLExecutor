@@ -113,4 +113,13 @@ func (s *Int32s) Feed(batchSize int) interface{} {
 	}
 	for i := len(s.Values); i < batchSize; i++ {
 		result[i] = []int32{s.Values[0]}
-		s
+		s.Values = append(s.Values, s.Values[0])
+	}
+	return result
+}
+
+func (s *Int32s) ValueAt(index int) interface{} {
+	if index >= len(s.Values) {
+		return s.Values[0]
+	}
+	return s.Values[in
