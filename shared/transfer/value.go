@@ -122,4 +122,16 @@ func (s *Int32s) ValueAt(index int) interface{} {
 	if index >= len(s.Values) {
 		return s.Values[0]
 	}
-	return s.Values[in
+	return s.Values[index]
+}
+
+func (s *Int32s) Key() string {
+	return s.Name
+}
+
+func (s *Int32s) Len() int {
+	return len(s.Values)
+}
+
+func (s *Int32s) Set(values ...interface{}) error {
+	s.Values = make([
