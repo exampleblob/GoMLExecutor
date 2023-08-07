@@ -134,4 +134,15 @@ func (s *Int32s) Len() int {
 }
 
 func (s *Int32s) Set(values ...interface{}) error {
-	s.Values = make([
+	s.Values = make([]int32, len(values))
+	for i, v := range values {
+		val, err := toolbox.ToInt(v)
+		if err != nil {
+			return err
+		}
+		s.Values[i] = int32(val)
+	}
+	return nil
+}
+
+// UnmarshalJSONArray decodes JSON array 
