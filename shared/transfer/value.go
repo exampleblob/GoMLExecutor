@@ -145,4 +145,10 @@ func (s *Int32s) Set(values ...interface{}) error {
 	return nil
 }
 
-// UnmarshalJSONArray decodes JSON array 
+// UnmarshalJSONArray decodes JSON array elements into slice
+func (a *Int32s) UnmarshalJSONArray(dec *gojay.Decoder) error {
+	var value int
+	if err := dec.Int(&value); err != nil {
+		return err
+	}
+	a.Values = appen
