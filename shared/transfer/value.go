@@ -151,4 +151,11 @@ func (a *Int32s) UnmarshalJSONArray(dec *gojay.Decoder) error {
 	if err := dec.Int(&value); err != nil {
 		return err
 	}
-	a.Values = appen
+	a.Values = append(a.Values, int32(value))
+	return nil
+}
+
+// MarshalJSONArray encodes arrays into JSON
+func (a Int32s) MarshalJSONArray(enc *gojay.Encoder) {
+	for i := 0; i < len(a.Values); i++ {
+		enc.Int(int(a.Values
