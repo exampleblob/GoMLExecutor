@@ -158,4 +158,15 @@ func (a *Int32s) UnmarshalJSONArray(dec *gojay.Decoder) error {
 // MarshalJSONArray encodes arrays into JSON
 func (a Int32s) MarshalJSONArray(enc *gojay.Encoder) {
 	for i := 0; i < len(a.Values); i++ {
-		enc.Int(int(a.Values
+		enc.Int(int(a.Values[i]))
+	}
+}
+
+// IsNil checks if array is nil
+func (v Int32s) IsNil() bool {
+	return len(v.Values) == 0
+}
+
+func (s *Int64s) Feed(batchSize int) interface{} {
+	var result = make([][]int64, batchSize)
+	for i, ite
