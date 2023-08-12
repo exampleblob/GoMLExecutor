@@ -169,4 +169,14 @@ func (v Int32s) IsNil() bool {
 
 func (s *Int64s) Feed(batchSize int) interface{} {
 	var result = make([][]int64, batchSize)
-	for i, ite
+	for i, item := range s.Values {
+		result[i] = []int64{item}
+	}
+	for i := len(s.Values); i < batchSize; i++ {
+		result[i] = []int64{s.Values[0]}
+		s.Values = append(s.Values, s.Values[0])
+	}
+	return result
+}
+
+func (s *Int64s) Len() in
