@@ -179,4 +179,16 @@ func (s *Int64s) Feed(batchSize int) interface{} {
 	return result
 }
 
-func (s *Int64s) Len() in
+func (s *Int64s) Len() int {
+	return len(s.Values)
+}
+
+func (s *Int64s) ValueAt(index int) interface{} {
+	if index >= len(s.Values) {
+		return s.Values[0]
+	}
+	return s.Values[index]
+}
+
+func (s *Int64s) Key() string {
+	retu
