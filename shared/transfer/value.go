@@ -191,4 +191,11 @@ func (s *Int64s) ValueAt(index int) interface{} {
 }
 
 func (s *Int64s) Key() string {
-	retu
+	return s.Name
+}
+
+func (v *Int64s) Set(values ...interface{}) error {
+	v.Values = make([]int64, len(values))
+	for i, item := range values {
+		val, err := toolbox.ToInt(item)
+		if err != nil {
