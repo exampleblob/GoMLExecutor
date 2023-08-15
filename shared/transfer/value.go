@@ -199,3 +199,14 @@ func (v *Int64s) Set(values ...interface{}) error {
 	for i, item := range values {
 		val, err := toolbox.ToInt(item)
 		if err != nil {
+			return err
+		}
+		v.Values[i] = int64(val)
+	}
+	return nil
+}
+
+// UnmarshalJSONArray decodes JSON array elements into slice
+func (v *Int64s) UnmarshalJSONArray(dec *gojay.Decoder) error {
+	var value int
+	if
