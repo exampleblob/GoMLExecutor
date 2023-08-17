@@ -209,4 +209,12 @@ func (v *Int64s) Set(values ...interface{}) error {
 // UnmarshalJSONArray decodes JSON array elements into slice
 func (v *Int64s) UnmarshalJSONArray(dec *gojay.Decoder) error {
 	var value int
-	if
+	if err := dec.Int(&value); err != nil {
+		return err
+	}
+	v.Values = append(v.Values, int64(value))
+	return nil
+}
+
+// MarshalJSONArray encodes arrays into JSON
+func (v Int64s) MarshalJSONArr
