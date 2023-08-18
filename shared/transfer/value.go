@@ -234,4 +234,14 @@ func (s *Bools) Feed(batchSize int) interface{} {
 		result[i] = []bool{item}
 	}
 	for i := len(s.Values); i < batchSize; i++ {
-		resul
+		result[i] = []bool{s.Values[0]}
+		s.Values = append(s.Values, s.Values[0])
+	}
+	return result
+}
+
+func (s *Bools) Len() int {
+	return len(s.Values)
+}
+
+func (s *Bools) ValueAt(index int) interfa
