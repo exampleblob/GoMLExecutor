@@ -227,3 +227,11 @@ func (v Int64s) MarshalJSONArray(enc *gojay.Encoder) {
 func (v Int64s) IsNil() bool {
 	return len(v.Values) == 0
 }
+
+func (s *Bools) Feed(batchSize int) interface{} {
+	var result = make([][]bool, batchSize)
+	for i, item := range s.Values {
+		result[i] = []bool{item}
+	}
+	for i := len(s.Values); i < batchSize; i++ {
+		resul
