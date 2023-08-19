@@ -244,4 +244,16 @@ func (s *Bools) Len() int {
 	return len(s.Values)
 }
 
-func (s *Bools) ValueAt(index int) interfa
+func (s *Bools) ValueAt(index int) interface{} {
+	if index >= len(s.Values) {
+		return s.Values[0]
+	}
+	return s.Values[index]
+}
+
+func (s *Bools) Key() string {
+	return s.Name
+}
+
+func (s *Bools) Set(values ...interface{}) error {
+	s.Values = make([]bool, len(values
