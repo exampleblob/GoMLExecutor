@@ -256,4 +256,15 @@ func (s *Bools) Key() string {
 }
 
 func (s *Bools) Set(values ...interface{}) error {
-	s.Values = make([]bool, len(values
+	s.Values = make([]bool, len(values))
+	for i, v := range values {
+		val, err := toolbox.ToBoolean(v)
+		if err != nil {
+			return err
+		}
+		s.Values[i] = val
+	}
+	return nil
+}
+
+// UnmarshalJSONArray decodes JSON array elements 
