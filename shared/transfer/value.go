@@ -274,4 +274,15 @@ func (v *Bools) UnmarshalJSONArray(dec *gojay.Decoder) error {
 		return err
 	}
 	v.Values = append(v.Values, value)
-	return 
+	return nil
+}
+
+// MarshalJSONArray encodes arrays into JSON
+func (v Bools) MarshalJSONArray(enc *gojay.Encoder) {
+	for i := 0; i < len(v.Values); i++ {
+		enc.Bool(v.Values[i])
+	}
+}
+
+// IsNil checks if array is nil
+func (v Bools) I
