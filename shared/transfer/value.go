@@ -267,4 +267,11 @@ func (s *Bools) Set(values ...interface{}) error {
 	return nil
 }
 
-// UnmarshalJSONArray decodes JSON array elements 
+// UnmarshalJSONArray decodes JSON array elements into slice
+func (v *Bools) UnmarshalJSONArray(dec *gojay.Decoder) error {
+	var value bool
+	if err := dec.Bool(&value); err != nil {
+		return err
+	}
+	v.Values = append(v.Values, value)
+	return 
