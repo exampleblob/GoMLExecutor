@@ -285,4 +285,11 @@ func (v Bools) MarshalJSONArray(enc *gojay.Encoder) {
 }
 
 // IsNil checks if array is nil
-func (v Bools) I
+func (v Bools) IsNil() bool {
+	return len(v.Values) == 0
+}
+
+func (s *Float32s) Feed(batchSize int) interface{} {
+	var result = make([][]float32, batchSize)
+	for i, item := range s.Values {
+		re
