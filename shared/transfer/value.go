@@ -292,4 +292,13 @@ func (v Bools) IsNil() bool {
 func (s *Float32s) Feed(batchSize int) interface{} {
 	var result = make([][]float32, batchSize)
 	for i, item := range s.Values {
-		re
+		result[i] = []float32{item}
+	}
+	for i := len(s.Values); i < batchSize; i++ {
+		result[i] = []float32{s.Values[0]}
+		s.Values = append(s.Values, s.Values[0])
+	}
+	return result
+}
+
+func (s
