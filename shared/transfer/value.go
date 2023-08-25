@@ -301,4 +301,15 @@ func (s *Float32s) Feed(batchSize int) interface{} {
 	return result
 }
 
-func (s
+func (s *Float32s) Len() int {
+	return len(s.Values)
+}
+
+func (s *Float32s) ValueAt(index int) interface{} {
+	if index >= len(s.Values) {
+		return s.Values[0]
+	}
+	return s.Values[index]
+}
+
+func (s *Float3
