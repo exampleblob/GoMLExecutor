@@ -312,4 +312,12 @@ func (s *Float32s) ValueAt(index int) interface{} {
 	return s.Values[index]
 }
 
-func (s *Float3
+func (s *Float32s) Key() string {
+	return s.Name
+}
+
+func (s *Float32s) Set(values ...interface{}) error {
+	s.Values = make([]float32, len(values))
+	for i, v := range values {
+		val, err := toolbox.ToFloat(v)
+		if
