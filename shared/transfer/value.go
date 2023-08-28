@@ -329,4 +329,13 @@ func (s *Float32s) Set(values ...interface{}) error {
 }
 
 // UnmarshalJSONArray decodes JSON array elements into slice
-func (v *Float32s) UnmarshalJSONArray(dec *g
+func (v *Float32s) UnmarshalJSONArray(dec *gojay.Decoder) error {
+	var value float32
+	if err := dec.Float32(&value); err != nil {
+		return err
+	}
+	v.Values = append(v.Values, value)
+	return nil
+}
+
+// MarshalJS
