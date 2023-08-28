@@ -320,4 +320,13 @@ func (s *Float32s) Set(values ...interface{}) error {
 	s.Values = make([]float32, len(values))
 	for i, v := range values {
 		val, err := toolbox.ToFloat(v)
-		if
+		if err != nil {
+			return err
+		}
+		s.Values[i] = float32(val)
+	}
+	return nil
+}
+
+// UnmarshalJSONArray decodes JSON array elements into slice
+func (v *Float32s) UnmarshalJSONArray(dec *g
