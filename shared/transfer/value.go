@@ -338,4 +338,11 @@ func (v *Float32s) UnmarshalJSONArray(dec *gojay.Decoder) error {
 	return nil
 }
 
-// MarshalJS
+// MarshalJSONArray encodes arrays into JSON
+func (v Float32s) MarshalJSONArray(enc *gojay.Encoder) {
+	for i := 0; i < len(v.Values); i++ {
+		enc.Float32(v.Values[i])
+	}
+}
+
+// IsNil checks if array is ni
