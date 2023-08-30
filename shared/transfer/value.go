@@ -362,4 +362,16 @@ func (s *Float64s) Feed(batchSize int) interface{} {
 	return result
 }
 
-func (s *Float64s
+func (s *Float64s) Len() int {
+	return len(s.Values)
+}
+
+func (s *Float64s) ValueAt(index int) interface{} {
+	return s.Values[index]
+}
+
+func (s *Float64s) Key() string {
+	return s.Name
+}
+
+func (s *Float64s) Set(values
