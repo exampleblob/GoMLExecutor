@@ -383,4 +383,10 @@ func (s *Float64s) Set(values ...interface{}) error {
 		}
 		s.Values[i] = val
 	}
-	return ni
+	return nil
+}
+
+// UnmarshalJSONArray decodes JSON array elements into slice
+func (v *Float64s) UnmarshalJSONArray(dec *gojay.Decoder) error {
+	var value float64
+	if err := dec.Float64(&value); err != nil 
