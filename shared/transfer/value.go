@@ -374,4 +374,13 @@ func (s *Float64s) Key() string {
 	return s.Name
 }
 
-func (s *Float64s) Set(values
+func (s *Float64s) Set(values ...interface{}) error {
+	s.Values = make([]float64, len(values))
+	for i, v := range values {
+		val, err := toolbox.ToFloat(v)
+		if err != nil {
+			return err
+		}
+		s.Values[i] = val
+	}
+	return ni
