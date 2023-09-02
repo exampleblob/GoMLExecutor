@@ -389,4 +389,14 @@ func (s *Float64s) Set(values ...interface{}) error {
 // UnmarshalJSONArray decodes JSON array elements into slice
 func (v *Float64s) UnmarshalJSONArray(dec *gojay.Decoder) error {
 	var value float64
-	if err := dec.Float64(&value); err != nil 
+	if err := dec.Float64(&value); err != nil {
+		return err
+	}
+	v.Values = append(v.Values, value)
+	return nil
+}
+
+// MarshalJSONArray encodes arrays into JSON
+func (v Float64s) MarshalJSONArray(enc *gojay.Encoder) {
+	for i := 0; i < len(v.Values); i++ {
+		enc
