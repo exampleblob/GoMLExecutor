@@ -399,4 +399,15 @@ func (v *Float64s) UnmarshalJSONArray(dec *gojay.Decoder) error {
 // MarshalJSONArray encodes arrays into JSON
 func (v Float64s) MarshalJSONArray(enc *gojay.Encoder) {
 	for i := 0; i < len(v.Values); i++ {
-		enc
+		enc.Float64(v.Values[i])
+	}
+}
+
+// IsNil checks if array is nil
+func (v Float64s) IsNil() bool {
+	return len(v.Values) == 0
+}
+
+func (v *Values) ValueAt(index int) Value {
+	if index < len(*v) {
+		return (*v)
