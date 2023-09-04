@@ -417,4 +417,10 @@ func (v *Values) ValueAt(index int) Value {
 }
 
 // SetAt will create []Value at index or extend current array to support index
-func (v *Values) SetAt(index 
+func (v *Values) SetAt(index int, name string, kind reflect.Kind) (Value, error) {
+	if index >= len(*v) {
+		*v = append(*v, make([]Value, 1+index-len(*v))...)
+	}
+
+	err := v.allocate(index, name, kind)
+	if er
