@@ -410,4 +410,11 @@ func (v Float64s) IsNil() bool {
 
 func (v *Values) ValueAt(index int) Value {
 	if index < len(*v) {
-		return (*v)
+		return (*v)[index]
+	}
+	*v = append(*v, make([]Value, 1+index-len(*v))...)
+	return (*v)[index]
+}
+
+// SetAt will create []Value at index or extend current array to support index
+func (v *Values) SetAt(index 
