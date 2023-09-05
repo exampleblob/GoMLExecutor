@@ -423,4 +423,14 @@ func (v *Values) SetAt(index int, name string, kind reflect.Kind) (Value, error)
 	}
 
 	err := v.allocate(index, name, kind)
-	if er
+	if err != nil {
+		return nil, err
+	}
+
+	return (*v)[index], nil
+}
+
+func (v *Values) allocate(index int, name string, kind reflect.Kind) error {
+	switch kind {
+	case reflect.Bool:
+		(*v)[index] = &
