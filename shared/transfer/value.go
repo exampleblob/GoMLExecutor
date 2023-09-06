@@ -433,4 +433,9 @@ func (v *Values) SetAt(index int, name string, kind reflect.Kind) (Value, error)
 func (v *Values) allocate(index int, name string, kind reflect.Kind) error {
 	switch kind {
 	case reflect.Bool:
-		(*v)[index] = &
+		(*v)[index] = &Bools{Name: name}
+	case reflect.Int32:
+		(*v)[index] = &Int32s{Name: name}
+	case reflect.Int64, reflect.Int, reflect.Uint, reflect.Uint64:
+		(*v)[index] = &Int64s{Name: name}
+	case
