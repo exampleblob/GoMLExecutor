@@ -438,4 +438,10 @@ func (v *Values) allocate(index int, name string, kind reflect.Kind) error {
 		(*v)[index] = &Int32s{Name: name}
 	case reflect.Int64, reflect.Int, reflect.Uint, reflect.Uint64:
 		(*v)[index] = &Int64s{Name: name}
-	case
+	case reflect.Float64:
+		(*v)[index] = &Float64s{Name: name}
+	case reflect.Float32:
+		(*v)[index] = &Float32s{Name: name}
+	case reflect.String:
+		(*v)[index] = &Strings{Name: name}
+	defau
