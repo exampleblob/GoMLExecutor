@@ -444,4 +444,8 @@ func (v *Values) allocate(index int, name string, kind reflect.Kind) error {
 		(*v)[index] = &Float32s{Name: name}
 	case reflect.String:
 		(*v)[index] = &Strings{Name: name}
-	defau
+	default:
+		return fmt.Errorf("unsupported kind %v:%v", name, kind.String())
+	}
+	return nil
+}
