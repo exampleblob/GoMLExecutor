@@ -17,4 +17,9 @@ import (
 	"github.com/viant/afs/file"
 	"github.com/viant/afs/url"
 	sconfig "github.com/viant/mly/service/config"
-	"github.com/viant/mly
+	"github.com/viant/mly/service/domain"
+	"github.com/viant/mly/service/endpoint"
+	"github.com/viant/mly/service/layers"
+	"github.com/viant/mly/service/tfmodel"
+	"github.com/viant/mly/shared"
+	"github.com/viant
