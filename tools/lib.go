@@ -29,4 +29,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// Deprecated: FetchDictHash 
+// Deprecated: FetchDictHash is used to inspect dictionary data from a meta URL, which is
+// no longer a supported feature.
+func FetchDictHash(writer io.Writer, sourceURL string, fs afs.Service) error {
+	source, err := fs.DownloadWithURL(context.Backg
