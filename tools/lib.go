@@ -32,4 +32,15 @@ import (
 // Deprecated: FetchDictHash is used to inspect dictionary data from a meta URL, which is
 // no longer a supported feature.
 func FetchDictHash(writer io.Writer, sourceURL string, fs afs.Service) error {
-	source, err := fs.DownloadWithURL(context.Backg
+	source, err := fs.DownloadWithURL(context.Background(), sourceURL)
+	if err != nil {
+		return err
+	}
+	dict := common.Dictionary{}
+	if err = json.Unmarshal(source, &dict); err != nil {
+		return err
+	}
+
+	printDictHash(dict, writer)
+
+	
