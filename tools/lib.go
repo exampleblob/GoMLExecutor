@@ -43,4 +43,10 @@ func FetchDictHash(writer io.Writer, sourceURL string, fs afs.Service) error {
 
 	printDictHash(dict, writer)
 
-	
+	return nil
+}
+
+func printDictHash(dict common.Dictionary, writer io.Writer) {
+	fmt.Fprintf(writer, "dict hash: %v\n", dict.UpdateHash(0))
+	for _, l := range dict.Layers {
+		fmt.Fprintf(writ
