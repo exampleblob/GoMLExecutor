@@ -57,4 +57,9 @@ func LoadModel(ctx context.Context, URL string) (*tf.SavedModel, error) {
 	fs := afs.New()
 
 	location := url.Path(URL)
-	if url.Scheme(URL, file.Scheme) !=
+	if url.Scheme(URL, file.Scheme) != file.Scheme {
+		_, name := path.Split(URL)
+		location = path.Join(os.TempDir(), name)
+		log.Printf("copy model files to %s", location)
+		if err := fs.Copy(ctx, URL, location); err != nil {
+			return ni
