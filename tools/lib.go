@@ -49,4 +49,12 @@ func FetchDictHash(writer io.Writer, sourceURL string, fs afs.Service) error {
 func printDictHash(dict common.Dictionary, writer io.Writer) {
 	fmt.Fprintf(writer, "dict hash: %v\n", dict.UpdateHash(0))
 	for _, l := range dict.Layers {
-		fmt.Fprintf(writ
+		fmt.Fprintf(writer, "layer: %v hash: %v\n", l.Name, l.Hash)
+	}
+}
+
+func LoadModel(ctx context.Context, URL string) (*tf.SavedModel, error) {
+	fs := afs.New()
+
+	location := url.Path(URL)
+	if url.Scheme(URL, file.Scheme) !=
