@@ -62,4 +62,15 @@ func LoadModel(ctx context.Context, URL string) (*tf.SavedModel, error) {
 		location = path.Join(os.TempDir(), name)
 		log.Printf("copy model files to %s", location)
 		if err := fs.Copy(ctx, URL, location); err != nil {
-			return ni
+			return nil, err
+		}
+	}
+
+	model, err := tf.LoadSavedModel(location, []string{"serve"}, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to load model %v, due to %w", location, err)
+	}
+	return model, nil
+}
+
+func Discov
