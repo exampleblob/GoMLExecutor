@@ -73,4 +73,10 @@ func LoadModel(ctx context.Context, URL string) (*tf.SavedModel, error) {
 	return model, nil
 }
 
-func Discov
+func DiscoverDictHash(model *tf.SavedModel, writer io.Writer) error {
+	signature, err := tfmodel.Signature(model)
+	if err != nil {
+		return err
+	}
+
+	dict, err := layers.Dictionary(model.Session, model.Graph, signat
