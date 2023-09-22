@@ -79,4 +79,15 @@ func DiscoverDictHash(model *tf.SavedModel, writer io.Writer) error {
 		return err
 	}
 
-	dict, err := layers.Dictionary(model.Session, model.Graph, signat
+	dict, err := layers.Dictionary(model.Session, model.Graph, signature)
+	if err != nil {
+		return err
+	}
+
+	printDictHash(*dict, writer)
+
+	return nil
+}
+
+func DiscoverSignature(writer io.Writer, signature *domain.Signature) error {
+	encoder := sjson.N
