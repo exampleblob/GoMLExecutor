@@ -90,4 +90,9 @@ func DiscoverDictHash(model *tf.SavedModel, writer io.Writer) error {
 }
 
 func DiscoverSignature(writer io.Writer, signature *domain.Signature) error {
-	encoder := sjson.N
+	encoder := sjson.NewEncoder(writer)
+	return encoder.Encode(signature)
+}
+
+func DiscoverConfig(sourceURL string, model *tf.SavedModel, writer io.Writer) error {
+	signature, err := tfmodel.Signature(mode
