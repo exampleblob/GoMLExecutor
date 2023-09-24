@@ -105,4 +105,9 @@ func DiscoverConfig(sourceURL string, model *tf.SavedModel, writer io.Writer) er
 	cfg := buildDefaultConfig(sourceURL, model, ID, signature)
 
 	encoder := yaml.NewEncoder(writer)
-	retu
+	return encoder.Encode(cfg)
+}
+
+func buildDefaultConfig(sourceURL string, model *tf.SavedModel, ID string, signature *domain.Signature) endpoint.Config {
+	cfg := endpoint.Config{}
+	cfg.C
