@@ -95,4 +95,14 @@ func DiscoverSignature(writer io.Writer, signature *domain.Signature) error {
 }
 
 func DiscoverConfig(sourceURL string, model *tf.SavedModel, writer io.Writer) error {
-	signature, err := tfmodel.Signature(mode
+	signature, err := tfmodel.Signature(model)
+	if err != nil {
+		return err
+	}
+
+	_, ID := path.Split(sourceURL)
+
+	cfg := buildDefaultConfig(sourceURL, model, ID, signature)
+
+	encoder := yaml.NewEncoder(writer)
+	retu
