@@ -110,4 +110,10 @@ func DiscoverConfig(sourceURL string, model *tf.SavedModel, writer io.Writer) er
 
 func buildDefaultConfig(sourceURL string, model *tf.SavedModel, ID string, signature *domain.Signature) endpoint.Config {
 	cfg := endpoint.Config{}
-	cfg.C
+	cfg.Connections = append(cfg.Connections, &datastore.Connection{
+		ID:        "l1",
+		Hostnames: "127.0.0.1",
+		Port:      3000,
+	})
+	cfg.Datastores = append(cfg.Datastores, &dconfig.Datastore{
+		I
