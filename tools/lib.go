@@ -116,4 +116,11 @@ func buildDefaultConfig(sourceURL string, model *tf.SavedModel, ID string, signa
 		Port:      3000,
 	})
 	cfg.Datastores = append(cfg.Datastores, &dconfig.Datastore{
-		I
+		ID:    "mly_l1",
+		Cache: &scache.Config{SizeMb: 128},
+		Reference: &datastore.Reference{
+			Connection:   "l1",
+			Namespace:    "test",
+			Dataset:      ID,
+			TimeToLiveMs: 0,
+			Retry
