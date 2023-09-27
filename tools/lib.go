@@ -123,4 +123,15 @@ func buildDefaultConfig(sourceURL string, model *tf.SavedModel, ID string, signa
 			Namespace:    "test",
 			Dataset:      ID,
 			TimeToLiveMs: 0,
-			Retry
+			RetryTimeMs:  0,
+			ReadOnly:     false,
+		},
+		L2:       nil,
+		Storable: "",
+		Fields:   nil,
+		Disabled: false,
+	})
+
+	cfg.Endpoint.Port = 8087
+	configModel := &sconfig.Model{}
+	configModel.ID = 
