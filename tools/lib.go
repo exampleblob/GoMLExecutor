@@ -142,4 +142,9 @@ func buildDefaultConfig(sourceURL string, model *tf.SavedModel, ID string, signa
 
 	var fields []*shared.Field
 	for _, input := range signature.Inputs {
-		hasDictionary := tfmodel.
+		hasDictionary := tfmodel.MatchOperation(model.Graph, input.Name) != ""
+		inputType := input.Type
+		fields = append(fields, &shared.Field{
+			Name:     input.Name,
+			Index:    input.Index,
+			DataType: inputType
