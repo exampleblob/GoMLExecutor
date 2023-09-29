@@ -134,4 +134,12 @@ func buildDefaultConfig(sourceURL string, model *tf.SavedModel, ID string, signa
 
 	cfg.Endpoint.Port = 8087
 	configModel := &sconfig.Model{}
-	configModel.ID = 
+	configModel.ID = ID
+	configModel.URL = sourceURL
+	configModel.DataStore = ID
+
+	useDict := true
+
+	var fields []*shared.Field
+	for _, input := range signature.Inputs {
+		hasDictionary := tfmodel.
