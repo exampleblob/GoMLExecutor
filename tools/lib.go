@@ -156,4 +156,9 @@ func buildDefaultConfig(sourceURL string, model *tf.SavedModel, ID string, signa
 	}
 	configModel.Inputs = fields
 
-	fields =
+	fields = make([]*shared.Field, 0)
+	for _, output := range signature.Outputs {
+		fields = append(fields, &shared.Field{
+			Name:     output.Name,
+			Index:    output.Index,
+			DataType: out
