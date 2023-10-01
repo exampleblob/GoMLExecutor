@@ -147,4 +147,13 @@ func buildDefaultConfig(sourceURL string, model *tf.SavedModel, ID string, signa
 		fields = append(fields, &shared.Field{
 			Name:     input.Name,
 			Index:    input.Index,
-			DataType: inputType
+			DataType: inputType.Name(),
+			Wildcard: !hasDictionary,
+		})
+
+		isFloat := inputType.Kind() == reflect.Float32 || inputType.Kind() == reflect.Float64
+		useDict = useDict && !isFloat
+	}
+	configModel.Inputs = fields
+
+	fields =
