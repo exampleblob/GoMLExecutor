@@ -161,4 +161,16 @@ func buildDefaultConfig(sourceURL string, model *tf.SavedModel, ID string, signa
 		fields = append(fields, &shared.Field{
 			Name:     output.Name,
 			Index:    output.Index,
-			DataType: out
+			DataType: output.DataType,
+		})
+	}
+	sort.Sort(shared.Fields(fields))
+	configModel.Outputs = fields
+
+	configModel.UseDict = &useDict
+
+	cfg.Models = []*sconfig.Model{configModel}
+	return cfg
+}
+
+func GenerateTable(
