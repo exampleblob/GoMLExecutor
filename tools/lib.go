@@ -173,4 +173,10 @@ func buildDefaultConfig(sourceURL string, model *tf.SavedModel, ID string, signa
 	return cfg
 }
 
-func GenerateTable(
+func GenerateTable(w io.Writer, single bool, signature *domain.Signature) error {
+	typeMod := func(s string) string {
+		return fmt.Sprintf("ARRAY<%s>", s)
+	}
+
+	if single {
+		typeMod = func(s string) string {
