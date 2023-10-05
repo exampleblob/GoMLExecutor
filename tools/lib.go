@@ -180,3 +180,15 @@ func GenerateTable(w io.Writer, single bool, signature *domain.Signature) error 
 
 	if single {
 		typeMod = func(s string) string {
+			return s
+		}
+	}
+
+	fmt.Fprint(w, "  -- inputs\n")
+
+	for _, input := range signature.Inputs {
+		var bqType string
+		switch input.Type.Kind() {
+		case reflect.String:
+			bqType = "STRING"
+		case ref
