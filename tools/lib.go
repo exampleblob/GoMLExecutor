@@ -191,4 +191,12 @@ func GenerateTable(w io.Writer, single bool, signature *domain.Signature) error 
 		switch input.Type.Kind() {
 		case reflect.String:
 			bqType = "STRING"
-		case ref
+		case reflect.Int, reflect.Int32, reflect.Int64:
+			bqType = "INT64"
+		case reflect.Float32, reflect.Float64:
+			bqType = "FLOAT64"
+		default:
+			return fmt.Errorf("unknown BQ type conversion: %s", input.Type)
+		}
+
+		fm
