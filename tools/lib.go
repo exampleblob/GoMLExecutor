@@ -205,4 +205,11 @@ func GenerateTable(w io.Writer, single bool, signature *domain.Signature) error 
 	fmt.Fprint(w, "  -- !! remember to add auxiliary fields !!\n")
 	fmt.Fprint(w, "  -- outputs\n")
 
-	for _, output := range signature.Outputs 
+	for _, output := range signature.Outputs {
+		var bqType string
+		switch output.DataTypeKind {
+		case reflect.String:
+			bqType = "STRING"
+		case reflect.Int, reflect.Int32, reflect.Int64:
+			bqType = "INT64"
+		case ref
