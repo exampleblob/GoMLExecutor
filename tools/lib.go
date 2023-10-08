@@ -199,4 +199,10 @@ func GenerateTable(w io.Writer, single bool, signature *domain.Signature) error 
 			return fmt.Errorf("unknown BQ type conversion: %s", input.Type)
 		}
 
-		fm
+		fmt.Fprintf(w, "  %s %s,\n", input.Name, typeMod(bqType))
+	}
+
+	fmt.Fprint(w, "  -- !! remember to add auxiliary fields !!\n")
+	fmt.Fprint(w, "  -- outputs\n")
+
+	for _, output := range signature.Outputs 
