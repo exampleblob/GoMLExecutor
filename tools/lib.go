@@ -212,4 +212,10 @@ func GenerateTable(w io.Writer, single bool, signature *domain.Signature) error 
 			bqType = "STRING"
 		case reflect.Int, reflect.Int32, reflect.Int64:
 			bqType = "INT64"
-		case ref
+		case reflect.Float32, reflect.Float64:
+			bqType = "FLOAT64"
+		default:
+			return fmt.Errorf("unknown BQ type conversion: %s", output.DataTypeKind)
+		}
+
+		fmt.Fprintf(w, "  %s %s,\n", output.Name, typeMod(bqTy
