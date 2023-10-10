@@ -218,4 +218,10 @@ func GenerateTable(w io.Writer, single bool, signature *domain.Signature) error 
 			return fmt.Errorf("unknown BQ type conversion: %s", output.DataTypeKind)
 		}
 
-		fmt.Fprintf(w, "  %s %s,\n", output.Name, typeMod(bqTy
+		fmt.Fprintf(w, "  %s %s,\n", output.Name, typeMod(bqType))
+	}
+
+	fmt.Fprint(w, "  -- request metadata\n")
+	fmt.Fprint(w, "  timestamp TIMESTAMP,\n")
+	fmt.Fprint(w, "  eval_duration INT64,\n")
+	fmt.Fprintf(w, "  cache_key %s,\n", typeMod("STRING")
