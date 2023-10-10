@@ -224,4 +224,15 @@ func GenerateTable(w io.Writer, single bool, signature *domain.Signature) error 
 	fmt.Fprint(w, "  -- request metadata\n")
 	fmt.Fprint(w, "  timestamp TIMESTAMP,\n")
 	fmt.Fprint(w, "  eval_duration INT64,\n")
-	fmt.Fprintf(w, "  cache_key %s,\n", typeMod("STRING")
+	fmt.Fprintf(w, "  cache_key %s,\n", typeMod("STRING"))
+	fmt.Fprint(w, "  dict_hash INT64,\n")
+
+	if !single {
+		fmt.Fprint(w, "  batch_size INT64,\n")
+	}
+
+	return nil
+}
+
+func GetWriter(destURL string, fs afs.Service) (io.WriteCloser, error) {
+	var writer io.
