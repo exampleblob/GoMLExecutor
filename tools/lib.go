@@ -235,4 +235,8 @@ func GenerateTable(w io.Writer, single bool, signature *domain.Signature) error 
 }
 
 func GetWriter(destURL string, fs afs.Service) (io.WriteCloser, error) {
-	var writer io.
+	var writer io.WriteCloser = os.Stdout
+	var err error
+
+	if destURL != "" {
+		if writer, err = fs.NewWriter(context.Background(), destURL, file.DefaultFileOsMode); err !=
