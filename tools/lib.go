@@ -239,4 +239,10 @@ func GetWriter(destURL string, fs afs.Service) (io.WriteCloser, error) {
 	var err error
 
 	if destURL != "" {
-		if writer, err = fs.NewWriter(context.Background(), destURL, file.DefaultFileOsMode); err !=
+		if writer, err = fs.NewWriter(context.Background(), destURL, file.DefaultFileOsMode); err != nil {
+			return nil, err
+		}
+	}
+
+	return writer, nil
+}
