@@ -10,4 +10,13 @@ type Options struct {
 	ConfigURL string `short:"c" long:"config" description:"required if mode=run"`
 }
 
-fun
+func (o Options) Validate() error {
+	if o.Mode == "run" {
+		if o.ConfigURL == "" {
+			return fmt.Errorf("configurl was empty")
+		}
+
+		return nil
+	}
+	if o.SourceURL == "" {
+		return fmt.Err
