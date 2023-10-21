@@ -19,4 +19,10 @@ func (o Options) Validate() error {
 		return nil
 	}
 	if o.SourceURL == "" {
-		return fmt.Err
+		return fmt.Errorf("source location was empty")
+	}
+	if o.Operation == "layers" && o.DestURL == "" {
+		return fmt.Errorf("destination location was empty")
+	}
+	return nil
+}
