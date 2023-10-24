@@ -17,4 +17,15 @@ type (
 	}
 
 	Client interface {
-		Do() 
+		Do() error
+
+		Sent() uint64
+	}
+
+	TestStruct struct {
+		Server func() (Server, error)
+		Client func() (Client, error)
+	}
+)
+
+func Run(ts TestStruct, maxDos int32, testCases 
