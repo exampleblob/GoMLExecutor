@@ -28,4 +28,14 @@ type (
 	}
 )
 
-func Run(ts TestStruct, maxDos int32, testCases 
+func Run(ts TestStruct, maxDos int32, testCases int, statDur time.Duration) error {
+	srv, err := ts.Server()
+	if err != nil {
+		return err
+	}
+
+	wg := new(sync.WaitGroup)
+	wg.Add(testCases)
+
+	cli, err := ts.Client()
+	if err != nil {
