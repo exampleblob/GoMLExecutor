@@ -39,3 +39,19 @@ func Run(ts TestStruct, maxDos int32, testCases int, statDur time.Duration) erro
 
 	cli, err := ts.Client()
 	if err != nil {
+		return err
+	}
+
+	cliErrs := make([]error, 0)
+	cel := new(sync.Mutex)
+
+	var done bool
+	var started uint32
+	var ended uint32
+
+	i := 0
+	go func() {
+		for {
+			select {
+			case <-time.Tick(statDur):
+				
