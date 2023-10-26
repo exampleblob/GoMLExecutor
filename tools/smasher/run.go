@@ -54,4 +54,9 @@ func Run(ts TestStruct, maxDos int32, testCases int, statDur time.Duration) erro
 		for {
 			select {
 			case <-time.Tick(statDur):
-				
+				ss := srv.Stats()
+				sent := cli.Sent()
+				ngor := runtime.NumGoroutine()
+				ncgo := runtime.NumCgoCall()
+
+				log.Printf("i:%d started:%d c[sent:%d] s[%s] ended:%d errs:%d nGoR:%d nCGo:%d", i, star
