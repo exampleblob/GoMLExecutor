@@ -59,4 +59,19 @@ func Run(ts TestStruct, maxDos int32, testCases int, statDur time.Duration) erro
 				ngor := runtime.NumGoroutine()
 				ncgo := runtime.NumCgoCall()
 
-				log.Printf("i:%d started:%d c[sent:%d] s[%s] ended:%d errs:%d nGoR:%d nCGo:%d", i, star
+				log.Printf("i:%d started:%d c[sent:%d] s[%s] ended:%d errs:%d nGoR:%d nCGo:%d", i, started, sent, ss, ended, len(cliErrs), ngor, ncgo)
+
+				if done {
+					return
+				}
+			}
+		}
+	}()
+
+	var sem *semaph.Semaph
+	if maxDos > 0 {
+		sem = semaph.NewSemaph(maxDos)
+	}
+	ctx := context.Background()
+
+	for ; i < t
