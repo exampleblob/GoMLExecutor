@@ -86,4 +86,18 @@ func Run(ts TestStruct, maxDos int32, testCases int, statDur time.Duration) erro
 			}
 
 			atomic.AddUint32(&started, 1)
-			defer func() { atomic.Ad
+			defer func() { atomic.AddUint32(&ended, 1) }()
+			err := cli.Do()
+			if err != nil {
+				cel.Lock()
+				cliErrs = append(cliErrs, err)
+				cel.Unlock()
+			}
+
+		}()
+	}
+
+	wg.Wait()
+	done = true
+
+	log.Printf("err
