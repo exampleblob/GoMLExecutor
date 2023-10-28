@@ -74,4 +74,16 @@ func Run(ts TestStruct, maxDos int32, testCases int, statDur time.Duration) erro
 	}
 	ctx := context.Background()
 
-	for ; i < t
+	for ; i < testCases; i++ {
+		if sem != nil {
+			sem.Acquire(ctx)
+		}
+
+		go func() {
+			defer wg.Done()
+			if sem != nil {
+				defer sem.Release()
+			}
+
+			atomic.AddUint32(&started, 1)
+			defer func() { atomic.Ad
