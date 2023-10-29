@@ -100,4 +100,17 @@ func Run(ts TestStruct, maxDos int32, testCases int, statDur time.Duration) erro
 	wg.Wait()
 	done = true
 
-	log.Printf("err
+	log.Printf("errs:%d", len(cliErrs))
+
+	errMsgs := make(map[string]int, 0)
+	for _, e := range cliErrs {
+		s := e.Error()
+		_, ok := errMsgs[s]
+		if !ok {
+			errMsgs[s] = 0
+		}
+
+		errMsgs[s] += 1
+	}
+
+	for errm, c := rang
