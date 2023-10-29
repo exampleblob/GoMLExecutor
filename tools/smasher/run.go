@@ -113,4 +113,11 @@ func Run(ts TestStruct, maxDos int32, testCases int, statDur time.Duration) erro
 		errMsgs[s] += 1
 	}
 
-	for errm, c := rang
+	for errm, c := range errMsgs {
+		log.Printf("- err:%s", errm)
+		log.Printf("  count:%d", c)
+	}
+
+	log.Printf("stats:[%s]", srv.Stats())
+	return nil
+}
